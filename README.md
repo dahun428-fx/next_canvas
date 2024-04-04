@@ -38,3 +38,17 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## 통계 프로그램 만들기
+
+1. 범죄발생 지역별 통계
+
+- 위치별
+- 검색별
+-
+
+2. 경찰청\_전국 경찰서별 강력범죄 발생 현황
+
+- 위치별
+- 검색별
+- 범죄별 : 살인/강도/절도/폭력
