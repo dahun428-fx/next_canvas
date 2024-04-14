@@ -29,6 +29,8 @@ export function createAxios(config: CreateAxiosConfig = {}, options?: { shouldSe
       return handleRejected(error, config.handleError);
     }
   );
+
+  return $axios;
 }
 
 /**
@@ -80,4 +82,14 @@ function handleRejected(error: unknown, handler?: AxiosErrorHandler): never {
     throw new ApiError(error);
   }
   throw new ApplicationError(`Unknown type of api error: ${error}`);
+}
+
+
+/**
+ * validate HTTP status.
+ * @param {number} status - HTTP response status
+ * @returns if status belows 400, returns true (fulfilled), otherwise returns false (rejected).
+ */
+export function validateStatus(status: number) {
+	return status >= 200 && status < 400;
 }
