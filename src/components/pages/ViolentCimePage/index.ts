@@ -1,0 +1,1 @@
+export { ViolentCimePage } from './ViolentCimePage';

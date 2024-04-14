@@ -13,13 +13,21 @@ export type NavConfigType = {
 	title: string;
 	path: string;
 	icon: JSX.Element;
+	children?: NavConfigType[];
 };
 
 const navConfig: NavConfigType[] = [
 	{
 		title: 'dashboard',
-		path: '/',
+		path: '/dashboard',
 		icon: icon('ic_analytics'),
+		children: [
+			{
+				title: 'violent-crime',
+				path: '/dashboard/violent-crime',
+				icon: icon('ic_analytics'),
+			},
+		],
 	},
 	{
 		title: 'user',

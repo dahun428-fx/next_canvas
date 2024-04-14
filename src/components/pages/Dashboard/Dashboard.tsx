@@ -9,21 +9,9 @@ import { BottomNavi } from '@/components/common/BottomNavi';
 type Props = {};
 
 export const Dashboard: React.FC<Props> = () => {
-	const initailized = useRef(false);
-
-	const dispatch = useDispatch();
-
-	useEffect(() => {
-		if (!initailized.current) {
-			loadOperation(dispatch)();
-			initailized.current = true;
-		}
-	}, [dispatch, initailized.current]);
-
 	return (
 		<Container maxWidth="xl">
-			<PoliceMain />
-			<BottomNavi />
+			<div>wellcome dashboard home</div>
 		</Container>
 	);
 };

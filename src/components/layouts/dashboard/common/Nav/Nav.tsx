@@ -15,6 +15,7 @@ import navConfig from './config-navigation';
 import { NavItem } from './NavItem';
 import { Scrollbar } from '@/components/common/Scrollbar';
 import { Logo } from '@/components/common/Logo';
+import styles from './Nav.module.scss';
 
 type Props = {
 	openNav: boolean;
