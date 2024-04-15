@@ -1,3 +1,4 @@
+import { OpenApiError } from "@/errors/api/OpenApiError";
 import { OpenApiErrorResponse } from "@/models/api/open/OpenApiErrorResponse";
 import { OpenApiResponse } from "@/models/api/open/OpenApiResponse";
 import { isObject } from "@/utils/object";
@@ -9,7 +10,11 @@ type RequestOption = {
   cancelToken?: CancelToken;
 };
 
-function handleError(error: AxiosError) {}
+function handleError(error: AxiosError) {
+    if (isOpenApiErrorResponse(error.response?.data)) {
+        throw new OpenApiError(error);
+    }
+}
 
 function isOpenApiErrorResponse(response: unknown): response is OpenApiErrorResponse {
   if (response == null) {
