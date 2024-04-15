@@ -1,6 +1,8 @@
+import { BottomNavi } from "@/components/common/BottomNavi";
 import { VerticalBar } from "@/components/ui/charts/verticalbar";
 import { ViolenceState } from "@/store/modules/common/violence";
 import { mergeByCityWithYear, mergeByYearly } from "@/utils/openapi/police/police";
+import { Container } from "@mui/material";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 import { useMemo } from "react";
 
@@ -8,7 +10,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 type Props = { violenceResponse: ViolenceState };
 
-export const ViolentYearly: React.FC<Props> = ({ violenceResponse }) => {
+export const ViolentYearlyPage: React.FC<Props> = ({ violenceResponse }) => {
   if (violenceResponse.items.length < 1) return null;
 
   const labels = useMemo(() => {
@@ -25,10 +27,11 @@ export const ViolentYearly: React.FC<Props> = ({ violenceResponse }) => {
   }, [violenceResponse]);
 
   return (
-    <div>
+    <Container maxWidth="xl">
       <VerticalBar dataObject={datasForRobber} labels={labels} chartName="연도별 / 지역별 강력범죄 추이 (강도)" />
-    </div>
+      <BottomNavi />
+    </Container>
   );
 };
 
-ViolentYearly.displayName = "ViolentYearly";
+ViolentYearlyPage.displayName = "ViolentYearly";

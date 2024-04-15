@@ -4,6 +4,7 @@ import { Box, ListItemButton, alpha } from "@mui/material";
 import React, { MouseEvent, useMemo, useState } from "react";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { useRouter } from "next/router";
 
 type Props = {
   item: NavConfigType;
@@ -13,6 +14,8 @@ type Props = {
 
 export const NavItem: React.FC<Props> = ({ item, className, depth = 0 }) => {
   const pathname = usePathname();
+
+  const router = useRouter();
 
   const [openChildren, setOpenChildren] = useState(true);
 
@@ -26,11 +29,13 @@ export const NavItem: React.FC<Props> = ({ item, className, depth = 0 }) => {
     <>
       <ListItemButton
         className={className}
-        href={item.path}
+        // href={item.path}
         onClick={(event) => {
           if (item.children && item.children.length > 0) {
             event.preventDefault();
             setOpenChildren(!openChildren);
+          } else {
+            router.push(item.path);
           }
         }}
         sx={{
