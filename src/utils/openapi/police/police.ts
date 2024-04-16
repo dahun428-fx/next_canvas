@@ -1,6 +1,8 @@
 import { Police } from "@/models/api/open/police/SearchPoliceResponse";
 import { Violence } from "@/store/modules/common/violence";
 
+export const policeCityArray = ["서울", "부산", "대구", "인천", "광주", "대전", "울산", "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주", "세종"];
+
 export const seperateByCity = (data: Police[], targetName?: string) => {
   const cityNames = new Set<string>();
   data.forEach((item, index) => {
@@ -18,10 +20,13 @@ export const seperateByCity = (data: Police[], targetName?: string) => {
 
 export const mergeByCity = (data: Police[]) => {
   const cityNames = new Set<string>();
-  data.forEach((item, index) => {
-    const name = item.경찰서.slice(0, 2);
-    cityNames.add(name);
+  policeCityArray.map((item) => {
+    cityNames.add(item);
   });
+  // data.forEach((item, index) => {
+  //   const name = item.경찰서.slice(0, 2);
+  //   cityNames.add(name);
+  // });
   return Array.from(cityNames).map((item, index) => {
     let 강도 = 0;
     let 살인 = 0;

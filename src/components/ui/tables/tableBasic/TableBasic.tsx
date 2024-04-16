@@ -1,5 +1,6 @@
+import { policeCityArray } from "@/utils/openapi/police/police";
 import { getComparator, stableSort } from "@/utils/sort";
-import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Toolbar, Tooltip, Typography } from "@mui/material";
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, Toolbar, Tooltip, Typography } from "@mui/material";
 import { visuallyHidden } from "@mui/utils";
 import { useMemo, useState } from "react";
 
@@ -22,14 +23,25 @@ interface HeadCell {
 }
 
 export const TableBasic: React.FC<Props> = ({ tableTitle, tableHeadData, datas }) => {
-  const [order, setOrder] = useState<Order>("asc");
+  const [order, setOrder] = useState<Order>("desc");
   const [orderBy, setOrderBy] = useState<string>(tableHeadData[0]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(17);
 
   const rows = useMemo(() => {
-    return datas;
-  }, [datas]);
+    const result = datas.map((item, index) => {
+      const { label, data } = item;
+
+      const r = data.map((child, childIndex) => {
+        return {
+          [tableHeadData[childIndex]]: child,
+        };
+      });
+      return Object.assign({ city: label }, ...r);
+    });
+
+    return result;
+  }, [datas, tableHeadData]);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
     const isAsc = orderBy === property && order === "asc";
@@ -48,14 +60,7 @@ export const TableBasic: React.FC<Props> = ({ tableTitle, tableHeadData, datas }
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  //   const visibleRows = useMemo(
-  //     () =>
-  //       stableSort(rows, getComparator(order, orderBy)).slice(
-  //         page * rowsPerPage,
-  //         page * rowsPerPage + rowsPerPage,
-  //       ),
-  //     [order, orderBy, page, rowsPerPage],
-  //   );
+  const visibleRows = useMemo(() => stableSort(rows, getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage), [order, orderBy, page, rowsPerPage]);
 
   interface EnhancedTableProps {
     onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
@@ -119,29 +124,41 @@ export const TableBasic: React.FC<Props> = ({ tableTitle, tableHeadData, datas }
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
+      <Paper sx={{ width: "100%", mb: 2, paddingLeft: "15px", paddingRight: "15px" }}>
         <EnhancedTableToolbar tableTitle={tableTitle} />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={"medium"}>
             <EnhancedTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} rowCount={rows.length} />
             <TableBody>
-              {datas &&
-                datas.length > 0 &&
-                datas.map((item, index) => {
-                  const { data, label } = item;
-                  return (
-                    <TableRow>
-                      <TableCell>{label}</TableCell>
-                      {data.length > 0 &&
-                        data.map((children, childrenItem) => {
-                          return <TableCell>{children}</TableCell>;
-                        })}
-                    </TableRow>
-                  );
-                })}
+              {visibleRows.map((row, index) => {
+                const labelId = `enhanced-table-${index}`;
+                let totalValue = 0;
+                return (
+                  <TableRow hover tabIndex={-1} key={`${labelId}`}>
+                    <TableCell component="th" id={`${row.city}_${index}`} scope="row" padding="none">
+                      {row.city}
+                    </TableCell>
+                    {tableHeadData.map((year, yearIndex) => {
+                      const value = row[year];
+                      if (typeof value === "number") {
+                        totalValue += Number(value);
+                      }
+                      return (
+                        <TableCell key={`${row.city}_${year}_${yearIndex}`} align="right">
+                          {value}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+              <TableRow>
+                <TableCell>총계</TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
+        {/* <TablePagination rowsPerPageOptions={[5, 10, 25]} component="div" count={rows.length} rowsPerPage={rowsPerPage} page={page} onPageChange={handleChangePage} onRowsPerPageChange={handleChangeRowsPerPage} /> */}
       </Paper>
     </Box>
   );

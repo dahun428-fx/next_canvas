@@ -24,12 +24,6 @@ export const ViolentMain: React.FC<Props> = ({ violenceResponse }) => {
     });
   }, [violenceResponse]);
 
-  const tableDatas = useMemo(() => {
-    return mergeByCityWithYear(violenceResponse.items).map((item, index) => {
-      return { label: item.city, data: item.강도 };
-    });
-  }, [violenceResponse]);
-
   return (
     <div>
       <VerticalBar dataObject={datasForRobber} labels={labels} chartName="연도별 / 지역별 강력범죄 추이 (강도)" />
