@@ -9,23 +9,18 @@ import { useDispatch } from "react-redux";
 type Props = {};
 
 export const ViolentYearlyPage: React.FC<Props> = () => {
-  const violenceResponse = useSelector(selectViolence);
-
   const initailized = useRef(false);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!initailized.current && violenceResponse.items.length < 1) {
+    if (!initailized.current) {
       loadOperations(dispatch)();
       initailized.current = true;
     }
-  }, [dispatch, initailized.current, violenceResponse.items.length]);
+  }, [dispatch, initailized.current]);
 
-  if (violenceResponse && violenceResponse.items && violenceResponse.items.length > 0) {
-    return <Presenter violenceResponse={violenceResponse} />;
-  }
-  return null;
+  return <Presenter />;
 };
 
 ViolentYearlyPage.displayName = "ViolentYearly";

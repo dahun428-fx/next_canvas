@@ -63,20 +63,14 @@ export const mergeByYearly = (violences: Violence[]) => {
  *   폭력 : [2014,2015,2016,2017,2018,2019,2020,2021,2022]
  */
 export const mergeByCityWithYear = (violences: Violence[]) => {
-  // const result = violences.map((violence, index) => {
-  //   const mergedByCity = mergeByCity(violence.data);
-  //   const year = violence.data[0].발생년도 ? `${violence.data[0].발생년도}` : `${violence.data[0].발생연도}`;
-  //   return {year};
-  // })
   const mergedByYearly = mergeByYearly(violences);
-  console.log("mergedByYearly ===> ", mergedByYearly);
-  //city: 서울, 강도: [],
+
   let array: mergeByCityWithYearType[] = [];
+
   mergedByYearly.forEach((item, index) => {
-    const year: string = Object.keys([item][0])[0];
     const items = Object.values(item);
-    items.map((level2Item, level2Index) => {
-      level2Item.map((level3Item, level3Index) => {
+    items.map((level2Item) => {
+      level2Item.map((level3Item) => {
         const { city, 강도, 살인, 절도, 폭력 } = level3Item;
         const foundIndex = array.findIndex((arrayItem) => arrayItem.city === city);
         if (foundIndex >= 0) {
@@ -97,8 +91,8 @@ export const mergeByCityWithYear = (violences: Violence[]) => {
         }
       });
     });
-    // console.log(year, items);
   });
+
   console.log("array===>", array);
   return Array.from(array);
 };
