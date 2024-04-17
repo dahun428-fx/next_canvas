@@ -21,12 +21,19 @@ export interface ViolentData {
 
 const cityNames = policeCityArray;
 
-type TabType = "robber" | "a";
+const ViolentTabType = {
+  ROBBER: "1",
+  MURDER: "2",
+  THEFT: "3",
+  VIOLENCE: "4",
+} as const;
+// type TabType = "robber" | "a";
+type ViolentTabType = (typeof ViolentTabType)[keyof typeof ViolentTabType];
 
 export const ViolentMain: React.FC<Props> = ({ violenceResponse }) => {
   if (violenceResponse.items.length < 1) return null;
 
-  const [tabValue, setTabValue] = useState<TabType>("robber");
+  const [tabValue, setTabValue] = useState<ViolentTabType>(ViolentTabType.ROBBER);
 
   const [checkedCityNamesWithRobber, setCheckedCityNamesWithRobber] = useState<string[]>(cityNames);
 
@@ -57,16 +64,16 @@ export const ViolentMain: React.FC<Props> = ({ violenceResponse }) => {
       <TabContext value={tabValue}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList
-            onChange={(event: SyntheticEvent, value: TabType) => {
+            onChange={(event: SyntheticEvent, value: ViolentTabType) => {
               setTabValue(value);
             }}
             variant="scrollable"
             // aria-label="lab API tabs example"
           >
-            <Tab label={`강도`} value={"robber"} />
+            <Tab label={`강도`} value={ViolentTabType.ROBBER} />
           </TabList>
         </Box>
-        <TabPanel value={`robber`}>
+        <TabPanel value={ViolentTabType.ROBBER}>
           <ViolentParts labels={labels} cityNames={cityNames} title="연도별 / 지역별 강력범죄 추이 (강도)" datas={datasForRobber} violenceResponse={violenceResponse} changeCheckedCityNames={changeCheckedCityNamesWithRobber} />
         </TabPanel>
       </TabContext>
