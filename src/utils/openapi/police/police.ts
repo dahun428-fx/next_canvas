@@ -31,14 +31,11 @@ export const PoliceType = {
 export type PoliceType = (typeof PoliceType)[keyof typeof PoliceType];
 
 export const seperateByCity = (data: Police[], targetName?: string) => {
-	const cityNames = new Set<string>();
-	data.forEach((item, index) => {
-		const name = item.경찰서.slice(0, 2);
-		cityNames.add(name);
-	});
+	const cityNames = new Set<string>(policeCityArray);
+
 	return Array.from(cityNames).map((item, index) => {
 		return data.filter((newItem, newIndex) => {
-			if (newItem.경찰서.includes(item)) {
+			if (newItem.경찰서.slice(0, 2) === item) {
 				return newItem;
 			}
 		});
@@ -46,17 +43,15 @@ export const seperateByCity = (data: Police[], targetName?: string) => {
 };
 
 export const mergeByCity = (data: Police[]) => {
-	const cityNames = new Set<string>();
-	policeCityArray.map(item => {
-		cityNames.add(item);
-	});
+	const cityNames = new Set<string>(policeCityArray);
+
 	return Array.from(cityNames).map((item, index) => {
 		let 강도 = 0;
 		let 살인 = 0;
 		let 절도 = 0;
 		let 폭력 = 0;
 		data.filter((newItem, newIndex) => {
-			if (newItem.경찰서.includes(item)) {
+			if (newItem.경찰서.slice(0, 2) === item) {
 				강도 += newItem.강도;
 				살인 += newItem.살인;
 				절도 += newItem.절도;

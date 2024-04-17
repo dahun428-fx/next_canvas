@@ -1,16 +1,13 @@
-import { Doughnut } from '@/components/ui/charts/doughnut';
 import { SearchPoliceRequest } from '@/models/api/open/police/SearchPoliceRequest';
 import { PoliceState } from '@/store/modules/common/police';
 import {
-	PoliceType,
 	mergeByCity,
+	policeCityArray,
 	seperateByCity,
 } from '@/utils/openapi/police/police';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import {
 	Box,
-	Card,
-	CardHeader,
 	FormControl,
 	Grid,
 	InputLabel,
@@ -20,18 +17,11 @@ import {
 	Tab,
 	Typography,
 } from '@mui/material';
-import {
-	ChangeEvent,
-	MouseEvent,
-	SyntheticEvent,
-	useMemo,
-	useState,
-} from 'react';
+import { SyntheticEvent, useMemo, useState } from 'react';
 import { PoliceList } from './PoliceList';
-import { Police } from '@/models/api/open/police/SearchPoliceResponse';
 import { PoliceItem } from './PoliceItem';
-import { DoughnutDataObject } from '@/components/ui/charts/doughnut/Doughnut';
 import { digit } from '@/utils/number';
+import { DoughnutData } from '@/components/ui/charts/doughnut/Doughnut';
 
 type Props = {
 	onReload: (request: Omit<SearchPoliceRequest, 'serviceKey'>) => void;
@@ -51,12 +41,6 @@ export const PoliceMain: React.FC<Props> = ({
 
 	const seperatedPoliceList = useMemo(() => {
 		return seperateByCity(policeResponse.items);
-	}, [policeResponse.items]);
-
-	const seperatedPoliceTabNames = useMemo(() => {
-		return seperateByCity(policeResponse.items).map((item, index) => {
-			return item[0].경찰서.slice(0, 2);
-		});
 	}, [policeResponse.items]);
 
 	const mergePoliceList = useMemo(() => {
@@ -108,9 +92,9 @@ export const PoliceMain: React.FC<Props> = ({
 						{seperatedPoliceList && seperatedPoliceList.length > 0 && (
 							<Tab label={`전체`} value={`police_all`} />
 						)}
-						{seperatedPoliceTabNames &&
-							seperatedPoliceTabNames.length > 0 &&
-							seperatedPoliceTabNames.map((tabName, tabId) => {
+						{policeCityArray &&
+							policeCityArray.length > 0 &&
+							policeCityArray.map((tabName, tabId) => {
 								return (
 									<Tab
 										key={`police_${tabId}`}
@@ -127,7 +111,7 @@ export const PoliceMain: React.FC<Props> = ({
 							mergePoliceList.length > 0 &&
 							mergePoliceList.map((item, index) => {
 								const { 강도, 살인, city, 절도, 폭력 } = item;
-								const dataObj: DoughnutDataObject = {
+								const dataObj: DoughnutData = {
 									강도,
 									절도,
 									살인,
@@ -135,15 +119,17 @@ export const PoliceMain: React.FC<Props> = ({
 								};
 
 								const subheader = `총 발생건수 : ${digit(강도 + 살인 + 절도 + 폭력)} 건`;
-
-								return (
-									<PoliceItem
-										key={`all_${index}`}
-										dataObj={dataObj}
-										title={city}
-										subheader={subheader}
-									/>
-								);
+								if (강도 + 살인 + 절도 + 폭력 > 0) {
+									return (
+										<PoliceItem
+											key={`all_${index}`}
+											dataObj={dataObj}
+											title={city}
+											subheader={subheader}
+										/>
+									);
+								}
+								return null;
 							})}
 					</Grid>
 				</TabPanel>

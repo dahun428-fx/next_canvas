@@ -17,55 +17,55 @@ ChartJS.register(ArcElement, Tooltip, Legend, Colors);
  * 강도 : 1, 절도 : 1, 살인 : 1, 폭력 : 1,
  */
 
-export type DoughnutDataObject = {
+export type DoughnutData = {
 	[key: string]: number;
 };
 
 type Props = {
 	className?: string;
-	dataObject: DoughnutDataObject;
+	data: DoughnutData;
 	chartName?: string;
-	label: string;
+	labels?: string[];
+	title: string;
 	colors?: string[];
 };
 
 export const Doughnut: React.FC<Props> = ({
 	className,
-	label,
+	title,
 	chartName,
-	dataObject,
+	data,
+	labels,
 	colors,
 }) => {
-	if (!isObject(dataObject)) return null;
-	const labels: string[] = Object.keys(dataObject);
-	const chartDatas: number[] = Object.values(dataObject);
+	if (!isObject(data)) return null;
 
-	const adjustLabels = useMemo(() => {
-		const labels = Object.keys(dataObject);
-		const chartDatas: number[] = Object.values(dataObject);
+	const chartDatas: number[] = Object.values(data);
 
-		let result = [];
-		for (let i = 0; i < labels.length; i++) {
-			const text = `${labels[i]} (${digit(chartDatas[i])})`;
-			result.push(text);
-		}
-		return result;
-	}, [dataObject]);
-
-	const data = {
-		labels: adjustLabels,
-		datasets: [
-			{
-				label: label,
-				data: chartDatas,
-			},
-		],
-	};
 	const options = {};
+
+	const dataLabel = useMemo(() => {
+		if (labels && labels.length > 0) {
+			return labels;
+		}
+		return Object.keys(data);
+	}, [labels, data]);
+
 	return (
 		<div className={className}>
 			{chartName && <div className={styles.chartName}>{chartName}</div>}
-			<DoughnutChart data={data} options={options} />
+			<DoughnutChart
+				data={{
+					labels: dataLabel,
+					datasets: [
+						{
+							label: title,
+							data: chartDatas,
+						},
+					],
+				}}
+				options={options}
+			/>
 		</div>
 	);
 };
