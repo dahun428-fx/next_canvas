@@ -23,10 +23,6 @@ export const mergeByCity = (data: Police[]) => {
   policeCityArray.map((item) => {
     cityNames.add(item);
   });
-  // data.forEach((item, index) => {
-  //   const name = item.경찰서.slice(0, 2);
-  //   cityNames.add(name);
-  // });
   return Array.from(cityNames).map((item, index) => {
     let 강도 = 0;
     let 살인 = 0;
@@ -98,7 +94,6 @@ export const mergeByCityWithYear = (violences: Violence[]) => {
     });
   });
 
-  console.log("array===>", array);
   return Array.from(array);
 };
 

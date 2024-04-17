@@ -66,7 +66,7 @@ export const PoliceMain: React.FC<Props> = ({ onReload, searchPoliceRequest, pol
       <TabContext value={tabValue}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList
-            onChange={(event: MouseEvent, value: string) => setTabValue(value)}
+            onChange={(event: SyntheticEvent, value: string) => setTabValue(value)}
             variant="scrollable"
             // aria-label="lab API tabs example"
           >

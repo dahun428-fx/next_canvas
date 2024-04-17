@@ -8,7 +8,7 @@ export const ViolentYearlyPage: React.FC<Props> = ({}) => {
   return (
     <Container maxWidth="xl">
       <ViolentMain />
-      <BottomNavi />
+      {/* <BottomNavi /> */}
     </Container>
   );
 };
