@@ -4,22 +4,16 @@ import { ViolentChartsModalButton } from "../ViolentChartsModalButton";
 import styles from "./ViolentCharts.module.scss";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState } from "react";
+import { ChartType } from "chart.js";
 
 type Props = {
   dataObject: ViolentData[];
   title: string;
   labels: string[];
+  selectedChart?: ChartType;
 };
-type VerticalBarProps = {
-  className?: string;
-  dataObject: ViolentData[];
-  chartName?: string;
-  colors?: string[];
-  labels: string[];
-};
-// const VerticalBarDynamic = dynamic<VerticalBarProps>(() => import("@/components/ui/charts/verticalbar").then((modules) => modules.VerticalBar), { ssr: false });
 
-export const ViolentCharts: React.FC<Props> = ({ dataObject, labels, title }) => {
+export const ViolentCharts: React.FC<Props> = ({ dataObject, labels, title, selectedChart = "line" }) => {
   return (
     <>
       <div className={styles.modalButton}>

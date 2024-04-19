@@ -2,6 +2,7 @@ import { PoliceResourceYears, searchPoliceList } from "@/api/clients/services/op
 import { Dispatch } from "redux";
 import { actions } from "./slice";
 import { SearchPoliceReseponse } from "@/models/api/open/police/SearchPoliceResponse";
+import { ChartType } from "chart.js";
 
 export function loadOperations(dispatch: Dispatch) {
   return async () => {
@@ -23,5 +24,11 @@ export function loadOperations(dispatch: Dispatch) {
       });
       dispatch(actions.load(violenceItems));
     });
+  };
+}
+
+export function updateChartTypeOperation(dispatch: Dispatch) {
+  return (chartType: ChartType) => {
+    dispatch(actions.updateChartType(chartType));
   };
 }

@@ -1,7 +1,9 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { ChartType } from "chart.js";
 
 export type ViolenceState = {
   items: LoadPayload[];
+  chartType: ChartType;
   show: boolean;
 };
 
@@ -37,6 +39,7 @@ type LoadPayload = {
 
 const initialState: ViolenceState = {
   items: [],
+  chartType: "line",
   show: true,
 };
 
@@ -48,6 +51,12 @@ const slice = createSlice({
       return {
         ...state,
         items: action.payload,
+      };
+    },
+    updateChartType(state, action: PayloadAction<ChartType>) {
+      return {
+        ...state,
+        chartType: action.payload,
       };
     },
   },

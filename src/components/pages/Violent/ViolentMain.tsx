@@ -9,19 +9,23 @@ import styles from "./ViolentMain.module.scss";
 import { Box, Grid, Tab } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { ViolentParts } from "./ViolentParts/ViolentParts";
+import { ChartType, ChartTypeRegistry } from "chart.js";
 
-type Props = {
-  violenceResponse: ViolenceState;
-};
+// export type ViolentAcceptableChartType = Pick<ChartTypeRegistry, "line" | "bar" | "polarArea">;
 
 export interface ViolentData {
   label: string;
   data: number[];
 }
 
+type Props = {
+  violenceResponse: ViolenceState;
+  selectedChart: ChartType;
+};
+
 const cityNames = policeCityArray;
 
-export const ViolentMain: React.FC<Props> = ({ violenceResponse }) => {
+export const ViolentMain: React.FC<Props> = ({ violenceResponse, selectedChart }) => {
   if (violenceResponse.items.length < 1) return null;
 
   const [tabValue, setTabValue] = useState<PoliceType>(PoliceType.ROBBER);
@@ -111,16 +115,16 @@ export const ViolentMain: React.FC<Props> = ({ violenceResponse }) => {
           </TabList>
         </Box>
         <TabPanel value={PoliceType.ROBBER}>
-          <ViolentParts labels={labels} cityNames={cityNames} title={`연도별 / 지역별 강력범죄 추이 (${PoliceType.ROBBER})`} datas={datasForRobber} violenceResponse={violenceResponse} changeCheckedCityNames={changeCheckedCityNamesWithRobber} checkedCityName={checkedCityNamesWithRobber} />
+          <ViolentParts selectedChart={selectedChart} labels={labels} cityNames={cityNames} title={`연도별 / 지역별 강력범죄 추이 (${PoliceType.ROBBER})`} datas={datasForRobber} violenceResponse={violenceResponse} changeCheckedCityNames={changeCheckedCityNamesWithRobber} checkedCityName={checkedCityNamesWithRobber} />
         </TabPanel>
         <TabPanel value={PoliceType.MURDER}>
-          <ViolentParts labels={labels} cityNames={cityNames} title={`연도별 / 지역별 강력범죄 추이 (${PoliceType.MURDER})`} datas={datasForMurder} violenceResponse={violenceResponse} changeCheckedCityNames={changeCheckedCityNamesWithMurder} checkedCityName={checkedCityNamesWithMurder} />
+          <ViolentParts selectedChart={selectedChart} labels={labels} cityNames={cityNames} title={`연도별 / 지역별 강력범죄 추이 (${PoliceType.MURDER})`} datas={datasForMurder} violenceResponse={violenceResponse} changeCheckedCityNames={changeCheckedCityNamesWithMurder} checkedCityName={checkedCityNamesWithMurder} />
         </TabPanel>
         <TabPanel value={PoliceType.THEFT}>
-          <ViolentParts labels={labels} cityNames={cityNames} title={`연도별 / 지역별 강력범죄 추이 (${PoliceType.THEFT})`} datas={datasForTheft} violenceResponse={violenceResponse} changeCheckedCityNames={changeCheckedCityNamesWithTheft} checkedCityName={checkedCityNamesWithTheft} />
+          <ViolentParts selectedChart={selectedChart} labels={labels} cityNames={cityNames} title={`연도별 / 지역별 강력범죄 추이 (${PoliceType.THEFT})`} datas={datasForTheft} violenceResponse={violenceResponse} changeCheckedCityNames={changeCheckedCityNamesWithTheft} checkedCityName={checkedCityNamesWithTheft} />
         </TabPanel>
         <TabPanel value={PoliceType.VIOLENCE}>
-          <ViolentParts labels={labels} cityNames={cityNames} title={`연도별 / 지역별 강력범죄 추이 (${PoliceType.VIOLENCE})`} datas={datasForViolence} violenceResponse={violenceResponse} changeCheckedCityNames={changeCheckedCityNamesWithViolence} checkedCityName={checkedCityNamesWithViolence} />
+          <ViolentParts selectedChart={selectedChart} labels={labels} cityNames={cityNames} title={`연도별 / 지역별 강력범죄 추이 (${PoliceType.VIOLENCE})`} datas={datasForViolence} violenceResponse={violenceResponse} changeCheckedCityNames={changeCheckedCityNamesWithViolence} checkedCityName={checkedCityNamesWithViolence} />
         </TabPanel>
       </TabContext>
     </div>
