@@ -6,17 +6,27 @@ import ListSubheader from "@mui/material/ListSubheader";
 import Switch from "@mui/material/Switch";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BluetoothIcon from "@mui/icons-material/Bluetooth";
-import { RefObject, useCallback, useState } from "react";
+import { RefObject, useCallback, useEffect, useState } from "react";
 
 type Props = {
   data: string[];
   className?: string;
+  checkedCityName?: string[];
   parentCheckEvent?: (items: string[]) => void;
 };
 
-export const SwitchBasic: React.FC<Props> = ({ data, className, parentCheckEvent }) => {
-  const [checked, setChecked] = useState([...data]);
+export const SwitchBasic: React.FC<Props> = ({ data, checkedCityName, className, parentCheckEvent }) => {
+  const [checked, setChecked] = useState<string[]>([]);
   const [allChecked, setAllChecked] = useState<boolean>(true);
+  useEffect(() => {
+    if (checkedCityName && data.length > checkedCityName.length) {
+      setChecked(checkedCityName);
+      setAllChecked(false);
+    } else {
+      setChecked(data);
+      setAllChecked(true);
+    }
+  }, []);
 
   const handleToggle = (value: string) => () => {
     const currentIndex = checked.indexOf(value);
