@@ -1,10 +1,10 @@
-import { BottomNavi } from "@/components/common/BottomNavi";
-import { Container } from "@mui/material";
-import { ViolentMain } from "../Violent/ViolentMain.container";
-import { ChartTypeRegistry, ChartType } from "chart.js";
-import { useCallback, useState } from "react";
-import { updateChartTypeOperation } from "@/store/modules/common/violence";
-import { useDispatch } from "react-redux";
+import { BottomNavi } from '@/components/common/BottomNavi';
+import { Container } from '@mui/material';
+import { ViolentMain } from '../Violent/ViolentMain.container';
+import { ChartTypeRegistry, ChartType } from 'chart.js';
+import { useCallback, useState } from 'react';
+import { updateChartTypeOperation } from '@/store/modules/common/violence';
+import { useDispatch } from 'react-redux';
 
 // export type ViolentAcceptableChart = Pick<ChartTypeRegistry, "line" | "bar" | "polarArea">;
 
@@ -13,25 +13,29 @@ import { useDispatch } from "react-redux";
 type Props = {};
 
 export const ViolentYearlyPage: React.FC<Props> = ({}) => {
-  const dispatch = useDispatch();
+	const dispatch = useDispatch();
 
-  const availableCharts: ChartType[] = ["line", "bar", "polarArea"];
-  const [selectedChartType, setSelectedChartType] = useState<ChartType>("line");
+	const availableCharts: ChartType[] = ['line', 'bar'];
+	const [selectedChartType, setSelectedChartType] = useState<ChartType>('line');
 
-  const handleChangeChartType = useCallback(
-    (value: ChartType) => {
-      setSelectedChartType(value);
-      updateChartTypeOperation(dispatch)(value);
-    },
-    [selectedChartType, setSelectedChartType]
-  );
+	const handleChangeChartType = useCallback(
+		(value: ChartType) => {
+			setSelectedChartType(value);
+			updateChartTypeOperation(dispatch)(value);
+		},
+		[selectedChartType, setSelectedChartType]
+	);
 
-  return (
-    <Container maxWidth="xl">
-      <ViolentMain selectedChart={selectedChartType} />
-      <BottomNavi handleChangeChartType={handleChangeChartType} selectedChartType={selectedChartType} availableCharts={availableCharts} />
-    </Container>
-  );
+	return (
+		<Container maxWidth="xl">
+			<ViolentMain selectedChart={selectedChartType} />
+			<BottomNavi
+				handleChangeChartType={handleChangeChartType}
+				selectedChartType={selectedChartType}
+				availableCharts={availableCharts}
+			/>
+		</Container>
+	);
 };
 
-ViolentYearlyPage.displayName = "ViolentYearly";
+ViolentYearlyPage.displayName = 'ViolentYearly';

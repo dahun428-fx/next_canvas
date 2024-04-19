@@ -1,5 +1,9 @@
-import { AppState } from "@/store";
+import { AppState } from '@/store';
 
 export function selectViolence(state: AppState) {
-  return state.violence;
+	return state.violence;
+}
+
+export function selectChartType(state: AppState) {
+	return state.violence.chartType;
 }

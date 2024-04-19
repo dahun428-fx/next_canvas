@@ -1,6 +1,6 @@
-import { MyChartType } from '@/components/ui/charts/types';
 import { Police } from '@/models/api/open/police/SearchPoliceResponse';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { ChartType } from 'chart.js';
 
 export type PoliceState = {
 	items: Police[];
@@ -11,13 +11,12 @@ export type PoliceState = {
 	matchCount?: number;
 	currentCount?: number;
 	year?: string;
-	chartType?: PoliceChartType;
+	chartType: ChartType;
 };
-
-type PoliceChartType = MyChartType;
 
 const initialState: PoliceState = {
 	items: [],
+	chartType: 'doughnut',
 	show: true,
 };
 
@@ -29,7 +28,7 @@ type LoadPayload = {
 	page: number;
 	perPage: number;
 	year?: string;
-	chartType?: PoliceChartType;
+	chartType?: ChartType;
 };
 
 const slice = createSlice({
@@ -45,7 +44,6 @@ const slice = createSlice({
 				perPage,
 				totalCount,
 				year,
-				chartType,
 			} = action.payload;
 
 			return {
@@ -57,7 +55,6 @@ const slice = createSlice({
 				perPage,
 				totalCount,
 				year,
-				chartType: chartType ?? 'doughnut',
 			};
 		},
 		setItems(state, action: PayloadAction<Police[]>) {
@@ -70,6 +67,12 @@ const slice = createSlice({
 			return {
 				...state,
 				items: action.payload,
+			};
+		},
+		updateChartType(state, action: PayloadAction<ChartType>) {
+			return {
+				...state,
+				chartType: action.payload,
 			};
 		},
 		// removeItems() {},

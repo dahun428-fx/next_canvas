@@ -6,6 +6,7 @@ import {
 	InitializePoliceRequest,
 	SearchPoliceRequest,
 } from '@/models/api/open/police/SearchPoliceRequest';
+import { ChartType } from 'chart.js';
 
 type PoliceRequest = Omit<SearchPoliceRequest, 'serviceKey'>;
 
@@ -28,6 +29,12 @@ export const addItemsOperations = (dispatch: Dispatch) => {
 export const updateItemsOperations = (dispatch: Dispatch) => {
 	return (items: Police[]) => {
 		dispatch(PoliceActions.updateItems(items));
+	};
+};
+
+export const updateChartTypeOperation = (dispatch: Dispatch) => {
+	return (item: ChartType) => {
+		dispatch(PoliceActions.updateChartType(item));
 	};
 };
 

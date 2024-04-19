@@ -22,6 +22,7 @@
     "chart.js": "^4.4.2",
     "chartjs-plugin-zoom": "^2.0.1",
     "iconify": "^1.4.0",
+    "install": "^0.13.0",
     "next": "14.1.4",
     "numeral": "^2.0.6",
     "react": "^18",
