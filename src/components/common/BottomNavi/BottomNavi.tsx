@@ -3,6 +3,9 @@ import {
 	BottomNavigationAction,
 	Box,
 	Card,
+	CardContent,
+	CardHeader,
+	Typography,
 } from '@mui/material';
 import RestoreIcon from '@mui/icons-material/Restore';
 import { useState } from 'react';
@@ -60,6 +63,13 @@ export const BottomNavi: React.FC<Props> = ({
 
 	return (
 		<Card className={styles.bottomfixed}>
+			{/* <CardContent
+				sx={{ backgroundColor: '#1976d2', textAlign: 'center', padding: '5px' }}
+			>
+				<Typography sx={{ fontWeight: 'bold', color: '#fff' }}>
+					차트변경
+				</Typography>
+			</CardContent> */}
 			<BottomNavigation
 				showLabels
 				value={selectedChartType}

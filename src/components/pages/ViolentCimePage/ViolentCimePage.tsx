@@ -11,12 +11,11 @@ import {
 import { loadOperations } from '@/store/modules/common/violence';
 import { useSelector } from '@/store/hooks';
 import { ChartType } from 'chart.js';
+import { bottomBarAddChartTypesOpertion } from '@/store/modules/common/bottom';
 
 type Props = {};
 
 export const ViolentCimePage: React.FC<Props> = () => {
-	const initailized = useRef(false);
-	const policeResponse = useSelector(selectPolice);
 	const dispatch = useDispatch();
 
 	const availableCharts: ChartType[] = ['doughnut', 'polarArea', 'pie'];
@@ -31,21 +30,14 @@ export const ViolentCimePage: React.FC<Props> = () => {
 		[selectedChartType, setSelectedChartType]
 	);
 
-	useEffect(() => {
-		if (!initailized.current && policeResponse.items.length < 1) {
-			loadOperation(dispatch)();
-			initailized.current = true;
-		}
-	}, [dispatch, initailized.current, policeResponse.items.length]);
-
 	return (
 		<Container maxWidth="xl">
 			<PoliceMain />
-			<BottomNavi
-				availableCharts={availableCharts}
-				handleChangeChartType={handleChangeChartType}
-				selectedChartType={selectedChartType}
-			/>
+			{/* <BottomNavi
+			// availableCharts={availableCharts}
+			// handleChangeChartType={handleChangeChartType}
+			// selectedChartType={selectedChartType}
+			/> */}
 		</Container>
 	);
 };

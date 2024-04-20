@@ -1,13 +1,15 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { policeReducer } from "./modules/common/police/slice";
-import { violenceReducer } from "./modules/common/violence/slice";
+import { configureStore } from '@reduxjs/toolkit';
+import { policeReducer } from './modules/common/police/slice';
+import { violenceReducer } from './modules/common/violence/slice';
+import { bottomBarReducer } from './modules/common/bottom/slice';
 
 export const store = configureStore({
-  reducer: {
-    police: policeReducer,
-    violence: violenceReducer,
-  },
-  devTools: process.env.NODE_ENV === "development",
+	reducer: {
+		police: policeReducer,
+		violence: violenceReducer,
+		bottomBar: bottomBarReducer,
+	},
+	devTools: process.env.NODE_ENV === 'development',
 });
 
 export type GetState = typeof store.getState;
