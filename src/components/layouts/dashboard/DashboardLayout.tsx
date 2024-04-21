@@ -6,7 +6,11 @@ import { Main } from './common/Main';
 import { BottomAppBar } from '@/components/common/BottomAppBar';
 import { useDispatch } from 'react-redux';
 import { Router } from 'next/router';
-import { bottomBarResetChartTypesOperation } from '@/store/modules/common/bottom';
+import {
+	bottomBarResetChartTypesOperation,
+	selectBottomPageRoute,
+} from '@/store/modules/common/bottom';
+import { useSelector } from '@/store/hooks';
 
 type Props = {
 	children?: ReactNode;
@@ -16,7 +20,15 @@ export const DashboardLayout: React.FC<Props> = ({ children }) => {
 	const [openNav, setOpenNav] = useState(true);
 
 	const dispatch = useDispatch();
+
+	const pageRoute = useSelector(selectBottomPageRoute);
+
 	useEffect(() => {
+		console.log('pageRoute ===> ', pageRoute);
+		if (pageRoute) {
+			return;
+		}
+
 		Router.events.on(
 			'routeChangeStart',
 			bottomBarResetChartTypesOperation(dispatch)

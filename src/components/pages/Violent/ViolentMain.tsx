@@ -1,5 +1,3 @@
-import { VerticalBar } from '@/components/ui/charts/verticalbar';
-import { TableBasic } from '@/components/ui/tables/tableBasic';
 import { ViolenceState } from '@/store/modules/common/violence';
 import {
 	PoliceType,
@@ -7,23 +5,10 @@ import {
 	mergeByYearly,
 	policeCityArray,
 } from '@/utils/openapi/police/police';
-import {
-	MouseEvent,
-	SyntheticEvent,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
-import { ViolentTable } from './ViolentTable/ViolentTable';
-import { SwitchBasic } from '@/components/ui/list/switch';
-import styles from './ViolentMain.module.scss';
-import { Box, Grid, Tab } from '@mui/material';
+import { SyntheticEvent, useMemo, useState } from 'react';
+import { Box, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { ViolentParts } from './ViolentParts/ViolentParts';
-import { ChartType, ChartTypeRegistry } from 'chart.js';
-
-// export type ViolentAcceptableChartType = Pick<ChartTypeRegistry, "line" | "bar" | "polarArea">;
 
 export interface ViolentData {
 	label: string;
@@ -32,15 +17,11 @@ export interface ViolentData {
 
 type Props = {
 	violenceResponse: ViolenceState;
-	selectedChart: ChartType;
 };
 
 const cityNames = policeCityArray;
 
-export const ViolentMain: React.FC<Props> = ({
-	violenceResponse,
-	selectedChart,
-}) => {
+export const ViolentMain: React.FC<Props> = ({ violenceResponse }) => {
 	if (violenceResponse.items.length < 1) return null;
 
 	const [tabValue, setTabValue] = useState<PoliceType>(PoliceType.ROBBER);
@@ -152,7 +133,6 @@ export const ViolentMain: React.FC<Props> = ({
 				</Box>
 				<TabPanel value={'all'}>
 					<ViolentParts
-						selectedChart={selectedChart}
 						labels={labels}
 						cityNames={cityNames}
 						title={`연도별 / 지역별 강력범죄 추이 ( 전체 )`}
@@ -164,7 +144,6 @@ export const ViolentMain: React.FC<Props> = ({
 				</TabPanel>
 				<TabPanel value={PoliceType.ROBBER}>
 					<ViolentParts
-						selectedChart={selectedChart}
 						labels={labels}
 						cityNames={cityNames}
 						title={`연도별 / 지역별 강력범죄 추이 (${PoliceType.ROBBER})`}
@@ -176,7 +155,6 @@ export const ViolentMain: React.FC<Props> = ({
 				</TabPanel>
 				<TabPanel value={PoliceType.MURDER}>
 					<ViolentParts
-						selectedChart={selectedChart}
 						labels={labels}
 						cityNames={cityNames}
 						title={`연도별 / 지역별 강력범죄 추이 (${PoliceType.MURDER})`}
@@ -188,7 +166,6 @@ export const ViolentMain: React.FC<Props> = ({
 				</TabPanel>
 				<TabPanel value={PoliceType.THEFT}>
 					<ViolentParts
-						selectedChart={selectedChart}
 						labels={labels}
 						cityNames={cityNames}
 						title={`연도별 / 지역별 강력범죄 추이 (${PoliceType.THEFT})`}
@@ -200,7 +177,6 @@ export const ViolentMain: React.FC<Props> = ({
 				</TabPanel>
 				<TabPanel value={PoliceType.VIOLENCE}>
 					<ViolentParts
-						selectedChart={selectedChart}
 						labels={labels}
 						cityNames={cityNames}
 						title={`연도별 / 지역별 강력범죄 추이 (${PoliceType.VIOLENCE})`}

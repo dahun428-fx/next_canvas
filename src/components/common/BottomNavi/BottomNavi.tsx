@@ -19,6 +19,8 @@ import PieChartIcon from '@mui/icons-material/PieChart';
 import BubbleChartIcon from '@mui/icons-material/BubbleChart';
 import RadarIcon from '@mui/icons-material/Radar';
 import DonutSmallIcon from '@mui/icons-material/DonutSmall';
+import AssessmentIcon from '@mui/icons-material/AssessmentOutlined';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 type Props = {
 	availableCharts?: ChartType[];
@@ -62,34 +64,40 @@ export const BottomNavi: React.FC<Props> = ({
 	};
 
 	return (
-		<Card className={styles.bottomfixed}>
-			{/* <CardContent
+		<>
+			<div></div>
+			<Box sx={{ marginRight: '12px' }}>
+				<AssessmentIcon fontSize="large" />
+			</Box>
+			<Card className={styles.bottomfixed}>
+				{/* <CardContent
 				sx={{ backgroundColor: '#1976d2', textAlign: 'center', padding: '5px' }}
 			>
 				<Typography sx={{ fontWeight: 'bold', color: '#fff' }}>
 					차트변경
 				</Typography>
 			</CardContent> */}
-			<BottomNavigation
-				showLabels
-				value={selectedChartType}
-				onChange={(event, newValue) => {
-					handleChangeChartType(newValue);
-				}}
-			>
-				{availableCharts.map((item, index) => {
-					const key = `${item}_${index}`;
-					return (
-						<BottomNavigationAction
-							key={key}
-							label={item}
-							value={item}
-							icon={ChartIcons(item)}
-						/>
-					);
-				})}
-			</BottomNavigation>
-		</Card>
+				<BottomNavigation
+					showLabels
+					value={selectedChartType}
+					onChange={(event, newValue) => {
+						handleChangeChartType(newValue);
+					}}
+				>
+					{availableCharts.map((item, index) => {
+						const key = `${item}_${index}`;
+						return (
+							<BottomNavigationAction
+								key={key}
+								label={item}
+								value={item}
+								icon={ChartIcons(item)}
+							/>
+						);
+					})}
+				</BottomNavigation>
+			</Card>
+		</>
 	);
 };
 

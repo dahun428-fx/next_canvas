@@ -1,16 +1,13 @@
-import { useSelector } from "@/store/hooks";
-import { ViolentMain as Presenter } from "./ViolentMain";
-import { selectViolence } from "@/store/modules/common/violence";
-import { ChartType } from "chart.js";
+import { useSelector } from '@/store/hooks';
+import { ViolentMain as Presenter } from './ViolentMain';
+import { selectViolence } from '@/store/modules/common/violence';
 
-type Props = {
-  selectedChart: ChartType;
+type Props = {};
+
+export const ViolentMain: React.FC<Props> = () => {
+	const violenceResponse = useSelector(selectViolence);
+
+	return <Presenter violenceResponse={violenceResponse} />;
 };
 
-export const ViolentMain: React.FC<Props> = ({ selectedChart }) => {
-  const violenceResponse = useSelector(selectViolence);
-
-  return <Presenter violenceResponse={violenceResponse} selectedChart={selectedChart} />;
-};
-
-ViolentMain.displayName = "ViolentMain";
+ViolentMain.displayName = 'ViolentMain';
