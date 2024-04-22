@@ -34,15 +34,21 @@ type RegionDataItem = {
 	totalCount: number;
 };
 
+/*
+[{city_name:서울, count: 0, children: []}, {city_name:경기, count : 0, children: [ ... ]   }]	
+{ city_name : 서울, count: 0, 경기 : 0  }
+*/
+
 export const changeToRegionalData = (data: any[], year: string) => {
 	const mainCategoryName = '범죄대분류';
 	const subCategoryName = '범죄중분류';
 
-	return regionCityArray.map((city, cityIdx) => {
+	return regionCityArray.map(city => {
 		let totalCount: number = 0;
 		let category: RegionCategoryItem[] = [];
 		let children: RegionDataItem[] = [];
 		const regExp = new RegExp(city);
+		let childMap = new Map<string, RegionCategoryItem[]>();
 		data.forEach(
 			(_data: { [key: string]: string | number }, _dataIdx: number) => {
 				let main = String(_data[mainCategoryName]);
@@ -56,28 +62,46 @@ export const changeToRegionalData = (data: any[], year: string) => {
 				let endIdx = 0;
 
 				keyObjArr.forEach((key, keyIdx) => {
-					if (key.match(regExp)) {
+					let keyCityname = key.split(' ')[0];
+					let keyChildname = key.split(' ')[1];
+					if (keyCityname.match(regExp)) {
 						count += Number(valueObjArr[keyIdx]);
-						// let childCityName = key.replace(regExp, '').trim();
-						// if (childCityName) {
-						// 	children.push({
-						// 		city_name: childCityName,
-						// 		category: [{ main, sub, count }],
-						// 		year: year,
-						// 		totalCount: Number(valueObjArr[keyIdx]),
-						// 		// city_count: valueObjArr[keyIdx],
-						// 	});
-						// }
-						// startIdx = Math.min(keyIdx, startIdx);
-						// endIdx = Math.max(keyIdx, endIdx);
+
+						if (keyChildname) {
+							let obj: RegionCategoryItem = {
+								count: Number(valueObjArr[keyIdx]),
+								main: main,
+								sub: sub,
+							};
+							if (childMap.has(keyChildname)) {
+								let array = childMap.get(keyChildname) ?? [];
+								array = [...array, obj];
+								childMap.set(keyChildname, array);
+							} else {
+								let array: RegionCategoryItem[] = [obj];
+								childMap.set(keyChildname, array);
+							}
+						}
 					}
 				});
 				//배열삭제 --> 중복 배열 삭제
-				// keyObjArr.splice(startIdx, endIdx - startIdx + 1);
+				keyObjArr.splice(startIdx, endIdx - startIdx + 1);
 				totalCount += count;
 				category = [...category, { main, sub, count }];
 			}
 		);
+		childMap.forEach((value, key, map) => {
+			let totalCount = 0;
+			value.forEach(v => {
+				totalCount += v.count;
+			});
+			children.push({
+				city_name: key,
+				totalCount: totalCount,
+				year: year,
+				category: [...value],
+			});
+		});
 
 		return {
 			city_name: city,

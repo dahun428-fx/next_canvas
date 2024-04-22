@@ -28,8 +28,10 @@ export function loadOperations(dispatch: Dispatch) {
 		);
 		promise.then(async response => {
 			const regionItems: RegionResponse[] = response.map((item, index) => {
-				const result = changeToRegionalData(item.response.data, item.year);
-				console.log('response result ====> ', result);
+				if (index === 0) {
+					const result = changeToRegionalData(item.response.data, item.year);
+					console.log('response result ====> ', result);
+				}
 				return {
 					currentCount: item.response.currentCount,
 					matchCount: item.response.matchCount,
