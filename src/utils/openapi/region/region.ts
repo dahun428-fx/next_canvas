@@ -20,6 +20,75 @@ export const regionCityArray = [
 	'도시이외',
 ];
 
+type RegionCategoryItem = {
+	main: string;
+	sub: string;
+	count: number;
+};
+
+type RegionDataItem = {
+	city_name: string;
+	year: string;
+	category: RegionCategoryItem[];
+	children?: RegionDataItem[];
+	totalCount: number;
+};
+
+export const changeToRegionalData = (data: any[], year: string) => {
+	const mainCategoryName = '범죄대분류';
+	const subCategoryName = '범죄중분류';
+
+	return regionCityArray.map((city, cityIdx) => {
+		let totalCount: number = 0;
+		let category: RegionCategoryItem[] = [];
+		let children: RegionDataItem[] = [];
+		const regExp = new RegExp(city);
+		data.forEach(
+			(_data: { [key: string]: string | number }, _dataIdx: number) => {
+				let main = String(_data[mainCategoryName]);
+				let sub = String(_data[subCategoryName]);
+				let keyObjArr = Object.keys(_data);
+				let valueObjArr = Object.values(_data);
+				let count = 0;
+				//배열삭제 index
+				let startIdx = Number.MAX_VALUE;
+				//배열삭제 index
+				let endIdx = 0;
+
+				keyObjArr.forEach((key, keyIdx) => {
+					if (key.match(regExp)) {
+						count += Number(valueObjArr[keyIdx]);
+						// let childCityName = key.replace(regExp, '').trim();
+						// if (childCityName) {
+						// 	children.push({
+						// 		city_name: childCityName,
+						// 		category: [{ main, sub, count }],
+						// 		year: year,
+						// 		totalCount: Number(valueObjArr[keyIdx]),
+						// 		// city_count: valueObjArr[keyIdx],
+						// 	});
+						// }
+						// startIdx = Math.min(keyIdx, startIdx);
+						// endIdx = Math.max(keyIdx, endIdx);
+					}
+				});
+				//배열삭제 --> 중복 배열 삭제
+				// keyObjArr.splice(startIdx, endIdx - startIdx + 1);
+				totalCount += count;
+				category = [...category, { main, sub, count }];
+			}
+		);
+
+		return {
+			city_name: city,
+			year: year,
+			category: category,
+			children: children,
+			totalCount,
+		};
+	});
+};
+
 export const responseToRegionData = (data: any[]): RegionItem[] => {
 	const mainCategoryName = '범죄대분류';
 	const subCategoryName = '범죄중분류';
@@ -85,6 +154,44 @@ export type RegionCityData = {
 	city_count: string | number;
 	city_child?: RegionCityData[];
 };
+
+/*
+
+data : [
+	{
+		city_name : 서울,
+		year:'',
+		category : [
+			{
+				main : '',
+				sub : '',
+				count : 0,
+			},
+			{
+				main : '',
+				sub : '',
+				count : 0,
+			},
+		],
+		// children : [
+		// 	{
+		// 		city_name : '',
+		// 		year: '',
+		// 		category : [
+		// 			{
+		// 				main : '',
+		// 				sub: '',
+		// 				count : 0,
+		// 			}
+		// 		],
+		// 	},
+		// 	...
+		// ]
+		totalCount : 0
+	}
+]
+
+*/
 
 /*
 

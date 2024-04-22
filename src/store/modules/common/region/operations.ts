@@ -5,7 +5,10 @@ import {
 import { SearchRegionResponse } from '@/models/api/open/region/SearchRegionResponse';
 import { Dispatch } from 'redux';
 import { RegionResponse, actions } from './slice';
-import { responseToRegionData } from '@/utils/openapi/region/region';
+import {
+	changeToRegionalData,
+	responseToRegionData,
+} from '@/utils/openapi/region/region';
 import { ChartType } from 'chart.js';
 
 export function loadOperations(dispatch: Dispatch) {
@@ -25,6 +28,8 @@ export function loadOperations(dispatch: Dispatch) {
 		);
 		promise.then(async response => {
 			const regionItems: RegionResponse[] = response.map((item, index) => {
+				const result = changeToRegionalData(item.response.data, item.year);
+				console.log('response result ====> ', result);
 				return {
 					currentCount: item.response.currentCount,
 					matchCount: item.response.matchCount,
