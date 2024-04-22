@@ -1,5 +1,6 @@
 import { Police } from '@/models/api/open/police/SearchPoliceResponse';
 import { Violence } from '@/store/modules/common/violence';
+import { isObject } from '@/utils/object';
 
 export const policeCityArray = [
 	'서울',
@@ -55,7 +56,11 @@ export const seperateByCity = (data: Police[], targetName?: string) => {
 
 	return Array.from(cityNames).map((item, index) => {
 		return data.filter((newItem, newIndex) => {
-			if (newItem.경찰서.slice(0, 2) === item) {
+			if (
+				isObject(newItem) &&
+				newItem?.경찰서 !== null &&
+				newItem.경찰서.slice(0, 2) === item
+			) {
 				return newItem;
 			}
 		});
@@ -71,7 +76,11 @@ export const mergeByCity = (data: Police[]) => {
 		let 절도 = 0;
 		let 폭력 = 0;
 		data.filter((newItem, newIndex) => {
-			if (newItem.경찰서.slice(0, 2) === item) {
+			if (
+				isObject(newItem) &&
+				newItem?.경찰서 !== null &&
+				newItem.경찰서.slice(0, 2) === item
+			) {
 				강도 += newItem.강도;
 				살인 += newItem.살인;
 				절도 += newItem.절도;

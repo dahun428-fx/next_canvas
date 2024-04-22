@@ -25,8 +25,6 @@ export const BottomNavi: React.FC<Props> = () => {
 	const policeChartType = useSelector(selectPoliceChartType);
 	const violenceChartType = useSelector(violenceSelectChart);
 
-	console.log(chartTypes, pageRoute, policeChartType, violenceChartType);
-
 	const selected = useMemo(() => {
 		switch (pageRoute) {
 			case 'violent':
