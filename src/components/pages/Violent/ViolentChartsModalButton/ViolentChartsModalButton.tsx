@@ -31,7 +31,7 @@ export const ViolentChartsModalButton: React.FC<Props> = ({
 			</ModalOpener>
 			<Modal
 				title={props.title}
-				className={styles.container}
+				// className={styles.container}
 				size={ModalSizeType.lg}
 			>
 				<div>

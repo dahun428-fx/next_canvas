@@ -4,6 +4,7 @@ import { ViolentChartsModalButton } from '../ViolentChartsModalButton';
 import styles from './ViolentCharts.module.scss';
 import { useSelector } from '@/store/hooks';
 import { selectChartType } from '@/store/modules/common/violence';
+import { Box } from '@mui/material';
 
 type Props = {
 	dataObject: ViolentData[];
@@ -19,7 +20,7 @@ export const ViolentCharts: React.FC<Props> = ({
 	const chartType = useSelector(selectChartType);
 
 	return (
-		<>
+		<Box>
 			<div className={styles.modalButton}>
 				<ViolentChartsModalButton
 					dataObject={dataObject}
@@ -34,7 +35,7 @@ export const ViolentCharts: React.FC<Props> = ({
 				zoomNeed={false}
 				chartType={chartType}
 			/>
-		</>
+		</Box>
 	);
 };
 

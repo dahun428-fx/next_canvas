@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, Suspense, useEffect, useState } from 'react';
 import { Nav } from './common/Nav';
 import { Header } from './common/Header';
 import { Box } from '@mui/material';
@@ -11,6 +11,7 @@ import {
 	selectBottomPageRoute,
 } from '@/store/modules/common/bottom';
 import { useSelector } from '@/store/hooks';
+import Loading from './common/Loading';
 
 type Props = {
 	children?: ReactNode;
@@ -52,8 +53,9 @@ export const DashboardLayout: React.FC<Props> = ({ children }) => {
 				}}
 			>
 				<Nav openNav={openNav} onCloseNav={() => setOpenNav(false)} />
-
-				<Main>{children}</Main>
+				<Suspense fallback={<Loading />}>
+					<Main>{children}</Main>
+				</Suspense>
 				<BottomAppBar />
 			</Box>
 		</>

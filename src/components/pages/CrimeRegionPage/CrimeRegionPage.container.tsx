@@ -1,7 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { CrimeRegionPage as Presenter } from './CrimeRegionPage';
-import { searchRegionList } from '@/api/clients/services/open/region';
-import { responseToRegionData } from '@/utils/openapi/region/region';
 import { useSelector } from '@/store/hooks';
 import { loadOperations, selectRegion } from '@/store/modules/common/region';
 import { useDispatch } from 'react-redux';
@@ -15,7 +13,7 @@ export const CrimeRegionPage: React.FC<Props> = () => {
 	const initialize = useRef(false);
 
 	useEffect(() => {
-		if (!initialize.current) {
+		if (!initialize.current && regionResponse.items.length < 1) {
 			loadOperations(dispatch)();
 			initialize.current = true;
 		}

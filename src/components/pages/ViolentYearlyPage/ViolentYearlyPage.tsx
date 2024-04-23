@@ -22,7 +22,7 @@ export const ViolentYearlyPage: React.FC<Props> = ({}) => {
 	);
 
 	return (
-		<Container maxWidth="xl">
+		<Container>
 			<ViolentMain />
 		</Container>
 	);

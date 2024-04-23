@@ -20,17 +20,17 @@ export const regionCityArray = [
 	'도시이외',
 ];
 
-type RegionCategoryItem = {
+export type RegionCategoryItem = {
 	main: string;
 	sub: string;
 	count: number;
 };
 
-type RegionDataItem = {
+export type RegionItem = {
 	city_name: string;
 	year: string;
 	category: RegionCategoryItem[];
-	children?: RegionDataItem[];
+	children?: RegionItem[];
 	totalCount: number;
 };
 
@@ -46,7 +46,7 @@ export const changeToRegionalData = (data: any[], year: string) => {
 	return regionCityArray.map(city => {
 		let totalCount: number = 0;
 		let category: RegionCategoryItem[] = [];
-		let children: RegionDataItem[] = [];
+		let children: RegionItem[] = [];
 		const regExp = new RegExp(city);
 		let childMap = new Map<string, RegionCategoryItem[]>();
 		data.forEach(
@@ -113,71 +113,89 @@ export const changeToRegionalData = (data: any[], year: string) => {
 	});
 };
 
-export const responseToRegionData = (data: any[]): RegionItem[] => {
-	const mainCategoryName = '범죄대분류';
-	const subCategoryName = '범죄중분류';
+export const changeToChartData = (data: RegionCategoryItem[]) => {
+	// Object.fromEntries({data.})
 
-	return data.map((item, index) => {
-		const main_category = item[mainCategoryName];
-		const sub_category = item[subCategoryName];
-
-		const city_data = makeCityObject(item);
-
-		return {
-			main_category,
-			sub_category,
-			city_data,
-		};
+	// const regionMap = new Map<string, number>();
+	const adjustData = data.map((item, index) => {
+		// regionMap.set(item.sub, item.count);
+		// return {
+		// 	[item.sub]: item.count,
+		// };
+		return [`${item.sub}`, `${item.count}`];
 	});
+	// console.log('region map : ', regionMap);
+	// const successData = Object.fromEntries(adjustData);
+	// console.log('adjustdata', adjustData);
+	// console.log('successData', successData);
+	return Object.fromEntries(adjustData);
 };
 
-const makeCityObject = (value: { [key: string]: number }): RegionCityData[] => {
-	let keys = Object.keys(value);
-	let values = Object.values(value);
+// export const responseToRegionData = (data: any[]): RegionItem[] => {
+// 	const mainCategoryName = '범죄대분류';
+// 	const subCategoryName = '범죄중분류';
 
-	return regionCityArray.map((item, index) => {
-		const regex = new RegExp(item);
-		let children: RegionCityData[] = [];
-		let cnt = 0;
-		//배열삭제 index
-		let startIdx = Number.MAX_VALUE;
-		//배열삭제 index
-		let endIdx = 0;
-		keys.forEach((ele, idx) => {
-			if (ele.match(regex)) {
-				cnt += Number(values[idx]);
-				let childCityName = ele.replace(regex, '').trim();
-				if (childCityName) {
-					children.push({
-						city_name: childCityName,
-						city_count: values[idx],
-					});
-				}
-				startIdx = Math.min(idx, startIdx);
-				endIdx = Math.max(idx, endIdx);
-			}
-		});
-		//배열삭제 --> 중복 배열 삭제
-		keys.splice(startIdx, endIdx - startIdx + 1);
-		return {
-			city_name: item,
-			city_count: cnt,
-			city_child: children,
-		};
-	});
-};
+// 	return data.map((item, index) => {
+// 		const main_category = item[mainCategoryName];
+// 		const sub_category = item[subCategoryName];
 
-export type RegionItem = {
-	main_category: string;
-	sub_category: string;
-	city_data: RegionCityData[];
-};
+// 		const city_data = makeCityObject(item);
 
-export type RegionCityData = {
-	city_name: string;
-	city_count: string | number;
-	city_child?: RegionCityData[];
-};
+// 		return {
+// 			main_category,
+// 			sub_category,
+// 			city_data,
+// 		};
+// 	});
+// };
+
+// const makeCityObject = (value: { [key: string]: number }): RegionCityData[] => {
+// 	let keys = Object.keys(value);
+// 	let values = Object.values(value);
+
+// 	return regionCityArray.map((item, index) => {
+// 		const regex = new RegExp(item);
+// 		let children: RegionCityData[] = [];
+// 		let cnt = 0;
+// 		//배열삭제 index
+// 		let startIdx = Number.MAX_VALUE;
+// 		//배열삭제 index
+// 		let endIdx = 0;
+// 		keys.forEach((ele, idx) => {
+// 			if (ele.match(regex)) {
+// 				cnt += Number(values[idx]);
+// 				let childCityName = ele.replace(regex, '').trim();
+// 				if (childCityName) {
+// 					children.push({
+// 						city_name: childCityName,
+// 						city_count: values[idx],
+// 					});
+// 				}
+// 				startIdx = Math.min(idx, startIdx);
+// 				endIdx = Math.max(idx, endIdx);
+// 			}
+// 		});
+// 		//배열삭제 --> 중복 배열 삭제
+// 		keys.splice(startIdx, endIdx - startIdx + 1);
+// 		return {
+// 			city_name: item,
+// 			city_count: cnt,
+// 			city_child: children,
+// 		};
+// 	});
+// };
+
+// export type RegionItem = {
+// 	main_category: string;
+// 	sub_category: string;
+// 	city_data: RegionCityData[];
+// };
+
+// export type RegionCityData = {
+// 	city_name: string;
+// 	city_count: string | number;
+// 	city_child?: RegionCityData[];
+// };
 
 /*
 
