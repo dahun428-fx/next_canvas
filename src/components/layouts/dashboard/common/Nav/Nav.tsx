@@ -16,6 +16,7 @@ import { NavItem } from './NavItem';
 import { Scrollbar } from '@/components/common/Scrollbar';
 import { Logo } from '@/components/common/Logo';
 import styles from './Nav.module.scss';
+import LogoDevIcon from '@mui/icons-material/LogoDev';
 
 type Props = {
 	openNav: boolean;
@@ -52,7 +53,24 @@ export const Nav: React.FC<Props> = ({ onCloseNav, openNav }) => {
 				},
 			}}
 		>
-			<Logo sx={{ mt: 3, ml: 4 }} />
+			{/* <LogoDevIcon sx={{ mt: 3, ml: 4 }} /> */}
+			{/* <Logo sx={{ mt: 3, ml: 4 }} /> */}
+			<Box
+				sx={{
+					mt: 9,
+					ml: 4,
+				}}
+			>
+				{/* <Typography
+					variant="overline"
+					sx={{
+						fontWeight: 'bold',
+						fontSize: 16,
+					}}
+				>
+					Welcome To Jung's Board
+				</Typography> */}
+			</Box>
 			{renderMenu}
 			<Box sx={{ flexGrow: 1 }} />
 		</Scrollbar>

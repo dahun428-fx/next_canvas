@@ -13,6 +13,7 @@ import { CrimeContentSub } from './CrimeContentSub';
 import Divider from '@mui/material/Divider';
 import { useSelector } from '@/store/hooks';
 import { selectChartType } from '@/store/modules/common/region';
+import { CustomChart } from '@/components/common/utils/CustomChart';
 
 type Props = {
 	data: RegionItem;
@@ -41,21 +42,11 @@ export const CrimeContent: React.FC<Props> = ({ data }) => {
 				{title}
 			</Typography>
 			<Box>
-				<Doughnut
-					labels={makeDoughnutLabels(adjustData, data.totalCount)}
-					data={adjustData}
-					title={``}
-					chartName={``}
+				<CustomChart
+					dataLabels={makeDoughnutLabels(adjustData, data.totalCount)}
+					chartDoughnutData={adjustData}
 					chartType={chartType}
-					options={{
-						responsive: true,
-						plugins: {
-							legend: {
-								display: true,
-								position: 'left',
-							},
-						},
-					}}
+					labelPositon="left"
 				/>
 			</Box>
 			<Divider />

@@ -18,12 +18,12 @@ export const CrimeRegionPage: React.FC<Props> = () => {
 	const initialize = useRef(false);
 	const initailized2 = useRef(false);
 	const availableCharts: ChartType[] = ['doughnut', 'polarArea', 'pie'];
-	useEffect(() => {
-		if (!initialize.current && regionResponse.items.length < 1) {
-			loadOperations(dispatch)();
-			initialize.current = true;
-		}
-	}, [dispatch, regionResponse.items.length, initialize.current]);
+	// useEffect(() => {
+	// 	if (!initialize.current && regionResponse.items.length < 1) {
+	// 		loadOperations(dispatch)();
+	// 		initialize.current = true;
+	// 	}
+	// }, [dispatch, regionResponse.items.length, initialize.current]);
 	useEffect(() => {
 		if (!initailized2.current) {
 			bottomBarAddChartTypesOpertion(dispatch)(availableCharts);

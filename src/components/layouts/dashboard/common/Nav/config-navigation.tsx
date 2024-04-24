@@ -1,6 +1,10 @@
 // ----------------------------------------------------------------------
 
 import { SvgColor } from '../svg-color';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
+import RoomIcon from '@mui/icons-material/Room';
+import ReviewsIcon from '@mui/icons-material/Reviews';
 
 const icon = (name: string) => (
 	<SvgColor
@@ -18,31 +22,41 @@ export type NavConfigType = {
 
 const navConfig: NavConfigType[] = [
 	{
-		title: 'dashboard',
+		title: 'DASHBOARD',
 		path: '/dashboard',
+		icon: <DashboardIcon />,
+		children: [
+			{
+				title: '전국',
+				path: '/dashboard/nationwide',
+				icon: <DashboardIcon />,
+			},
+			{
+				title: '지역',
+				path: '/dashboard/area',
+				icon: <DashboardIcon />,
+			},
+		],
+	},
+	{
+		title: '강력범죄 발생현황 데이터',
+		path: '/dashboard/violent-crime',
 		icon: icon('ic_analytics'),
 		children: [
 			{
-				title: '강력범죄 발생현황',
-				path: '/dashboard/violent-crime',
-				icon: icon('ic_analytics'),
-				children: [
-					{
-						title: '경찰서별',
-						icon: icon('ic_analytics'),
-						path: '/dashboard/violent-crime/office',
-					},
-					{
-						title: '연도/지역별',
-						icon: icon('ic_analytics'),
-						path: '/dashboard/violent-crime/yearly',
-					},
-					{
-						title: '지역별 상세',
-						icon: icon('ic_analytics'),
-						path: '/dashboard/violent-crime/region',
-					},
-				],
+				title: '경찰서별',
+				icon: <LocalPoliceIcon />,
+				path: '/dashboard/violent-crime/office',
+			},
+			{
+				title: '연도/지역별',
+				icon: <RoomIcon />,
+				path: '/dashboard/violent-crime/yearly',
+			},
+			{
+				title: '지역별 상세',
+				icon: <ReviewsIcon />,
+				path: '/dashboard/violent-crime/region',
 			},
 		],
 	},

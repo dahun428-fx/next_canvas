@@ -1,4 +1,4 @@
-import { ReactNode, Suspense, useEffect, useState } from 'react';
+import { ReactNode, Suspense, useEffect, useRef, useState } from 'react';
 import { Nav } from './common/Nav';
 import { Header } from './common/Header';
 import { Box } from '@mui/material';
@@ -12,20 +12,46 @@ import {
 } from '@/store/modules/common/bottom';
 import { useSelector } from '@/store/hooks';
 import Loading from './common/Loading';
-
+import {
+	loadOperations as RegionLoadOperation,
+	selectRegion,
+} from '@/store/modules/common/region';
+import {
+	loadOperations as violenceLoadOperation,
+	selectViolence,
+} from '@/store/modules/common/violence';
 type Props = {
 	children?: ReactNode;
 };
 
 export const DashboardLayout: React.FC<Props> = ({ children }) => {
 	const [openNav, setOpenNav] = useState(true);
+	const initialize = useRef(false);
+	const regionResponse = useSelector(selectRegion);
+	const violenceResponse = useSelector(selectViolence);
 
 	const dispatch = useDispatch();
 
 	const pageRoute = useSelector(selectBottomPageRoute);
 
 	useEffect(() => {
-		console.log('pageRoute ===> ', pageRoute);
+		if (!initialize.current) {
+			if (regionResponse.items.length < 1) {
+				RegionLoadOperation(dispatch)();
+			}
+			if (violenceResponse.items.length < 1) {
+				violenceLoadOperation(dispatch)();
+			}
+			initialize.current = true;
+		}
+	}, [
+		dispatch,
+		regionResponse.items.length,
+		violenceResponse.items.length,
+		initialize.current,
+	]);
+
+	useEffect(() => {
 		if (pageRoute) {
 			return;
 		}
