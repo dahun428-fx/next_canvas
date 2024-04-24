@@ -1,48 +1,68 @@
 import { Doughnut } from '@/components/ui/charts/doughnut';
 import { digit } from '@/utils/number';
-import { RegionItem, changeToChartData } from '@/utils/openapi/region/region';
-import { useEffect, useMemo } from 'react';
+import {
+	CrimeMainCategory,
+	RegionItem,
+	changeToChartData,
+	makeDoughnutLabels,
+} from '@/utils/openapi/region/region';
+import { Box, Typography } from '@mui/material';
+import { Context } from 'chartjs-plugin-datalabels';
+import { useEffect, useMemo, useState } from 'react';
+import { CrimeContentSub } from './CrimeContentSub';
+import Divider from '@mui/material/Divider';
+import { useSelector } from '@/store/hooks';
+import { selectChartType } from '@/store/modules/common/region';
 
 type Props = {
 	data: RegionItem;
 };
 
 export const CrimeContent: React.FC<Props> = ({ data }) => {
+	const chartType = useSelector(selectChartType);
+
 	const adjustData = useMemo(() => {
 		return changeToChartData(data.category);
 	}, [data]);
 
-	const adjustLabels = useMemo(() => {
-		const labels: string[] = Object.keys(adjustData);
-		const chartDatas: number[] = Object.values(adjustData);
+	const title = useMemo(() => {
+		return `${data.year} 년도 ${data.city_name}지역 범죄 대분류 차트`;
+	}, [data]);
 
-		let result = [];
-		for (let i = 0; i < labels.length; i++) {
-			const text = `${labels[i]} (${digit(chartDatas[i])})`;
-			result.push(text);
-		}
-		return result;
-	}, [adjustData]);
+	if (!adjustData) {
+		return null;
+	}
+
+	console.log('adjustData====>', adjustData);
 
 	return (
-		<div>
-			<Doughnut
-				labels={adjustLabels}
-				data={adjustData}
-				title={``}
-				chartName={``}
-				chartType="doughnut"
-				options={{
-					responsive: true,
-					plugins: {
-						legend: {
-							display: true,
-							position: 'bottom',
+		<Box mt={2}>
+			<Typography sx={{ textAlign: 'center' }} variant="h5">
+				{title}
+			</Typography>
+			<Box>
+				<Doughnut
+					labels={makeDoughnutLabels(adjustData, data.totalCount)}
+					data={adjustData}
+					title={``}
+					chartName={``}
+					chartType={chartType}
+					options={{
+						responsive: true,
+						plugins: {
+							legend: {
+								display: true,
+								position: 'left',
+							},
 						},
-					},
-				}}
-			/>
-		</div>
+					}}
+				/>
+			</Box>
+			<Divider />
+			<Box mt={3}>
+				<CrimeContentSub data={data} chartType={chartType} />
+			</Box>
+		</Box>
 	);
 };
 

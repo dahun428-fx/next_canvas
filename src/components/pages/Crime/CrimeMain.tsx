@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Box, Grid, IconButton } from '@mui/material';
 import React, {
 	CSSProperties,
 	MouseEvent,
@@ -12,6 +12,8 @@ import React, {
 import { CrimeSideList } from './CrimeSideList';
 import { CrimeTabList } from './CrimeTabList';
 import { RegionItem, regionCityArray } from '@/utils/openapi/region/region';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 type ChildPosition = {
 	x: number;
@@ -33,6 +35,7 @@ export const CrimeMain: React.FC<Props> = ({
 	// const [parentData, setParentData] = useState<RegionItem>(selectedData);
 	const [childCity, setChildCity] = useState<string[]>([]);
 	const [childSelectedItem, setChildSelectedItem] = useState<string>('');
+	const [sideShow, setSideShow] = useState(true);
 
 	const childSelectItemHandler = (event: MouseEvent, value: string) => {
 		setChildSelectedItem(value);
@@ -55,9 +58,6 @@ export const CrimeMain: React.FC<Props> = ({
 	}, []);
 
 	const viewData = useMemo(() => {
-		// console.log('selectedItem ==> ', selectedItem);
-		// console.log('selectedData ===> ', selectedData);
-		// console.log('childSelectedItem ==> ', childSelectedItem);
 		if (childSelectedItem) {
 			const resultItem = selectedData.children?.filter(child => {
 				if (child.city_name === childSelectedItem) {
@@ -77,37 +77,59 @@ export const CrimeMain: React.FC<Props> = ({
 				maxWidth: '90px',
 				overflowY: 'auto',
 				maxHeight: '750px',
-				// top: selectedItemPosition.y,
 			};
 			return obj;
 		}
 		return {};
 	}, [selectedItemPosition]);
 
+	const handleSideListToggleButton = () => {};
+
 	return (
 		<Grid container>
-			<Grid item xs={3} sm={2} md={2}>
-				<Grid container>
-					<Grid item xs={6} sm={6} md={6}>
-						<CrimeSideList
-							listItem={regionCity}
-							selectedItem={selectedItem}
-							setSelectedItem={setSelectedItem}
-						/>
-					</Grid>
-					<Grid item xs={6} sm={6} md={6}>
-						{childCity && childCity.length > 0 && (
+			{sideShow ? (
+				<Grid item xs={3} sm={2} md={2}>
+					<Grid container>
+						<Grid item xs={6} sm={6} md={6}>
 							<CrimeSideList
-								listItem={childCity}
-								selectedItem={childSelectedItem}
-								setSelectedItem={childSelectItemHandler}
-								style={childPositionStyle}
+								listItem={regionCity}
+								selectedItem={selectedItem}
+								setSelectedItem={setSelectedItem}
 							/>
-						)}
+						</Grid>
+						<Grid item xs={6} sm={6} md={6}>
+							{childCity && childCity.length > 0 && (
+								<CrimeSideList
+									listItem={childCity}
+									selectedItem={childSelectedItem}
+									setSelectedItem={childSelectItemHandler}
+									style={childPositionStyle}
+								/>
+							)}
+						</Grid>
 					</Grid>
 				</Grid>
-			</Grid>
+			) : (
+				<Grid item xs={2} sm={1} md={1}></Grid>
+			)}
 			<Grid item xs={9} sm={10} md={10}>
+				<Box
+					sx={{
+						position: 'relative',
+						right: '80px',
+					}}
+				>
+					<IconButton
+						sx={{
+							border: '1px solid #ddd',
+						}}
+						onClick={() => {
+							setSideShow(!sideShow);
+						}}
+					>
+						{sideShow ? <ArrowBackIosNewIcon /> : <ArrowForwardIosIcon />}
+					</IconButton>
+				</Box>
 				<CrimeTabList selectedData={viewData} />
 			</Grid>
 		</Grid>

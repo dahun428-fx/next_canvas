@@ -15,6 +15,10 @@ import {
 	selectPoliceChartType,
 } from '@/store/modules/common/police';
 import { useDispatch } from 'react-redux';
+import {
+	selectChartType as selectRegionChartType,
+	updateChartTypeOperation as RegionOperation,
+} from '@/store/modules/common/region';
 
 type Props = {};
 
@@ -24,6 +28,7 @@ export const BottomNavi: React.FC<Props> = () => {
 	const pageRoute = useSelector(selectBottomPageRoute);
 	const policeChartType = useSelector(selectPoliceChartType);
 	const violenceChartType = useSelector(violenceSelectChart);
+	const regionChartType = useSelector(selectRegionChartType);
 
 	const selected = useMemo(() => {
 		switch (pageRoute) {
@@ -31,10 +36,19 @@ export const BottomNavi: React.FC<Props> = () => {
 				return violenceChartType;
 			case 'police':
 				return policeChartType;
+			case 'region':
+				return regionChartType;
 			default:
 				break;
 		}
-	}, [pageRoute, dispatch, chartTypes, violenceChartType, policeChartType]);
+	}, [
+		pageRoute,
+		dispatch,
+		chartTypes,
+		violenceChartType,
+		policeChartType,
+		regionChartType,
+	]);
 
 	const handleChangeChartType = useCallback(
 		(value: ChartType) => {
@@ -45,6 +59,8 @@ export const BottomNavi: React.FC<Props> = () => {
 				case 'violent':
 					ViolenceOperation(dispatch)(value);
 					break;
+				case 'region':
+					RegionOperation(dispatch)(value);
 				default:
 					break;
 			}

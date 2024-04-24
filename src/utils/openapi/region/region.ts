@@ -1,3 +1,5 @@
+import { digit } from '@/utils/number';
+
 export const regionCityArray = [
 	'서울',
 	'경기',
@@ -114,22 +116,74 @@ export const changeToRegionalData = (data: any[], year: string) => {
 };
 
 export const changeToChartData = (data: RegionCategoryItem[]) => {
-	// Object.fromEntries({data.})
+	const regionMap = new Map<string, number>();
 
-	// const regionMap = new Map<string, number>();
-	const adjustData = data.map((item, index) => {
-		// regionMap.set(item.sub, item.count);
-		// return {
-		// 	[item.sub]: item.count,
-		// };
-		return [`${item.sub}`, `${item.count}`];
+	data.forEach((item, index) => {
+		const value = (regionMap.get(item.main) ?? 0) + item.count;
+		regionMap.set(item.main, value);
 	});
-	// console.log('region map : ', regionMap);
-	// const successData = Object.fromEntries(adjustData);
-	// console.log('adjustdata', adjustData);
-	// console.log('successData', successData);
-	return Object.fromEntries(adjustData);
+	const result = Object.fromEntries(regionMap);
+	console.log('changeToChartData ==>', result);
+	return result;
 };
+
+export const changeToChartDataSub = (
+	data: RegionCategoryItem[],
+	mainCategory: string
+): { [k: string]: number } => {
+	const regionMap = new Map<string, number>();
+
+	data.forEach((item, index) => {
+		if (item.main === mainCategory) {
+			const value = (regionMap.get(item.sub) ?? 0) + item.count;
+			regionMap.set(item.sub, value);
+		}
+	});
+
+	return Object.fromEntries(regionMap);
+};
+
+export const makeDoughnutLabels = (
+	data: {
+		[key: string]: number;
+	},
+	totalcount?: number
+): string[] => {
+	const labels: string[] = Object.keys(data);
+	const chartDatas: number[] = Object.values(data);
+
+	let result = [];
+	for (let i = 0; i < labels.length; i++) {
+		let text = `${labels[i]} (${digit(chartDatas[i])})`;
+		if (totalcount) {
+			const percentage = ((chartDatas[i] * 100) / totalcount).toFixed(2) + '%';
+			text = `${labels[i]} ( ${percentage} ), (${digit(chartDatas[i])})`;
+		}
+		result.push(text);
+	}
+	return result;
+};
+
+export const CrimeMainCategory = {
+	강력범죄: '강력범죄',
+	폭력범죄: '폭력범죄',
+	지능범죄: '지능범죄',
+	풍속범죄: '풍속범죄',
+	// 절도범죄:'절도범죄',
+	// 특별경제범죄: '특별경제범죄',
+	// 마약범죄: '마약범죄',
+	// 보건범죄: '보건범죄',
+	// 환경범죄: '환경범죄',
+	// 교통범죄: '교통범죄',
+	// 노동범죄: '노동범죄',
+	// 안보범죄: '안보범죄',
+	// 선거범죄: '선거범죄',
+	// 병역범죄: '병역범죄',
+	// 기타범죄: '기타범죄',
+} as const;
+
+export type CrimeMainCategory =
+	(typeof CrimeMainCategory)[keyof typeof CrimeMainCategory];
 
 // export const responseToRegionData = (data: any[]): RegionItem[] => {
 // 	const mainCategoryName = '범죄대분류';

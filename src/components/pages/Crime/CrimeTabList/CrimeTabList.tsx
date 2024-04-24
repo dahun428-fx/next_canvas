@@ -34,17 +34,11 @@ export const CrimeTabList: React.FC<Props> = ({ selectedData }) => {
 		<Box>
 			<TabContext value={tabValue}>
 				<Box>
-					<TabList
-						variant="scrollable"
-						onChange={tabChangeHandler}
-						// centered
-					>
+					<TabList variant="scrollable" onChange={tabChangeHandler}>
 						{regionYears &&
 							regionYears.length > 0 &&
 							regionYears.map(item => {
-								return (
-									<Tab key={item} label={`${item}`} value={`${item}`}></Tab>
-								);
+								return <Tab key={item} label={`${item}`} value={`${item}`} />;
 							})}
 					</TabList>
 				</Box>
@@ -54,8 +48,6 @@ export const CrimeTabList: React.FC<Props> = ({ selectedData }) => {
 						return (
 							<TabPanel key={item} value={`${item}`}>
 								<CrimeContent data={selectedData} />
-								{/* {selectedData.city_name}
-								{selectedData.totalCount} */}
 							</TabPanel>
 						);
 					})}
