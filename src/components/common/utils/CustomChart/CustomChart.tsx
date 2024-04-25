@@ -35,23 +35,29 @@ ChartJS.register(
 export type CustomChartDoughnutData = {
 	[key: string]: number;
 };
-export type CustomChartLineData = {
+export type CustomChartLineDataArray = {
 	label: string;
 	data: number[];
 };
-export type CustomChartData = CustomChartDoughnutData | CustomChartLineData[];
+export type CustomChartLineData = CustomChartDoughnutData;
+export type CustomChartData =
+	| CustomChartDoughnutData
+	| CustomChartLineData
+	| CustomChartLineDataArray[];
 
 type Props = {
 	className?: string;
 	dataLabels: string[];
 	// chartData: CustomChartData;
 	chartDoughnutData?: CustomChartDoughnutData;
-	chartLineData?: CustomChartLineData[];
+	chartLineData?: CustomChartLineData;
+	chartLineDataArray?: CustomChartLineDataArray[];
 	chartName?: string;
 	colors?: string[];
 	zoomNeed?: boolean;
 	chartType?: ChartType;
 	labelPositon?: 'left' | 'right' | 'bottom' | 'top';
+	isResponseSive?: boolean;
 };
 
 export const CustomChart: React.FC<Props> = ({
@@ -59,12 +65,14 @@ export const CustomChart: React.FC<Props> = ({
 	// chartData,
 	chartDoughnutData,
 	chartLineData,
+	chartLineDataArray,
 	chartName,
 	chartType = 'line',
 	className,
 	colors,
 	zoomNeed,
 	labelPositon,
+	isResponseSive = true,
 }) => {
 	/**
 	 * Zoom library 는 register 시 서버 측 렌더링 되므로 window is not defined 에러 발생 => 로딩 이후 시점으로 초기화
@@ -83,26 +91,30 @@ export const CustomChart: React.FC<Props> = ({
 	const chartRef = useRef<ChartJS | null>(null);
 
 	const defaultColor = useMemo(() => {
+		if (colors && colors.length > 0) {
+			return colors;
+		}
 		return [
-			'#FF6347',
-			'#FFD700',
-			'#40E0D0',
-			'#9ACD32',
-			'#00BFFF',
-			'#FF4500',
-			'#FF69B4',
-			'#FFFF00',
-			'#00FF00',
-			'#1E90FF',
-			'#8A2BE2',
-			'#FFA500',
-			'#FF1493',
-			'#FF00FF',
-			'#32CD32',
-			'#00FFFF',
-			'#FFDAB9',
-			'#FFB6C1',
-			'#FFA07A',
+			'#FF7F7F', // 짙은 분홍색
+			'#FFA07A', // 짙은 살구색
+			'#9370DB', // 짙은 보라색
+			'#20B2AA', // 짙은 터키스색
+			'#6B8E23', // 짙은 올리브색
+			'#BDB76B', // 짙은 카키색
+			'#CD5C5C', // 짙은 인디언 레드
+			'#6495ED', // 짙은 코랄색
+			'#8A2BE2', // 짙은 라벤더색
+			'#5F9EA0', // 짙은 시안색
+			'#7B68EE', // 짙은 파란색
+			'#32CD32', // 짙은 라임색
+			'#FFD700', // 짙은 금색
+			'#CD853F', // 짙은 페치색
+			'#8B4513', // 짙은 갈색
+			'#CD5555', // 짙은 핑크색
+			'#4682B4', // 짙은 스틸 블루
+			'#FF6347', // 짙은 토마토색
+			'#48D1CC', // 짙은 민트 크림
+			'#9932CC', // 짙은 보라색
 		];
 	}, [colors]);
 
@@ -127,30 +139,62 @@ export const CustomChart: React.FC<Props> = ({
 					},
 				],
 			};
-		} else if (chartLineData) {
-			return {
-				labels: dataLabels,
-				datasets: chartLineData.map((item, index) => {
-					return {
-						...item,
-						backgroundColor: defaultColor[index],
-						borderColor: defaultColor[index],
-					};
-				}),
-			};
+		} else {
+			if (chartLineData) {
+				return {
+					labels: dataLabels,
+					datasets: [
+						{
+							data: Object.values(chartLineData),
+							backgroundColor: defaultColor,
+							borderColor: defaultColor,
+						},
+						// {
+						// 	data: Object.values(chartLineData)[0],
+						// 	backgroundColor: defaultColor,
+						// 	borderColor: defaultColor,
+						// },
+						// {
+						// 	data: Object.values(chartLineData)[1],
+						// 	backgroundColor: defaultColor,
+						// 	borderColor: defaultColor,
+						// },
+						// {
+						// 	data: Object.values(chartLineData)[2],
+						// 	backgroundColor: defaultColor,
+						// 	borderColor: defaultColor,
+						// },
+					],
+				};
+			}
+
+			if (chartLineDataArray) {
+				return {
+					labels: dataLabels,
+					datasets: chartLineDataArray.map((item, index) => {
+						return {
+							...item,
+							backgroundColor: defaultColor[index],
+							borderColor: defaultColor[index],
+						};
+					}),
+				};
+			}
 		}
 		return {
 			datasets: [],
 			labels: [],
 		};
-	}, [chartDoughnutData, chartLineData]);
+	}, [chartDoughnutData, chartLineData, chartLineDataArray]);
 
-	if (!chartDoughnutData && !chartLineData) {
+	if (!chartDoughnutData && !chartLineData && !chartLineDataArray) {
 		return null;
 	}
 
 	return (
-		<div>
+		<div
+		// style={{ width: '100%' }}
+		>
 			{chartName && <div>{chartName}</div>}
 			<Chart
 				ref={chartRef}
@@ -180,7 +224,7 @@ export const CustomChart: React.FC<Props> = ({
 							position: labelPositon,
 						},
 					},
-					responsive: true,
+					responsive: isResponseSive,
 				}}
 			/>
 		</div>

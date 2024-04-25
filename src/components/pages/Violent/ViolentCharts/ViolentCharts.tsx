@@ -39,7 +39,7 @@ export const ViolentCharts: React.FC<Props> = ({
 			<CustomChart
 				dataLabels={labels}
 				chartName={title}
-				chartLineData={dataObject}
+				chartLineDataArray={dataObject}
 				zoomNeed={false}
 				labelPositon="top"
 				chartType={chartType}

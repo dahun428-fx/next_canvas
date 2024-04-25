@@ -163,3 +163,68 @@ type mergeByCityWithYearType = {
 	폭력: number[];
 	total: number[];
 };
+
+const PoliceYear: { [key: number]: string } = {
+	0: '2014',
+	1: '2015',
+	2: '2016',
+	3: '2017',
+	4: '2018',
+	5: '2019',
+	6: '2020',
+	7: '2021',
+	8: '2022',
+} as const;
+
+export type PoliceYear = (typeof PoliceYear)[keyof typeof PoliceYear];
+
+export const getDataByYear = (
+	originalData: Violence[],
+	year: PoliceYear,
+	type: 'total' | PoliceType
+): { [key: string]: number } => {
+	const map = new Map<string, number>();
+
+	const idx = Object.keys(PoliceYear).find(
+		key => PoliceYear[Number(key)] === year
+	);
+
+	if (idx) {
+		mergeByCityWithYear(originalData).map((item, index) => {
+			map.set(item.city, item[type][Number(idx)] ?? 0);
+			// map.set(item.city, item[type][8] ?? 0);
+		});
+	}
+	return Object.fromEntries(map);
+};
+
+export const getDataByCriminal = (
+	originalData: Violence[],
+	year: PoliceYear,
+	included: PoliceType[]
+) => {
+	const idx = Object.keys(PoliceYear).find(
+		key => PoliceYear[Number(key)] === year
+	);
+	const sortedData = mergeByCityWithYear(originalData);
+
+	const map = new Map<PoliceType, number>();
+
+	if (idx) {
+		sortedData.map((item, index) => {
+			if (included.some(item => item === '강도')) {
+				map.set('강도', (map.get('강도') ?? 0) + item.강도[Number(idx)]);
+			}
+			if (included.some(item => item === '살인')) {
+				map.set('살인', (map.get('살인') ?? 0) + item.살인[Number(idx)]);
+			}
+			if (included.some(item => item === '절도')) {
+				map.set('절도', (map.get('절도') ?? 0) + item.절도[Number(idx)]);
+			}
+			if (included.some(item => item === '폭력')) {
+				map.set('폭력', (map.get('폭력') ?? 0) + item.폭력[Number(idx)]);
+			}
+		});
+	}
+	return Object.fromEntries(map);
+};

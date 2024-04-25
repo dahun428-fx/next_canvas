@@ -28,12 +28,12 @@ const navConfig: NavConfigType[] = [
 		children: [
 			{
 				title: '전국',
-				path: '/dashboard/nationwide',
+				path: '/dashboard/nation-wide',
 				icon: <DashboardIcon />,
 			},
 			{
 				title: '지역',
-				path: '/dashboard/area',
+				path: '/dashboard/area-fix',
 				icon: <DashboardIcon />,
 			},
 		],

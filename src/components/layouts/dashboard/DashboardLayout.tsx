@@ -25,7 +25,8 @@ type Props = {
 };
 
 export const DashboardLayout: React.FC<Props> = ({ children }) => {
-	const [openNav, setOpenNav] = useState(true);
+	const [open, setOpen] = useState(true);
+
 	const initialize = useRef(false);
 	const regionResponse = useSelector(selectRegion);
 	const violenceResponse = useSelector(selectViolence);
@@ -69,7 +70,9 @@ export const DashboardLayout: React.FC<Props> = ({ children }) => {
 
 	return (
 		<>
-			<Header onOpenNav={() => setOpenNav(true)} />
+			<Header
+			// onOpenNav={() => setOpenNav(true)}
+			/>
 
 			<Box
 				sx={{
@@ -78,9 +81,9 @@ export const DashboardLayout: React.FC<Props> = ({ children }) => {
 					flexDirection: { xs: 'column', lg: 'row' },
 				}}
 			>
-				<Nav openNav={openNav} onCloseNav={() => setOpenNav(false)} />
+				<Nav open={open} setOpen={(value: boolean) => setOpen(value)} />
 				<Suspense fallback={<Loading />}>
-					<Main>{children}</Main>
+					<Main open={open}>{children}</Main>
 				</Suspense>
 				<BottomAppBar />
 			</Box>

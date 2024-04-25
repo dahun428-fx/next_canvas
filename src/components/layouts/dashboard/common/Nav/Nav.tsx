@@ -28,13 +28,11 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MenuIcon from '@mui/icons-material/Menu';
 
 type Props = {
-	openNav: boolean;
-	onCloseNav: () => void;
+	open: boolean;
+	setOpen: (value: boolean) => void;
 };
 
-export const Nav: React.FC<Props> = ({ onCloseNav, openNav }) => {
-	const pathname = usePathname();
-	const [open, setOpen] = useState(true);
+export const Nav: React.FC<Props> = ({ open, setOpen }) => {
 	const handleDrawerOpen = () => {
 		setOpen(true);
 	};
@@ -42,11 +40,6 @@ export const Nav: React.FC<Props> = ({ onCloseNav, openNav }) => {
 	const handleDrawerClose = () => {
 		setOpen(false);
 	};
-	useEffect(() => {
-		if (openNav) {
-			onCloseNav();
-		}
-	}, [pathname]);
 
 	const renderMenu = (
 		<Stack component="nav" spacing={0.5} sx={{ px: 2 }}>

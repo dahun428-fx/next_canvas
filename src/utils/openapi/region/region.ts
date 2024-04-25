@@ -123,7 +123,6 @@ export const changeToChartData = (data: RegionCategoryItem[]) => {
 		regionMap.set(item.main, value);
 	});
 	const result = Object.fromEntries(regionMap);
-	console.log('changeToChartData ==>', result);
 	return result;
 };
 
