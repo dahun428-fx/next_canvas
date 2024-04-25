@@ -15,7 +15,7 @@ export const BottomAppBar: React.FC<Props> = ({ handleToggle, showState }) => {
 			{showState ? (
 				<AppBar
 					position="fixed"
-					color="primary"
+					// color="primary"
 					sx={{ top: 'auto', bottom: 0 }}
 				>
 					<Toolbar>
