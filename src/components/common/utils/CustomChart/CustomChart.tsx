@@ -18,6 +18,7 @@ import {
 	ArcElement,
 	RadialLinearScale,
 } from 'chart.js';
+import { digit, percentage } from '@/utils/number';
 
 ChartJS.register(
 	CategoryScale,
@@ -58,6 +59,8 @@ type Props = {
 	chartType?: ChartType;
 	labelPositon?: 'left' | 'right' | 'bottom' | 'top';
 	isResponseSive?: boolean;
+	needDigit?: boolean;
+	needPercent?: boolean;
 };
 
 export const CustomChart: React.FC<Props> = ({
@@ -73,6 +76,8 @@ export const CustomChart: React.FC<Props> = ({
 	zoomNeed,
 	labelPositon,
 	isResponseSive = true,
+	needDigit,
+	needPercent,
 }) => {
 	/**
 	 * Zoom library 는 register 시 서버 측 렌더링 되므로 window is not defined 에러 발생 => 로딩 이후 시점으로 초기화
@@ -118,6 +123,34 @@ export const CustomChart: React.FC<Props> = ({
 		];
 	}, [colors]);
 
+	const adjustLabels = useMemo(() => {
+		if (chartDoughnutData) {
+			if (needDigit || needPercent) {
+				const labels: string[] = dataLabels;
+				const chartDatas: number[] = Object.values(chartDoughnutData);
+				let totalcount = chartDatas.reduce((prev, curr) => {
+					return prev + curr;
+				}, 0);
+
+				let result = [];
+				for (let i = 0; i < labels.length; i++) {
+					let text = `${labels[i]}`;
+					if (needDigit) {
+						let digited = `${digit(chartDatas[i])}`;
+						text = `${text} ( ${digited} )`;
+					}
+					if (needPercent) {
+						let percent = `${percentage(chartDatas[i], totalcount)}`;
+						text = `${text} ( ${percent} )`;
+					}
+					result.push(text);
+				}
+				return result;
+			}
+		}
+		return dataLabels;
+	}, [dataLabels]);
+
 	const DATA: ChartData<
 		keyof ChartTypeRegistry,
 		(number | [number, number] | Point | BubbleDataPoint | null)[],
@@ -130,7 +163,7 @@ export const CustomChart: React.FC<Props> = ({
 			chartDoughnutData
 		) {
 			return {
-				labels: dataLabels,
+				labels: needDigit || needPercent ? adjustLabels : dataLabels,
 				datasets: [
 					{
 						data: Object.values(chartDoughnutData),
@@ -150,19 +183,22 @@ export const CustomChart: React.FC<Props> = ({
 							borderColor: defaultColor,
 						},
 						// {
-						// 	data: Object.values(chartLineData)[0],
-						// 	backgroundColor: defaultColor,
-						// 	borderColor: defaultColor,
+						// 	label: 1,
+						// 	data: 10,
+						// 	backgroundColor: defaultColor[0],
+						// 	borderColor: defaultColor[0],
 						// },
 						// {
-						// 	data: Object.values(chartLineData)[1],
-						// 	backgroundColor: defaultColor,
-						// 	borderColor: defaultColor,
+						// 	label: 2,
+						// 	data: 1,
+						// 	backgroundColor: defaultColor[1],
+						// 	borderColor: defaultColor[1],
 						// },
 						// {
-						// 	data: Object.values(chartLineData)[2],
-						// 	backgroundColor: defaultColor,
-						// 	borderColor: defaultColor,
+						// 	label: 3,
+						// 	data:2,
+						// 	backgroundColor: defaultColor[2],
+						// 	borderColor: defaultColor[2],
 						// },
 					],
 				};
@@ -192,9 +228,7 @@ export const CustomChart: React.FC<Props> = ({
 	}
 
 	return (
-		<div
-		// style={{ width: '100%' }}
-		>
+		<div className={className}>
 			{chartName && <div>{chartName}</div>}
 			<Chart
 				ref={chartRef}

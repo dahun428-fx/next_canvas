@@ -6,7 +6,10 @@ import {
 import { CustomCard } from '@/components/ui/card';
 import { useSelector } from '@/store/hooks';
 import { ViolenceState, selectViolence } from '@/store/modules/common/violence';
+import { digit, percentage } from '@/utils/number';
 import {
+	PoliceYear,
+	find_by_year_and_office,
 	getDataByCriminal,
 	getDataByYear,
 	mergeByCityWithYear,
@@ -20,47 +23,138 @@ import {
 	ListItem,
 	Paper,
 	Stack,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
 	Typography,
 	styled,
 	useTheme,
 } from '@mui/material';
-import React, { Suspense, useMemo, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
+import styles from './NationWidePage.module.scss';
+import { PoliceResourceYears } from '@/api/clients/services/open/police';
+import { RegionState } from '@/store/modules/common/region';
+import {
+	CrimeValueType,
+	RegionItem,
+	data_merge_by_cirme,
+	data_merge_by_city,
+} from '@/utils/openapi/region/region';
+import { Police } from '@/models/api/open/police/SearchPoliceResponse';
 
 type Props = {
 	violenceResponse: ViolenceState;
+	regionResponse: RegionState;
 };
 
-export const NationWidePage: React.FC<Props> = ({ violenceResponse }) => {
-	const theme = useTheme();
-
-	// const [yearIndex, setYearIndex] = useState(8);
+export const NationWidePage: React.FC<Props> = ({
+	violenceResponse,
+	regionResponse,
+}) => {
+	const [nowYear, setNowYear] = useState<PoliceYear>('2022');
 	const dataByCityLabels = policeCityArray;
 
-	// const dataByCity: CustomChartDoughnutData = useMemo(() => {
-	// 	return getDataByYear(violenceResponse.items, '2022', 'total');
-	// }, [violenceResponse.items]);
-	const dataByCity: CustomChartLineData = useMemo(() => {
-		return getDataByYear(violenceResponse.items, '2022', 'total');
-	}, [violenceResponse.items]);
+	const regionDatas = useMemo(() => {
+		let result: RegionItem[] = [];
+		regionResponse.items.forEach(item => {
+			if (item.year === nowYear) {
+				result = item.items;
+			}
+		});
+		return result;
+	}, [nowYear, regionResponse.items]);
 
-	// console.log('data ===> ', dataByCity);
-	const DemoPaper = styled(Paper)(({ theme }) => ({
-		// width: 120,
-		// height: 120,
-		padding: theme.spacing(2),
-		...theme.typography.body2,
-		// textAlign: 'center',
-	}));
+	const regionMergedDataCrime = useMemo(() => {
+		return data_merge_by_cirme(regionDatas);
+	}, [regionDatas, nowYear]);
+
+	const regionMergedDataCity = useMemo(() => {
+		return data_merge_by_city(regionDatas);
+	}, [regionDatas, nowYear]);
+
+	const dataByOffice: Police | null = useMemo(() => {
+		return find_by_year_and_office(violenceResponse, nowYear);
+	}, [violenceResponse.items, nowYear]);
+
+	const dataByCity: CustomChartLineData = useMemo(() => {
+		return getDataByYear(violenceResponse.items, nowYear, 'total');
+	}, [violenceResponse.items, nowYear]);
+
+	const totalCountWithDataByCity = useMemo(() => {
+		let totalcount = 0;
+		dataByCityLabels.map(item => {
+			totalcount += dataByCity[item];
+		});
+		return totalcount;
+	}, [dataByCity]);
+
+	const lowestCity = useMemo(() => {
+		let minCity: string = '';
+		let min: number = Number.MAX_SAFE_INTEGER;
+		dataByCityLabels.forEach((item, index) => {
+			if (min > dataByCity[item]) {
+				minCity = item;
+				min = dataByCity[item];
+			}
+		});
+		return minCity;
+	}, [dataByCity]);
+
+	const highestCity = useMemo(() => {
+		let maxCity: string = '';
+		let max: number = 0;
+		dataByCityLabels.forEach((item, index) => {
+			if (max < dataByCity[item]) {
+				maxCity = item;
+				max = dataByCity[item];
+			}
+		});
+		return maxCity;
+	}, [dataByCity]);
+
+	const lowestCrime: CrimeValueType = useMemo(() => {
+		const keys = Object.keys(regionMergedDataCrime);
+		let crimeName = '';
+		let min = Number.MAX_SAFE_INTEGER;
+		keys.forEach((item, index) => {
+			const value = regionMergedDataCrime[item];
+			if (min > value) {
+				min = value;
+				crimeName = item;
+			}
+		});
+		return {
+			crime: crimeName,
+			count: regionMergedDataCrime[crimeName],
+		};
+	}, [regionMergedDataCrime]);
+	const highestCrime: CrimeValueType = useMemo(() => {
+		const keys = Object.keys(regionMergedDataCrime);
+		let crimeName = '';
+		let max = 0;
+		keys.forEach((item, index) => {
+			const value = regionMergedDataCrime[item];
+			if (max < value) {
+				max = value;
+				crimeName = item;
+			}
+		});
+		return {
+			crime: crimeName,
+			count: regionMergedDataCrime[crimeName],
+		};
+	}, [regionMergedDataCrime]);
 
 	const dataByCriminalOne: CustomChartDoughnutData = useMemo(() => {
-		return getDataByCriminal(violenceResponse.items, '2022', ['강도', '살인']);
-	}, [violenceResponse]);
+		return getDataByCriminal(violenceResponse.items, nowYear, ['강도', '살인']);
+	}, [violenceResponse, nowYear]);
 	const dataByCriminalTwo: CustomChartDoughnutData = useMemo(() => {
-		return getDataByCriminal(violenceResponse.items, '2022', ['절도', '폭력']);
-	}, [violenceResponse]);
-	// console.log('dataByCriminal', dataByCriminal);
+		return getDataByCriminal(violenceResponse.items, nowYear, ['절도', '폭력']);
+	}, [violenceResponse, nowYear]);
 
-	// console.log('compare data', mergeByCityWithYear(violenceResponse.items));
 	if (violenceResponse.items.length < 1) {
 		return null;
 	}
@@ -79,78 +173,175 @@ export const NationWidePage: React.FC<Props> = ({ violenceResponse }) => {
 			<Stack spacing={2}>
 				<Grid container>
 					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard type="total" />
+						<CustomCard
+							type="total"
+							year={nowYear}
+							totalCrimeCount={totalCountWithDataByCity}
+						/>
 					</Grid>
 					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard type="MaxMin" />
+						<CustomCard
+							type="MaxMin"
+							year={nowYear}
+							highestCity={highestCity}
+							lowestCity={lowestCity}
+						/>
 					</Grid>
 					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard type="crimeType" />
+						<CustomCard
+							type="crimeType"
+							year={nowYear}
+							lowestCrime={lowestCrime}
+							highestCrime={highestCrime}
+						/>
 					</Grid>
 					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard type="figure" />
+						<CustomCard
+							type="figure"
+							year={nowYear}
+							crimeData={regionMergedDataCrime}
+						/>
 					</Grid>
 					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard type="police" />
+						<CustomCard type="police" year={nowYear} office={dataByOffice} />
 					</Grid>
 					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard type="category" />
+						<CustomCard
+							type="category"
+							year={nowYear}
+							crimeData={regionMergedDataCity}
+						/>
 					</Grid>
 				</Grid>
-
-				<Grid container spacing={1}>
-					<Grid item xs={12} md={12} sm={12}>
-						<Card variant="outlined" sx={{ padding: 2, textAlign: 'center' }}>
-							<Grid container spacing={1}>
-								<Grid item xs={10} md={10} sm={10}>
+				<Stack>
+					<Card
+						variant="outlined"
+						sx={{
+							overflow: 'auto',
+							margin: 2,
+							textAlign: 'center',
+						}}
+					>
+						<Typography variant="overline" mt={1}>
+							{nowYear}년도 전국 지역별 범죄상황
+						</Typography>
+						<Box
+							sx={{
+								minWidth: 700,
+								overflow: 'auto',
+							}}
+						>
+							<CustomChart
+								dataLabels={dataByCityLabels}
+								chartLineData={dataByCity}
+								chartType="bar"
+								// isResponseSive={false}
+							/>
+						</Box>
+					</Card>
+					<Card variant="outlined" sx={{ margin: 2, textAlign: 'center' }}>
+						<TableContainer>
+							<Table sx={{ minWidth: 700 }} aria-label="customized table">
+								<TableHead>
+									<TableRow>
+										{dataByCityLabels.map((item, index) => {
+											return <TableCell key={index}>{item}</TableCell>;
+										})}
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									<TableRow>
+										{dataByCityLabels.map((item, index) => {
+											const value = dataByCity[item];
+											const digited = `${digit(value)}`;
+											const percent = `${percentage(value, totalCountWithDataByCity)}`;
+											const label = `${digited} ( ${percent} ) `;
+											return (
+												<TableCell key={index} component="th" scope="row">
+													{digited}
+												</TableCell>
+											);
+										})}
+									</TableRow>
+									<TableRow>
+										{dataByCityLabels.map((item, index) => {
+											const value = dataByCity[item];
+											const digited = `${digit(value)}`;
+											const percent = `${percentage(value, totalCountWithDataByCity)}`;
+											const label = `${digited} ( ${percent} ) `;
+											return (
+												<TableCell key={index} component="th" scope="row">
+													{`${percent}`}
+												</TableCell>
+											);
+										})}
+									</TableRow>
+								</TableBody>
+							</Table>
+						</TableContainer>
+					</Card>
+					<Grid container>
+						<Grid item xs={6} sm={6} md={6}>
+							<Card variant="outlined" sx={{ margin: 2, textAlign: 'center' }}>
+								<Typography
+									variant="overline"
+									sx={{ margin: 2, textAlign: 'center' }}
+								>
+									{nowYear}년도 범죄별 통계
+									{`  [${Object.keys(dataByCriminalOne).toString()}]`}
+								</Typography>
+								<Box
+									sx={{
+										height: '350px',
+										display: 'flex',
+										justifyContent: 'center',
+									}}
+								>
 									<CustomChart
-										dataLabels={dataByCityLabels}
-										chartLineData={dataByCity}
-										chartType="bar"
+										className={styles.gap}
+										dataLabels={Object.keys(dataByCriminalOne)}
+										chartDoughnutData={dataByCriminalOne}
+										chartType="doughnut"
+										labelPositon="bottom"
 										// isResponseSive={false}
+										needDigit
+										needPercent
 									/>
-								</Grid>
-								<Grid item xs={2} md={2} sm={2}>
-									<Card sx={{ padding: 1 }} variant="outlined">
-										<List>
-											{dataByCityLabels.map((item, index) => {
-												return (
-													<ListItem key={`${item}`}>
-														<Typography variant="overline">{item}</Typography>
-													</ListItem>
-												);
-											})}
-										</List>
-									</Card>
-								</Grid>
-							</Grid>
-						</Card>
+								</Box>
+							</Card>
+						</Grid>
+						<Grid item xs={6} sm={6} md={6}>
+							<Card variant="outlined" sx={{ margin: 2, textAlign: 'center' }}>
+								<Typography
+									variant="overline"
+									sx={{ margin: 2, textAlign: 'center' }}
+								>
+									{nowYear}년도 범죄별 통계
+									{`  [${Object.keys(dataByCriminalTwo).toString()}]`}
+								</Typography>
+								<Box
+									sx={{
+										height: '350px',
+										display: 'flex',
+										justifyContent: 'center',
+									}}
+								>
+									<CustomChart
+										className={styles.gap}
+										dataLabels={Object.keys(dataByCriminalTwo)}
+										chartDoughnutData={dataByCriminalTwo}
+										chartType="doughnut"
+										labelPositon="bottom"
+										colors={['#7B68EE', '#32CD32']}
+										// isResponseSive={false}
+										needDigit
+										needPercent
+									/>
+								</Box>
+							</Card>
+						</Grid>
 					</Grid>
-					{/* <Grid item xs={2} md={2} sm={2}>
-						<Card variant="outlined"></Card>
-					</Grid> */}
-				</Grid>
-				<Grid container>
-					<Grid item xs={6} md={6} sm={6} sx={{ margin: 1 }}>
-						<CustomChart
-							dataLabels={Object.keys(dataByCriminalOne)}
-							chartDoughnutData={dataByCriminalOne}
-							chartType="doughnut"
-							labelPositon="left"
-							isResponseSive={false}
-						/>
-					</Grid>
-					<Grid item xs={6} md={6} sm={6}>
-						<CustomChart
-							dataLabels={Object.keys(dataByCriminalTwo)}
-							chartDoughnutData={dataByCriminalTwo}
-							colors={['#7B68EE', '#32CD32']}
-							chartType="doughnut"
-							labelPositon="left"
-							isResponseSive={false}
-						/>
-					</Grid>
-				</Grid>
+				</Stack>
 			</Stack>
 		</Box>
 	);

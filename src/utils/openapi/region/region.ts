@@ -184,6 +184,54 @@ export const CrimeMainCategory = {
 export type CrimeMainCategory =
 	(typeof CrimeMainCategory)[keyof typeof CrimeMainCategory];
 
+//
+/*
+[
+	{ main : 강력범죄, sub: 살인기수, count : 00 },
+	{ main : 강력범죄, sub: 살인미수등, count : 00 },
+	{ main : 강력범죄, sub: 강간, count : 00 },
+]
+
+*/
+
+/**
+ * seperated by colon (:) {"main:sub", value}
+ * @param data
+ * @param selectedYear
+ */
+export const data_merge_by_cirme = (data: RegionItem[]) => {
+	const map = new Map<string, number>();
+	data.map((item, index) => {
+		const categories = item.category;
+		categories.forEach(category => {
+			const key = `${category.main}:${category.sub}`;
+			const value = category.count;
+			map.set(key, (map.get(key) ?? 0) + value);
+		});
+	});
+	return Object.fromEntries(map);
+};
+
+/**
+ * { "서울": 00, "인천": 00}
+ * @param data
+ * @returns
+ */
+export const data_merge_by_city = (data: RegionItem[]) => {
+	const map = new Map<string, number>();
+	data.map((item, index) => {
+		const cityname = item.city_name;
+		const total = item.totalCount;
+		map.set(cityname, (map.get(cityname) ?? 0) + total);
+	});
+	return Object.fromEntries(map);
+};
+
+export type CrimeValueType = {
+	crime: string;
+	count: number;
+};
+
 // export const responseToRegionData = (data: any[]): RegionItem[] => {
 // 	const mainCategoryName = '범죄대분류';
 // 	const subCategoryName = '범죄중분류';

@@ -1,25 +1,29 @@
 import { Police } from '@/models/api/open/police/SearchPoliceResponse';
-import { Violence } from '@/store/modules/common/violence';
+import {
+	Violence,
+	ViolenceItem,
+	ViolenceState,
+} from '@/store/modules/common/violence';
 import { isObject } from '@/utils/object';
 
 export const policeCityArray = [
 	'서울',
-	'부산',
-	'대구',
-	'인천',
-	'광주',
-	'대전',
-	'울산',
 	'경기',
+	'인천',
+	'대전',
+	'세종',
+	'광주',
 	'강원',
+	'울산',
+	'대구',
+	'부산',
+	'제주',
 	'충북',
 	'충남',
 	'전북',
 	'전남',
 	'경북',
 	'경남',
-	'제주',
-	'세종',
 ];
 
 export const policeChartColor: { [key: string]: string } = {
@@ -95,6 +99,40 @@ export const mergeByCity = (data: Police[]) => {
 			폭력,
 		};
 	});
+};
+
+export const find_by_year_and_office = (
+	datas: ViolenceState,
+	year: PoliceYear,
+	area?: string,
+	office?: string
+) => {
+	const foundIndex = datas.items.findIndex(item => item.year === year);
+	if (foundIndex < 0) {
+		return null;
+	}
+
+	let resultData = datas.items[foundIndex].data;
+	if (area) {
+		resultData = resultData.reduce((prev: ViolenceItem[], curr) => {
+			if (curr.경찰서.includes(area)) {
+				return [...prev, curr];
+			} else {
+				return prev;
+			}
+		}, []);
+	}
+
+	if (office) {
+		resultData = resultData.reduce((prev: ViolenceItem[], curr) => {
+			if (curr.경찰서 == office) {
+				return [...prev, curr];
+			} else {
+				return prev;
+			}
+		}, []);
+	}
+	return resultData[0];
 };
 
 export const mergeByYearly = (violences: Violence[]) => {
