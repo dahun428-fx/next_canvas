@@ -18,10 +18,14 @@ import {
 import {
 	Box,
 	Card,
+	Divider,
 	Grid,
 	List,
 	ListItem,
+	MenuItem,
 	Paper,
+	Select,
+	SelectChangeEvent,
 	Stack,
 	Table,
 	TableBody,
@@ -29,11 +33,18 @@ import {
 	TableContainer,
 	TableHead,
 	TableRow,
+	TextField,
 	Typography,
 	styled,
 	useTheme,
 } from '@mui/material';
-import React, { Suspense, useEffect, useMemo, useState } from 'react';
+import React, {
+	ChangeEvent,
+	Suspense,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import styles from './NationWidePage.module.scss';
 import { PoliceResourceYears } from '@/api/clients/services/open/police';
 import { RegionState } from '@/store/modules/common/region';
@@ -44,6 +55,7 @@ import {
 	data_merge_by_city,
 } from '@/utils/openapi/region/region';
 import { Police } from '@/models/api/open/police/SearchPoliceResponse';
+import { RegionResourceYear } from '@/api/clients/services/open/region';
 
 type Props = {
 	violenceResponse: ViolenceState;
@@ -56,6 +68,7 @@ export const NationWidePage: React.FC<Props> = ({
 }) => {
 	const [nowYear, setNowYear] = useState<PoliceYear>('2022');
 	const dataByCityLabels = policeCityArray;
+	const resourceYear = [...RegionResourceYear].reverse();
 
 	const regionDatas = useMemo(() => {
 		let result: RegionItem[] = [];
@@ -168,9 +181,35 @@ export const NationWidePage: React.FC<Props> = ({
         5. 가장 바쁜 경찰서
         6. 범죄 종류별 발생 건수
     */
+	console.log('resourceYear ==> ', resourceYear);
 	return (
 		<Box>
 			<Stack spacing={2}>
+				<Box sx={{ padding: 1, margin: 1 }}>
+					<Typography variant="h6">
+						<Select
+							variant="standard"
+							// select
+
+							value={nowYear}
+							defaultValue={nowYear}
+							sx={{ height: '30px', width: '12ch', textAlign: 'right' }}
+							onChange={(event: SelectChangeEvent) => {
+								setNowYear(event.target.value as string);
+							}}
+						>
+							{resourceYear.map(item => {
+								return (
+									<MenuItem key={item} value={item}>
+										{item}
+									</MenuItem>
+								);
+							})}
+						</Select>
+						년도 범죄 발생현황
+					</Typography>
+				</Box>
+				<Divider />
 				<Grid container>
 					<Grid item xs={12} md={4} sm={4}>
 						<CustomCard

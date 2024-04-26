@@ -51,8 +51,8 @@ export const CustomCard: React.FC<Props> = ({ type, ...props }) => {
 		return <div></div>;
 	};
 	return (
-		<Box sx={{ minWidth: 150, margin: 1 }}>
-			<Card sx={{ minHeight: 175 }} variant="outlined">
+		<Box sx={{ minWidth: 200, margin: 1 }}>
+			<Card sx={{ minHeight: 200 }} variant="outlined">
 				{type && cardContent()}
 			</Card>
 		</Box>
@@ -109,15 +109,15 @@ const MaxMinContent: React.FC<Props> = ({ year, highestCity, lowestCity }) => {
 				sx={{ fontWeight: 'bold', fontSize: titleFontSize }}
 			>
 				최다 범죄 발생지
-				<Typography
-					variant="h6"
-					component="span"
-					textAlign={'right'}
-					ml={4}
-					sx={{ color: '#1976d2', textAlign: 'right' }}
-				>
-					{highestCity}
-				</Typography>
+			</Typography>
+			<Typography
+				variant="h6"
+				component="div"
+				textAlign={'right'}
+				ml={4}
+				sx={{ color: '#1976d2', textAlign: 'right' }}
+			>
+				{highestCity}
 			</Typography>
 			<Typography
 				mt={1}
@@ -125,18 +125,18 @@ const MaxMinContent: React.FC<Props> = ({ year, highestCity, lowestCity }) => {
 				sx={{ fontWeight: 'bold', fontSize: titleFontSize }}
 			>
 				최저 범죄 발생지
-				<Typography
-					variant="h6"
-					component="span"
-					textAlign={'right'}
-					ml={4}
-					sx={{
-						color: '#1976d2',
-						textAlign: 'right',
-					}}
-				>
-					{lowestCity}
-				</Typography>
+			</Typography>
+			<Typography
+				variant="h6"
+				component="div"
+				textAlign={'right'}
+				ml={4}
+				sx={{
+					color: '#1976d2',
+					textAlign: 'right',
+				}}
+			>
+				{lowestCity}
 			</Typography>
 		</CardContent>
 	);
@@ -200,7 +200,7 @@ const CrimeTypeContent: React.FC<Props> = ({
 					>
 						최다 범죄
 					</Typography>
-					<Box textAlign={'left'}>
+					<Box textAlign={'left'} mt={1}>
 						<Typography
 							component="div"
 							variant="subtitle2"
@@ -229,7 +229,7 @@ const CrimeTypeContent: React.FC<Props> = ({
 					>
 						최저 범죄
 					</Typography>
-					<Box textAlign={'left'}>
+					<Box textAlign={'left'} mt={1}>
 						<Typography
 							component="div"
 							variant="subtitle2"

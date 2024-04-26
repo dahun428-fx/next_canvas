@@ -1,3 +1,4 @@
+import { ViolentData } from '@/components/pages/Violent/ViolentMain';
 import { Police } from '@/models/api/open/police/SearchPoliceResponse';
 import {
 	Violence,
@@ -99,6 +100,34 @@ export const mergeByCity = (data: Police[]) => {
 			폭력,
 		};
 	});
+};
+
+export const get_data_by_city = (data: Violence[], city: string) => {
+	const mergedData = mergeByCityWithYear(data);
+	let datas: ViolentData[] = [];
+	mergedData.forEach((item, index) => {
+		if (item.city === city) {
+			datas = [
+				{
+					label: '강도',
+					data: item.강도,
+				},
+				{
+					label: '살인',
+					data: item.살인,
+				},
+				{
+					label: '절도',
+					data: item.절도,
+				},
+				{
+					label: '폭력',
+					data: item.폭력,
+				},
+			];
+		}
+	});
+	return datas;
 };
 
 export const find_by_year_and_office = (
