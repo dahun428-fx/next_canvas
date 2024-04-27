@@ -65,8 +65,6 @@ export const Doughnut: React.FC<Props> = ({
 	plugins,
 	chartType = 'doughnut',
 }) => {
-	if (!isObject(data)) return null;
-
 	const chartDatas: number[] = Object.values(data);
 
 	const dataLabel = useMemo(() => {
@@ -99,6 +97,7 @@ export const Doughnut: React.FC<Props> = ({
 			'#FFA07A',
 		];
 	}, []);
+	if (!isObject(data)) return null;
 
 	return (
 		<div className={className}>
