@@ -5,10 +5,7 @@ import {
 import { SearchRegionResponse } from '@/models/api/open/region/SearchRegionResponse';
 import { Dispatch } from 'redux';
 import { RegionResponse, actions } from './slice';
-import {
-	changeToRegionalData,
-	responseToRegionData,
-} from '@/utils/openapi/region/region';
+import { changeToRegionalData } from '@/utils/openapi/region/region';
 import { ChartType } from 'chart.js';
 
 export function loadOperations(dispatch: Dispatch) {
@@ -28,17 +25,15 @@ export function loadOperations(dispatch: Dispatch) {
 		);
 		promise.then(async response => {
 			const regionItems: RegionResponse[] = response.map((item, index) => {
-				if (index === 0) {
-					const result = changeToRegionalData(item.response.data, item.year);
-					console.log('response result ====> ', result);
-				}
+				// const result = changeToRegionalData(item.response.data, item.year);
+				// console.log('response result ====> ', result);
 				return {
 					currentCount: item.response.currentCount,
 					matchCount: item.response.matchCount,
 					page: item.response.page,
 					perPage: item.response.perPage,
 					totalCount: item.response.totalCount,
-					items: responseToRegionData(item.response.data),
+					items: changeToRegionalData(item.response.data, item.year),
 					year: item.year,
 				};
 			});
@@ -50,5 +45,11 @@ export function loadOperations(dispatch: Dispatch) {
 export function updateChartTypeOperation(dispatch: Dispatch) {
 	return (chartType: ChartType) => {
 		dispatch(actions.updateChartType(chartType));
+	};
+}
+
+export function updateYearOperation(dispatch: Dispatch) {
+	return (year: string) => {
+		dispatch(actions.updateYear(year));
 	};
 }

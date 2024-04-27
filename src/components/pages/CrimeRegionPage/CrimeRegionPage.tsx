@@ -1,7 +1,14 @@
+import { Box, Grid } from '@mui/material';
+import { CrimeMain } from '../Crime';
+
 type Props = {};
 
 export const CrimeRegionPage: React.FC<Props> = () => {
-	return <div>this is crime page</div>;
+	return (
+		<Box>
+			<CrimeMain />
+		</Box>
+	);
 };
 
 CrimeRegionPage.displayName = 'CrimeRegionPage';

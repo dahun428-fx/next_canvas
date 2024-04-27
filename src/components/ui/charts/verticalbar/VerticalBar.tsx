@@ -123,70 +123,77 @@ export const VerticalBar: React.FC<Props> = ({
 	}, [chartRef.current]);
 
 	return (
-		<div className={className}>
-			{chartName && <div className={styles.chartName}>{chartName}</div>}
-			<Chart
-				ref={chartRef}
-				data={data}
-				type={chartType}
-				options={
-					!zoomNeed
-						? {}
-						: {
-								plugins: {
-									zoom: {
-										pan: {
-											enabled: true,
-											mode: 'xy',
-										},
+		<Grid
+			container
+			// sx={{ width: '100%' }}
+			spacing={{ xs: 6, md: 4 }}
+			columns={{ xs: 6, sm: 4, md: 0 }}
+		>
+			<Grid item md={12} xs={6} sm={8} className={className}>
+				{chartName && <div className={styles.chartName}>{chartName}</div>}
+				<Chart
+					ref={chartRef}
+					data={data}
+					type={chartType}
+					options={
+						!zoomNeed
+							? {}
+							: {
+									plugins: {
 										zoom: {
-											wheel: {
+											pan: {
 												enabled: true,
+												mode: 'xy',
 											},
-											pinch: {
-												enabled: true,
+											zoom: {
+												wheel: {
+													enabled: true,
+												},
+												pinch: {
+													enabled: true,
+												},
+												mode: 'xy',
 											},
-											mode: 'xy',
 										},
 									},
-								},
-							}
-				}
-			/>
-			{zoomNeed && (
-				<>
-					<Grid container>
-						<Grid item className={styles.buttonGroup}>
-							<ButtonGroup variant="outlined" aria-label="Basic button group">
-								<Button
-									onClick={() => {
-										if (chartRef && chartRef.current) {
-											chartRef.current.zoom(1.1);
-										}
-									}}
-								>
-									Zoom +10%
+								}
+					}
+				/>
+				{zoomNeed && (
+					<>
+						<Grid container>
+							<Grid item className={styles.buttonGroup}>
+								<ButtonGroup variant="outlined" aria-label="Basic button group">
+									<Button
+										onClick={() => {
+											if (chartRef && chartRef.current) {
+												chartRef.current.zoom(1.1);
+											}
+										}}
+									>
+										Zoom +10%
+									</Button>
+									<Button
+										onClick={() => {
+											if (chartRef && chartRef.current) {
+												chartRef.current.zoom(0.9);
+											}
+										}}
+									>
+										Zoom -10%
+									</Button>
+								</ButtonGroup>
+							</Grid>
+							<Grid item className={styles.resetButton}>
+								<Button variant="outlined" onClick={handleResetZoom}>
+									초기화
 								</Button>
-								<Button
-									onClick={() => {
-										if (chartRef && chartRef.current) {
-											chartRef.current.zoom(0.9);
-										}
-									}}
-								>
-									Zoom -10%
-								</Button>
-							</ButtonGroup>
+							</Grid>
 						</Grid>
-						<Grid item className={styles.resetButton}>
-							<Button variant="outlined" onClick={handleResetZoom}>
-								초기화
-							</Button>
-						</Grid>
-					</Grid>
-				</>
-			)}
-		</div>
+					</>
+				)}
+			</Grid>
+		</Grid>
 	);
 };
 

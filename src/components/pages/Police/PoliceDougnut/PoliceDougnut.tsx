@@ -1,3 +1,4 @@
+import { CustomChart } from '@/components/common/utils/CustomChart';
 import { Doughnut } from '@/components/ui/charts/doughnut';
 import { DoughnutData } from '@/components/ui/charts/doughnut/Doughnut';
 import { useSelector } from '@/store/hooks';
@@ -35,14 +36,12 @@ export const PoliceDougnut: React.FC<Props> = ({
 	}, [data]);
 
 	return (
-		<Doughnut
-			labels={adjustLabels}
-			data={data}
-			title={title}
+		<CustomChart
+			dataLabels={adjustLabels}
+			chartDoughnutData={data}
 			chartName={chartName}
-			className={className}
-			colors={colors}
 			chartType={chartType}
+			labelPositon="left"
 		/>
 	);
 };

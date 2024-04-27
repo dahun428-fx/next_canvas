@@ -1,25 +1,30 @@
+import { ViolentData } from '@/components/pages/Violent/ViolentMain';
 import { Police } from '@/models/api/open/police/SearchPoliceResponse';
-import { Violence } from '@/store/modules/common/violence';
+import {
+	Violence,
+	ViolenceItem,
+	ViolenceState,
+} from '@/store/modules/common/violence';
 import { isObject } from '@/utils/object';
 
 export const policeCityArray = [
 	'서울',
-	'부산',
-	'대구',
-	'인천',
-	'광주',
-	'대전',
-	'울산',
 	'경기',
+	'인천',
+	'대전',
+	'세종',
+	'광주',
 	'강원',
+	'울산',
+	'대구',
+	'부산',
+	'제주',
 	'충북',
 	'충남',
 	'전북',
 	'전남',
 	'경북',
 	'경남',
-	'제주',
-	'세종',
 ];
 
 export const policeChartColor: { [key: string]: string } = {
@@ -97,6 +102,72 @@ export const mergeByCity = (data: Police[]) => {
 	});
 };
 
+export const get_data_by_city = (data: Violence[], city: string) => {
+	const mergedData = mergeByCityWithYear(data);
+	let datas: ViolentData[] = [];
+	mergedData.forEach((item, index) => {
+		if (item.city === city) {
+			datas = [
+				{
+					label: '총합',
+					data: item.total,
+				},
+				{
+					label: '강도',
+					data: item.강도,
+				},
+				{
+					label: '살인',
+					data: item.살인,
+				},
+				{
+					label: '절도',
+					data: item.절도,
+				},
+				{
+					label: '폭력',
+					data: item.폭력,
+				},
+			];
+		}
+	});
+	return datas;
+};
+
+export const find_by_year_and_office = (
+	datas: ViolenceState,
+	year: PoliceYear,
+	area?: string,
+	office?: string
+) => {
+	const foundIndex = datas.items.findIndex(item => item.year === year);
+	if (foundIndex < 0) {
+		return null;
+	}
+
+	let resultData = datas.items[foundIndex].data;
+	if (area) {
+		resultData = resultData.reduce((prev: ViolenceItem[], curr) => {
+			if (curr.경찰서.includes(area)) {
+				return [...prev, curr];
+			} else {
+				return prev;
+			}
+		}, []);
+	}
+
+	if (office) {
+		resultData = resultData.reduce((prev: ViolenceItem[], curr) => {
+			if (curr.경찰서 == office) {
+				return [...prev, curr];
+			} else {
+				return prev;
+			}
+		}, []);
+	}
+	return resultData[0];
+};
+
 export const mergeByYearly = (violences: Violence[]) => {
 	return violences.map((violence, index) => {
 		const _data = mergeByCity(violence.data);
@@ -162,4 +233,69 @@ type mergeByCityWithYearType = {
 	절도: number[];
 	폭력: number[];
 	total: number[];
+};
+
+const PoliceYear: { [key: number]: string } = {
+	0: '2014',
+	1: '2015',
+	2: '2016',
+	3: '2017',
+	4: '2018',
+	5: '2019',
+	6: '2020',
+	7: '2021',
+	8: '2022',
+} as const;
+
+export type PoliceYear = (typeof PoliceYear)[keyof typeof PoliceYear];
+
+export const getDataByYear = (
+	originalData: Violence[],
+	year: PoliceYear,
+	type: 'total' | PoliceType
+): { [key: string]: number } => {
+	const map = new Map<string, number>();
+
+	const idx = Object.keys(PoliceYear).find(
+		key => PoliceYear[Number(key)] === year
+	);
+
+	if (idx) {
+		mergeByCityWithYear(originalData).map((item, index) => {
+			map.set(item.city, item[type][Number(idx)] ?? 0);
+			// map.set(item.city, item[type][8] ?? 0);
+		});
+	}
+	return Object.fromEntries(map);
+};
+
+export const getDataByCriminal = (
+	originalData: Violence[],
+	year: PoliceYear,
+	included: PoliceType[]
+) => {
+	const idx = Object.keys(PoliceYear).find(
+		key => PoliceYear[Number(key)] === year
+	);
+	const sortedData = mergeByCityWithYear(originalData);
+
+	const map = new Map<PoliceType, number>();
+
+	if (idx) {
+		sortedData.map((item, index) => {
+			if (included.some(item => item === '강도')) {
+				map.set('강도', (map.get('강도') ?? 0) + item.강도[Number(idx)]);
+			}
+			if (included.some(item => item === '살인')) {
+				map.set('살인', (map.get('살인') ?? 0) + item.살인[Number(idx)]);
+			}
+			if (included.some(item => item === '절도')) {
+				map.set('절도', (map.get('절도') ?? 0) + item.절도[Number(idx)]);
+			}
+			if (included.some(item => item === '폭력')) {
+				map.set('폭력', (map.get('폭력') ?? 0) + item.폭력[Number(idx)]);
+			}
+		});
+	}
+	return Object.fromEntries(map);
 };

@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { ChartType } from 'chart.js';
 
-export type PageRouteState = '' | 'police' | 'violent';
+export type PageRouteState = '' | 'police' | 'violent' | 'region';
 
 export type BottomBarState = {
 	show: boolean;

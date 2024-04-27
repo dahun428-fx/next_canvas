@@ -117,11 +117,12 @@ export const ViolentMain: React.FC<Props> = ({ violenceResponse }) => {
 			<TabContext value={tabValue}>
 				<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
 					<TabList
+						// variant="scrollable"
 						onChange={(event: SyntheticEvent, value: PoliceType) => {
 							setTabValue(value);
 						}}
-						// variant="scrollable"
-						centered
+						variant="scrollable"
+						// centered
 						// aria-label="lab API tabs example"
 					>
 						<Tab label={`전체`} value={'all'} />

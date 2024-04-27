@@ -7,3 +7,7 @@ export function selectRegion(state: AppState) {
 export function selectChartType(state: AppState) {
 	return state.region.chartType;
 }
+
+export function selectYear(state: AppState) {
+	return state.region.year;
+}

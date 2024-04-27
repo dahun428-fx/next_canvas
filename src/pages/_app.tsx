@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { Router } from 'next/router';
 import { bottomBarResetChartTypesOperation } from '@/store/modules/common/bottom';
 import { useDispatch } from 'react-redux';
+import '@/styles/common.css';
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
 	const getLayout = Standard;

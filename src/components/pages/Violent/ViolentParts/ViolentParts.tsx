@@ -28,12 +28,18 @@ export const ViolentParts: React.FC<Props> = ({
 	if (violenceResponse.items.length < 1) return null;
 
 	return (
-		<Grid container spacing={2}>
-			<Grid item md={10}>
+		<Grid
+			container
+			spacing={2}
+			sx={{
+				overflow: 'auto',
+			}}
+		>
+			<Grid item sm={10} md={10}>
 				<ViolentCharts dataObject={datas} labels={labels} title={title} />
 				<ViolentTable dataObject={datas} labels={labels} tableTitle={title} />
 			</Grid>
-			<Grid item md={2}>
+			<Grid item sm={2} md={2}>
 				<SwitchBasic
 					className={styles.violentSwitch}
 					data={cityNames}
