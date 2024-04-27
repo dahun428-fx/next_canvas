@@ -211,6 +211,25 @@ export const data_merge_by_cirme = (data: RegionItem[]) => {
 	});
 	return Object.fromEntries(map);
 };
+/**
+ * with city seperated by colon (:) {"main:sub", value}
+ * @param data
+ * @param selectedYear
+ */
+export const data_merge_by_cirme_city = (data: RegionItem[], city: string) => {
+	const map = new Map<string, number>();
+	data.map((item, index) => {
+		if (item.city_name === city) {
+			const categories = item.category;
+			categories.forEach(category => {
+				const key = `${category.main}:${category.sub}`;
+				const value = category.count;
+				map.set(key, (map.get(key) ?? 0) + value);
+			});
+		}
+	});
+	return Object.fromEntries(map);
+};
 
 /**
  * { "서울": 00, "인천": 00}

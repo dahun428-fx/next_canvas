@@ -19,7 +19,8 @@ export type CardContentType =
 	| 'crimeType'
 	| 'figure'
 	| 'police'
-	| 'category';
+	| 'category'
+	| 'MaxMinYear';
 
 type Props = {
 	type?: CardContentType;
@@ -31,6 +32,9 @@ type Props = {
 	highestCrime?: CrimeValueType;
 	crimeData?: { [k: string]: number };
 	office?: Police | null;
+	selectedCity?: string;
+	lowestYearData?: { [key: string]: number };
+	highestYearData?: { [key: string]: number };
 };
 
 export const CustomCard: React.FC<Props> = ({ type, ...props }) => {
@@ -47,6 +51,8 @@ export const CustomCard: React.FC<Props> = ({ type, ...props }) => {
 			return <PoliceOfficeContent {...props} />;
 		} else if (type === 'category') {
 			return <CategoryCountContent {...props} />;
+		} else if (type === 'MaxMinYear') {
+			return <MaxMinYear {...props} />;
 		}
 		return <div></div>;
 	};
@@ -306,13 +312,20 @@ const PoliceOfficeContent: React.FC<Props> = ({ year, office }) => {
 	);
 };
 
-const CategoryCountContent: React.FC<Props> = ({ year, crimeData }) => {
+const CategoryCountContent: React.FC<Props> = ({
+	year,
+	crimeData,
+	selectedCity,
+}) => {
 	if (!crimeData) return null;
 	const index = 0;
 	const keys = Object.keys(crimeData);
 	const values = Object.values(crimeData);
-	const key = keys[index];
-	const value = values[index];
+	const idx = keys.findIndex(item => item === selectedCity);
+
+	if (idx < 0) return null;
+	const key = keys[idx];
+	const value = values[idx];
 
 	return (
 		<CardContent>
@@ -337,6 +350,64 @@ const CategoryCountContent: React.FC<Props> = ({ year, crimeData }) => {
 				sx={{ color: '#1976d2', textAlign: 'right' }}
 			>
 				{`${key} | ${digit(value)} 건`}
+			</Typography>
+		</CardContent>
+	);
+};
+const MaxMinYear: React.FC<Props> = ({
+	selectedCity,
+	highestYearData,
+	lowestYearData,
+}) => {
+	if (!highestYearData || !lowestYearData) return null;
+	const highestYear = Object.keys(highestYearData)[0];
+	const lowestYear = Object.keys(lowestYearData)[0];
+
+	const highestYearCount = digit(highestYearData[highestYear]);
+	const lowestYearCount = digit(lowestYearData[lowestYear]);
+	return (
+		<CardContent>
+			<Typography
+				component="div"
+				sx={{ mb: 1.5 }}
+				color="text.secondary"
+				variant="overline"
+			>
+				{selectedCity} 지역
+			</Typography>
+			<Typography
+				component="div"
+				sx={{ fontWeight: 'bold', fontSize: titleFontSize }}
+			>
+				최다 범죄 발생 연도
+			</Typography>
+			<Typography
+				variant="h6"
+				component="div"
+				textAlign={'right'}
+				ml={4}
+				sx={{ color: '#1976d2', textAlign: 'right' }}
+			>
+				{highestYear} 년도 | {highestYearCount}건
+			</Typography>
+			<Typography
+				mt={1}
+				component="div"
+				sx={{ fontWeight: 'bold', fontSize: titleFontSize }}
+			>
+				최저 범죄 발생 연도
+			</Typography>
+			<Typography
+				variant="h6"
+				component="div"
+				textAlign={'right'}
+				ml={4}
+				sx={{
+					color: '#1976d2',
+					textAlign: 'right',
+				}}
+			>
+				{lowestYear} 년도 | {lowestYearCount}건
 			</Typography>
 		</CardContent>
 	);

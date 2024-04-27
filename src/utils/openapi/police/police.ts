@@ -109,6 +109,10 @@ export const get_data_by_city = (data: Violence[], city: string) => {
 		if (item.city === city) {
 			datas = [
 				{
+					label: '총합',
+					data: item.total,
+				},
+				{
 					label: '강도',
 					data: item.강도,
 				},

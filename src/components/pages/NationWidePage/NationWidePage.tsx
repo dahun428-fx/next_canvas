@@ -67,7 +67,9 @@ export const NationWidePage: React.FC<Props> = ({
 	regionResponse,
 }) => {
 	const [nowYear, setNowYear] = useState<PoliceYear>('2022');
-	const dataByCityLabels = policeCityArray;
+	const [selectedCity, setSelectedCity] = useState('서울');
+
+	const dataByCityLabels = [...policeCityArray];
 	const resourceYear = [...RegionResourceYear].reverse();
 
 	const regionDatas = useMemo(() => {
@@ -87,7 +89,6 @@ export const NationWidePage: React.FC<Props> = ({
 	const regionMergedDataCity = useMemo(() => {
 		return data_merge_by_city(regionDatas);
 	}, [regionDatas, nowYear]);
-
 	const dataByOffice: Police | null = useMemo(() => {
 		return find_by_year_and_office(violenceResponse, nowYear);
 	}, [violenceResponse.items, nowYear]);
@@ -181,7 +182,6 @@ export const NationWidePage: React.FC<Props> = ({
         5. 가장 바쁜 경찰서
         6. 범죄 종류별 발생 건수
     */
-	console.log('resourceYear ==> ', resourceYear);
 	return (
 		<Box>
 			<Stack spacing={2}>
@@ -249,6 +249,7 @@ export const NationWidePage: React.FC<Props> = ({
 							type="category"
 							year={nowYear}
 							crimeData={regionMergedDataCity}
+							selectedCity={`서울`}
 						/>
 					</Grid>
 				</Grid>
