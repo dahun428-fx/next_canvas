@@ -1,0 +1,1 @@
+export { CrimeContent } from './CrimeContent';

@@ -1,0 +1,19 @@
+.enter {
+  position: fixed;
+  z-index: 1000px;
+  opacity: 0;
+}
+
+.enterActive {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+
+.exit {
+  opacity: 1;
+}
+
+.exitActive {
+  opacity: 0;
+  transition: opacity 300ms;
+}

@@ -1,8 +1,7 @@
 import { SearchPoliceRequest } from '@/models/api/open/police/SearchPoliceRequest';
 import { SearchPoliceReseponse } from '@/models/api/open/police/SearchPoliceResponse';
 import { openApi } from '../../openApi';
-import { AxiosError, CancelToken } from 'axios';
-import { OpenApiError } from '@/errors/api/OpenApiError';
+import { CancelToken } from 'axios';
 
 // const API_KEY = `Ns5g8JcqOWSCela7ynku%2B0e3EUo0wOU7%2BA6%2B95T14Y34E9w%2FQxwRqsBaP8nMKxE2jFicfOgw13wrtOahWd%2FhQg%3D%3D`;
 const API_KEY = `Ns5g8JcqOWSCela7ynku+0e3EUo0wOU7+A6+95T14Y34E9w/QxwRqsBaP8nMKxE2jFicfOgw13wrtOahWd/hQg==`;

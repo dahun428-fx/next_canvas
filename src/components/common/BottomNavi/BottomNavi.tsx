@@ -3,31 +3,101 @@ import {
 	BottomNavigationAction,
 	Box,
 	Card,
+	CardContent,
+	CardHeader,
+	Typography,
 } from '@mui/material';
 import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useState } from 'react';
 import styles from './BottomNavi.module.scss';
+import { ChartType } from 'chart.js';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import DonutLargeIcon from '@mui/icons-material/DonutLarge';
+import SsidChartIcon from '@mui/icons-material/SsidChart';
+import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
+import PieChartIcon from '@mui/icons-material/PieChart';
+import BubbleChartIcon from '@mui/icons-material/BubbleChart';
+import RadarIcon from '@mui/icons-material/Radar';
+import DonutSmallIcon from '@mui/icons-material/DonutSmall';
+import AssessmentIcon from '@mui/icons-material/AssessmentOutlined';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
-type Props = {};
+type Props = {
+	availableCharts?: ChartType[];
+	handleChangeChartType?: (value: ChartType) => void;
+	selectedChartType?: ChartType;
+};
 
-export const BottomNavi: React.FC<Props> = () => {
-	const [value, setValue] = useState(0);
+export const BottomNavi: React.FC<Props> = ({
+	availableCharts,
+	selectedChartType,
+	handleChangeChartType,
+}) => {
+	if (
+		!availableCharts ||
+		availableCharts.length < 1 ||
+		!handleChangeChartType ||
+		!selectedChartType
+	) {
+		return null;
+	}
+
+	const ChartIcons = (chartType: ChartType) => {
+		switch (chartType) {
+			case 'bar':
+				return <BarChartIcon />;
+			case 'bubble':
+				return <BubbleChartIcon />;
+			case 'doughnut':
+				return <DonutLargeIcon />;
+			case 'line':
+				return <SsidChartIcon />;
+			case 'pie':
+				return <PieChartIcon />;
+			case 'polarArea':
+				return <DonutSmallIcon />;
+			case 'radar':
+				return <RadarIcon />;
+			case 'scatter':
+				return <ScatterPlotIcon />;
+		}
+	};
+
 	return (
-		<Card className={styles.bottomfixed}>
-			<BottomNavigation
-				showLabels
-				value={value}
-				onChange={(event, newValue) => {
-					setValue(newValue);
-				}}
+		<>
+			<div></div>
+			<Box sx={{ marginRight: '12px' }}>
+				<AssessmentIcon fontSize="large" />
+			</Box>
+			<Card className={styles.bottomfixed}>
+				{/* <CardContent
+				sx={{ backgroundColor: '#1976d2', textAlign: 'center', padding: '5px' }}
 			>
-				<BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-				<BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-				<BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
-			</BottomNavigation>
-		</Card>
+				<Typography sx={{ fontWeight: 'bold', color: '#fff' }}>
+					차트변경
+				</Typography>
+			</CardContent> */}
+				<BottomNavigation
+					showLabels
+					value={selectedChartType}
+					onChange={(event, newValue) => {
+						handleChangeChartType(newValue);
+					}}
+				>
+					{availableCharts.map((item, index) => {
+						const key = `${item}_${index}`;
+						return (
+							<BottomNavigationAction
+								key={key}
+								label={item}
+								value={item}
+								icon={ChartIcons(item)}
+							/>
+						);
+					})}
+				</BottomNavigation>
+			</Card>
+		</>
 	);
 };
 

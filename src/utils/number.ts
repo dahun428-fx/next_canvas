@@ -43,3 +43,13 @@ export function range(start: number, end: number): number[] {
 	}
 	return numbers;
 }
+
+/**
+ *
+ * @param {number} value target
+ * @param {number} total total
+ * @returns {string} '00%'
+ */
+export function percentage(value: number, total: number): string {
+	return ((value * 100) / total).toFixed(2) + '%';
+}

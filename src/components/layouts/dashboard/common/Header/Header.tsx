@@ -18,25 +18,29 @@ import { NAV, HEADER } from '../Nav/config-layout';
 // ----------------------------------------------------------------------
 
 type Props = {
-	onOpenNav: () => void;
+	// onOpenNav: () => void;
 };
 
-export const Header: React.FC<Props> = ({ onOpenNav }) => {
+export const Header: React.FC<Props> = (
+	{
+		// onOpenNav
+	}
+) => {
 	const theme = useTheme();
 
 	const lgUp = useResponsive('up', 'lg');
 
-	const renderContent = (
-		<>
-			{!lgUp && (
-				<IconButton onClick={onOpenNav} sx={{ mr: 1 }}>
-					<Iconify icon="eva:menu-2-fill" />
-				</IconButton>
-			)}
+	// const renderContent = (
+	// 	<>
+	// 		{!lgUp && (
+	// 			<IconButton onClick={onOpenNav} sx={{ mr: 1 }}>
+	// 				<Iconify icon="eva:menu-2-fill" />
+	// 			</IconButton>
+	// 		)}
 
-			<Box sx={{ flexGrow: 1 }} />
-		</>
-	);
+	// 		<Box sx={{ flexGrow: 1 }} />
+	// 	</>
+	// );
 
 	return (
 		<AppBar
@@ -62,7 +66,7 @@ export const Header: React.FC<Props> = ({ onOpenNav }) => {
 					zIndex: theme.zIndex.appBar + 1,
 				}}
 			>
-				{renderContent}
+				{/* {renderContent} */}
 			</Toolbar>
 		</AppBar>
 	);

@@ -10,27 +10,31 @@ import { ReactNode } from 'react';
 type Props = {
 	children: ReactNode;
 	sx?: object;
+	open: boolean;
 };
 
 const SPACING = 8;
 
-export const Main: React.FC<Props> = ({ children, sx, ...props }) => {
+export const Main: React.FC<Props> = ({ children, sx, open, ...props }) => {
 	const lgUp = useResponsive('up', 'lg');
 
+	const leftsize = open && !lgUp ? '240px' : '68px';
 	return (
 		<Box
 			component="main"
 			sx={{
+				marginLeft: leftsize,
+				marginRight: '68px',
 				flexGrow: 1,
 				minHeight: 1,
 				display: 'flex',
 				flexDirection: 'column',
 				py: `${HEADER.H_MOBILE + SPACING}px`,
-				...(lgUp && {
-					px: 2,
-					py: `${HEADER.H_DESKTOP + SPACING}px`,
-					width: `calc(100% - ${NAV.WIDTH}px)`,
-				}),
+				// ...(lgUp && {
+				// 	px: 2,
+				// 	py: `${HEADER.H_DESKTOP + SPACING}px`,
+				// 	width: `calc(100% - ${NAV.WIDTH}px)`,
+				// }),
 				...sx,
 			}}
 			{...props}

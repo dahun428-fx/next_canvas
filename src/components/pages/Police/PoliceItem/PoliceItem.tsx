@@ -1,11 +1,12 @@
 import { Doughnut } from '@/components/ui/charts/doughnut';
-import { DoughnutDataObject } from '@/components/ui/charts/doughnut/Doughnut';
+import { DoughnutData } from '@/components/ui/charts/doughnut/Doughnut';
 import { Box, Card, CardHeader, Grid } from '@mui/material';
+import { PoliceDougnut } from '../PoliceDougnut';
 
 type Props = {
 	title: string;
 	subheader: string;
-	dataObj: DoughnutDataObject;
+	dataObj: DoughnutData;
 };
 
 export const PoliceItem: React.FC<Props> = ({ title, subheader, dataObj }) => {
@@ -14,11 +15,7 @@ export const PoliceItem: React.FC<Props> = ({ title, subheader, dataObj }) => {
 			<Card>
 				<CardHeader title={title} subheader={subheader} />
 				<Box sx={{ p: 3, pb: 1 }}>
-					<Doughnut
-						dataObject={dataObj}
-						// chartName={경찰서}
-						label={title}
-					/>
+					<PoliceDougnut data={dataObj} title={title} />
 				</Box>
 			</Card>
 		</Grid>

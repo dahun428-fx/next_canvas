@@ -1,1 +1,1 @@
-export { BottomNavi } from './BottomNavi';
+export { BottomNavi } from './BottomNavi.container';

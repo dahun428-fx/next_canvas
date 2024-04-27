@@ -1,0 +1,1 @@
+export { CrimeChart } from './CrimeChart';

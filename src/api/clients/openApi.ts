@@ -13,9 +13,9 @@ type RequestOption = {
 };
 
 function handleError(error: AxiosError) {
-    if (isOpenApiErrorResponse(error.response?.data)) {
-        throw new OpenApiError(error);
-    }
+	if (isOpenApiErrorResponse(error.response?.data)) {
+		throw new OpenApiError(error);
+	}
 }
 
 function isOpenApiErrorResponse(

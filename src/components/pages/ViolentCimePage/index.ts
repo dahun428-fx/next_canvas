@@ -1,1 +1,1 @@
-export { ViolentCimePage } from './ViolentCimePage';
+export { ViolentCimePage } from './ViolentCimePage.container';
