@@ -19,7 +19,6 @@ import { useResponsive } from '@/components/common/hooks/use-responsive';
 import navConfig from './config-navigation';
 import { NavItem } from './NavItem';
 import { Scrollbar } from '@/components/common/Scrollbar';
-import { Logo } from '@/components/common/Logo';
 import styles from './Nav.module.scss';
 import LogoDevIcon from '@mui/icons-material/LogoDev';
 import MuiDrawer from '@mui/material/Drawer';

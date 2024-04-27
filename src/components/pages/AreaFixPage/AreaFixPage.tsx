@@ -303,10 +303,14 @@ export const AreaFixPage: React.FC<Props> = ({
 									{datasForMurderAndRobber.map((item, index) => {
 										const data = item.data;
 										return (
-											<TableRow>
+											<TableRow key={index}>
 												<TableCell>{item.label}</TableCell>
 												{data.map((_data, _index) => {
-													return <TableCell>{digit(_data)}</TableCell>;
+													return (
+														<TableCell key={`${index}_${index}`}>
+															{digit(_data)}
+														</TableCell>
+													);
 												})}
 											</TableRow>
 										);
@@ -314,10 +318,14 @@ export const AreaFixPage: React.FC<Props> = ({
 									{datasForViolenceAndStolen.map((item, index) => {
 										const data = item.data;
 										return (
-											<TableRow>
+											<TableRow key={index}>
 												<TableCell>{item.label}</TableCell>
 												{data.map((_data, _index) => {
-													return <TableCell>{digit(_data)}</TableCell>;
+													return (
+														<TableCell key={`${index}_${index}`}>
+															{digit(_data)}
+														</TableCell>
+													);
 												})}
 											</TableRow>
 										);
@@ -325,10 +333,14 @@ export const AreaFixPage: React.FC<Props> = ({
 									{datasForTotal.map((item, index) => {
 										const data = item.data;
 										return (
-											<TableRow>
+											<TableRow key={index}>
 												<TableCell>{item.label}</TableCell>
 												{data.map((_data, _index) => {
-													return <TableCell>{digit(_data)}</TableCell>;
+													return (
+														<TableCell key={`${index}_${index}`}>
+															{digit(_data)}
+														</TableCell>
+													);
 												})}
 											</TableRow>
 										);
@@ -403,7 +415,7 @@ export const AreaFixPage: React.FC<Props> = ({
 										0
 									);
 									return (
-										<Grid item xs={6} sm={6} md={6}>
+										<Grid key={index} item xs={6} sm={6} md={6}>
 											<Card
 												variant="outlined"
 												sx={{ margin: 2, textAlign: 'center' }}

@@ -29,3 +29,4 @@ export const SvgColor = forwardRef<HTMLDivElement, Props>(
 		/>
 	)
 );
+SvgColor.displayName = 'SvgColor';

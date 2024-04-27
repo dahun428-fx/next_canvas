@@ -16,6 +16,10 @@ export function useResponsive(
 
 	const mediaOnly = useMediaQuery(theme.breakpoints.only(start));
 
+	const mediaBetween = useMediaQuery(
+		theme.breakpoints.between(start, end ?? 'xs')
+	);
+
 	if (query === 'up') {
 		return mediaUp;
 	}
@@ -25,8 +29,6 @@ export function useResponsive(
 	}
 
 	if (query === 'between' && end) {
-		const mediaBetween = useMediaQuery(theme.breakpoints.between(start, end));
-
 		return mediaBetween;
 	}
 

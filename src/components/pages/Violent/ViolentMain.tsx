@@ -22,8 +22,6 @@ type Props = {
 const cityNames = policeCityArray;
 
 export const ViolentMain: React.FC<Props> = ({ violenceResponse }) => {
-	if (violenceResponse.items.length < 1) return null;
-
 	const [tabValue, setTabValue] = useState<PoliceType>(PoliceType.ROBBER);
 
 	const [checkedCityNamesWithRobber, setCheckedCityNamesWithRobber] =
@@ -111,6 +109,8 @@ export const ViolentMain: React.FC<Props> = ({ violenceResponse }) => {
 
 		return result;
 	}, [violenceResponse, checkedCityNamesWithViolence]);
+
+	if (violenceResponse.items.length < 1) return null;
 
 	return (
 		<div>

@@ -1,1 +1,0 @@
-export { CrimeChart } from './CrimeChart';
