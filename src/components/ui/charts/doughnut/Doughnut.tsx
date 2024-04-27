@@ -1,42 +1,21 @@
 import { isObject } from '@/utils/object';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import {
+	BubbleDataPoint,
+	ChartData,
 	Chart as ChartJS,
-	ArcElement,
-	Tooltip,
-	Legend,
-	Colors,
 	ChartType,
-	RadialLinearScale,
-	CategoryScale,
-	BarElement,
-	PointElement,
-	LineElement,
-	Title,
-	plugins,
+	ChartTypeRegistry,
+	Point,
 } from 'chart.js';
+import { registerables } from 'chart.js/auto';
 import { useMemo } from 'react';
 import { Chart } from 'react-chartjs-2';
 import styles from './Doughnut.module.scss';
 import { LinearScale } from 'chart.js';
 import { Plugin } from 'chart.js';
-import { ChartTypeRegistry } from 'chart.js';
 
-ChartJS.register(
-	CategoryScale,
-	LinearScale,
-	BarElement,
-	PointElement,
-	LineElement,
-	RadialLinearScale,
-	// ChartDataLabels,
-	ArcElement,
-	plugins,
-	Title,
-	Tooltip,
-	Legend,
-	Colors
-);
+ChartJS.register(...registerables);
 
 export type DoughnutData = {
 	[key: string]: number;

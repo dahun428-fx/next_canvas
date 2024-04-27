@@ -1,37 +1,17 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { Chart } from 'react-chartjs-2';
 import {
-	Chart as ChartJS,
 	BubbleDataPoint,
 	ChartData,
+	Chart as ChartJS,
 	ChartType,
 	ChartTypeRegistry,
 	Point,
-	CategoryScale,
-	LinearScale,
-	BarElement,
-	Title,
-	Tooltip,
-	Legend,
-	PointElement,
-	LineElement,
-	ArcElement,
-	RadialLinearScale,
 } from 'chart.js';
+import { registerables } from 'chart.js/auto';
 import { digit, percentage } from '@/utils/number';
 
-ChartJS.register(
-	CategoryScale,
-	LinearScale,
-	BarElement,
-	PointElement,
-	LineElement,
-	RadialLinearScale,
-	ArcElement,
-	Title,
-	Tooltip,
-	Legend
-);
+ChartJS.register(...registerables);
 
 export type CustomChartDoughnutData = {
 	[key: string]: number;
