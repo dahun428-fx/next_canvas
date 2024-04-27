@@ -63,9 +63,25 @@
 
 
 ![image](https://github.com/dahun428-fx/next_canvas/assets/70366042/09c7d142-b318-43d3-971c-24f09ab787ce)
+![image](https://github.com/dahun428-fx/next_canvas/assets/70366042/f3f5330e-2c70-4541-ac74-f807e36376d0)
 
 
 
+2. 대시보드 : 지역
+
+![image](https://github.com/dahun428-fx/next_canvas/assets/70366042/4be0a7fc-542d-4f72-a04b-0757399c490f)
+![image](https://github.com/dahun428-fx/next_canvas/assets/70366042/de903300-b788-4a02-81ba-0840c80441e6)
 
 
+3. 현황 데이터 : 경찰서별
+
+   ![image](https://github.com/dahun428-fx/next_canvas/assets/70366042/50494d2d-6560-44c9-8463-4c19f2588134)
+
+4. 현황 데이터 : 연도 / 지역
+
+![image](https://github.com/dahun428-fx/next_canvas/assets/70366042/b9a3451a-61d3-401e-8324-87266b526c62)
+
+5. 현황 데이터 : 지역별상세
+
+![image](https://github.com/dahun428-fx/next_canvas/assets/70366042/b3141f72-42e1-40eb-b957-e06cdee01859)
 
