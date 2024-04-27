@@ -1,6 +1,6 @@
 import { Provider } from 'react-redux';
 import { store } from '@/store';
-import { AppPropsWithLayout } from './types';
+import { AppPropsWithLayout } from '../types/types';
 import { Standard } from '@/layouts/standard';
 import { useEffect } from 'react';
 import { Router } from 'next/router';
