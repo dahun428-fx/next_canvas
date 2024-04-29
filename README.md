@@ -8,7 +8,7 @@
   공공데이터포털 오픈 API / storybook / scss / RESTfulAPI
 
 - 배포 사이트 ( Vercel )
-  : https://next-canvas-pied.vercel.app/
+  : https://next-canvas-pied.vercel.app/dashboard/nation-wide
 
 ---
 
