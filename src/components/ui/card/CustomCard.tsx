@@ -40,6 +40,7 @@ type Props = {
 	lowestYearData?: { [key: string]: number };
 	highestYearData?: { [key: string]: number };
 	isArrow?: boolean;
+	figureIdx?: number;
 	onClickArrow?: (direction: 'left' | 'right') => void;
 };
 
@@ -183,13 +184,16 @@ const MaxMinContent: React.FC<Props> = ({ year, highestCity, lowestCity }) => {
 	);
 };
 
-const FigureOutContent: React.FC<Props> = ({ year, crimeData }) => {
+const FigureOutContent: React.FC<Props> = ({
+	year,
+	crimeData,
+	figureIdx = 0,
+}) => {
 	if (!crimeData) return null;
-	const index = 0;
 	const keys = Object.keys(crimeData);
 	const values = Object.values(crimeData);
-	const key = keys[index].split(':')[1];
-	const value = values[index];
+	const key = keys[figureIdx].split(':')[1];
+	const value = values[figureIdx];
 
 	return (
 		<CardContent>
@@ -211,9 +215,9 @@ const FigureOutContent: React.FC<Props> = ({ year, crimeData }) => {
 				variant="h6"
 				component="div"
 				mt={2}
-				sx={{ color: '#1976d2', textAlign: 'right' }}
+				sx={{ color: '#1976d2', textAlign: 'center' }}
 			>
-				{`${key} | ${value} 건`}
+				{`${key} | ${digit(value)} 건`}
 			</Typography>
 		</CardContent>
 	);

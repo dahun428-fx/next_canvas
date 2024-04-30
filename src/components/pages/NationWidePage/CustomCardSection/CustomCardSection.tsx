@@ -30,7 +30,8 @@ export const CustomCardSection: React.FC<Props> = ({
 }) => {
 	const cities = [...regionCityArray];
 
-	const [selectedCity, setSelectedCity] = useState('서울');
+	const [selectedCity, setSelectedCity] = useState<string>('서울');
+	const [crimeDataIdx, setCrimeDataIdx] = useState<number>(0);
 
 	const onChangeSelectedCity = (direction: 'left' | 'right') => {
 		const foundIndex = cities.findIndex(item => item === selectedCity);
@@ -45,9 +46,19 @@ export const CustomCardSection: React.FC<Props> = ({
 				idx = max;
 			}
 			setSelectedCity(cities[idx]);
-			console.log('idx ===> ', idx, cities[idx]);
 		}
-		console.log('dr : ', direction, foundIndex);
+	};
+
+	const onChangeCrimeDataForFigureIndex = (direction: 'left' | 'right') => {
+		let max = Object.keys(regionMergedDataCrime).length - 1;
+		let idx = direction === 'right' ? crimeDataIdx + 1 : crimeDataIdx - 1;
+		if (idx > max) {
+			idx = 0;
+		}
+		if (idx < 0) {
+			idx = max;
+		}
+		setCrimeDataIdx(idx);
 	};
 
 	return (
@@ -80,6 +91,9 @@ export const CustomCardSection: React.FC<Props> = ({
 					type="figure"
 					year={nowYear}
 					crimeData={regionMergedDataCrime}
+					figureIdx={crimeDataIdx}
+					isArrow
+					onClickArrow={onChangeCrimeDataForFigureIndex}
 				/>
 			</Grid>
 			<Grid item xs={12} md={4} sm={4}>
