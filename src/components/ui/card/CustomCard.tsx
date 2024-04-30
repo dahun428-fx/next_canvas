@@ -1,6 +1,9 @@
 import { Police } from '@/models/api/open/police/SearchPoliceResponse';
 import { digit } from '@/utils/number';
 import { CrimeValueType } from '@/utils/openapi/region/region';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
 import {
 	Box,
 	Button,
@@ -8,6 +11,7 @@ import {
 	CardContent,
 	Divider,
 	Grid,
+	IconButton,
 	Stack,
 	Typography,
 } from '@mui/material';
@@ -35,6 +39,8 @@ type Props = {
 	selectedCity?: string;
 	lowestYearData?: { [key: string]: number };
 	highestYearData?: { [key: string]: number };
+	isArrow?: boolean;
+	onClickArrow?: (direction: 'left' | 'right') => void;
 };
 
 export const CustomCard: React.FC<Props> = ({ type, ...props }) => {
@@ -56,11 +62,40 @@ export const CustomCard: React.FC<Props> = ({ type, ...props }) => {
 		}
 		return <div></div>;
 	};
+	const onClickHandler = (direction: 'left' | 'right') => {
+		if (props.onClickArrow) {
+			props.onClickArrow(direction);
+		}
+	};
 	return (
-		<Box sx={{ minWidth: 200, margin: 1 }}>
+		<Box sx={{ minWidth: 200, margin: 1, position: 'relative' }}>
+			{props.isArrow && (
+				<IconButton
+					sx={{
+						position: 'absolute',
+						top: '92px',
+						left: 0,
+					}}
+					onClick={() => onClickHandler('left')}
+				>
+					<ArrowBackIosIcon />
+				</IconButton>
+			)}
 			<Card sx={{ minHeight: 200 }} variant="outlined">
 				{type && cardContent()}
 			</Card>
+			{props.isArrow && (
+				<IconButton
+					sx={{
+						position: 'absolute',
+						top: '92px',
+						right: 0,
+					}}
+					onClick={() => onClickHandler('right')}
+				>
+					<ArrowForwardIosIcon />
+				</IconButton>
+			)}
 		</Box>
 	);
 };
@@ -318,7 +353,7 @@ const CategoryCountContent: React.FC<Props> = ({
 	selectedCity,
 }) => {
 	if (!crimeData) return null;
-	const index = 0;
+
 	const keys = Object.keys(crimeData);
 	const values = Object.values(crimeData);
 	const idx = keys.findIndex(item => item === selectedCity);
@@ -347,7 +382,7 @@ const CategoryCountContent: React.FC<Props> = ({
 				variant="h6"
 				component="div"
 				mt={2}
-				sx={{ color: '#1976d2', textAlign: 'right' }}
+				sx={{ color: '#1976d2', textAlign: 'center' }}
 			>
 				{`${key} | ${digit(value)} 건`}
 			</Typography>

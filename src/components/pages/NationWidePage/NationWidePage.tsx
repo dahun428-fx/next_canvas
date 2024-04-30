@@ -56,6 +56,7 @@ import {
 } from '@/utils/openapi/region/region';
 import { Police } from '@/models/api/open/police/SearchPoliceResponse';
 import { RegionResourceYear } from '@/api/clients/services/open/region';
+import { CustomCardSection } from './CustomCardSection';
 
 type Props = {
 	violenceResponse: ViolenceState;
@@ -210,49 +211,17 @@ export const NationWidePage: React.FC<Props> = ({
 					</Typography>
 				</Box>
 				<Divider />
-				<Grid container>
-					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard
-							type="total"
-							year={nowYear}
-							totalCrimeCount={totalCountWithDataByCity}
-						/>
-					</Grid>
-					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard
-							type="MaxMin"
-							year={nowYear}
-							highestCity={highestCity}
-							lowestCity={lowestCity}
-						/>
-					</Grid>
-					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard
-							type="crimeType"
-							year={nowYear}
-							lowestCrime={lowestCrime}
-							highestCrime={highestCrime}
-						/>
-					</Grid>
-					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard
-							type="figure"
-							year={nowYear}
-							crimeData={regionMergedDataCrime}
-						/>
-					</Grid>
-					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard type="police" year={nowYear} office={dataByOffice} />
-					</Grid>
-					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard
-							type="category"
-							year={nowYear}
-							crimeData={regionMergedDataCity}
-							selectedCity={`서울`}
-						/>
-					</Grid>
-				</Grid>
+				<CustomCardSection
+					highestCity={highestCity}
+					lowestCity={lowestCity}
+					highestCrime={highestCrime}
+					lowestCrime={lowestCrime}
+					nowYear={nowYear}
+					office={dataByOffice}
+					regionMergedDataCity={regionMergedDataCity}
+					regionMergedDataCrime={regionMergedDataCrime}
+					totalCrimeCount={totalCountWithDataByCity}
+				/>
 				<Stack>
 					<Card
 						variant="outlined"
