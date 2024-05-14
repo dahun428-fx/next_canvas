@@ -1,5 +1,13 @@
+import {
+	RegionResourceYear,
+	defaultPageNumber,
+	defaultPerPage,
+	searchRegionList,
+} from '@/api/clients/services/open/region';
 import { Dashboard } from '@/components/pages/Dashboard';
+import { GetStaticProps } from 'next';
 import { Inter } from 'next/font/google';
+type Props = {};
 
 export default function Home() {
 	return (

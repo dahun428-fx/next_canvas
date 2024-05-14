@@ -30,11 +30,6 @@ export const Main: React.FC<Props> = ({ children, sx, open, ...props }) => {
 				display: 'flex',
 				flexDirection: 'column',
 				py: `${HEADER.H_MOBILE + SPACING}px`,
-				// ...(lgUp && {
-				// 	px: 2,
-				// 	py: `${HEADER.H_DESKTOP + SPACING}px`,
-				// 	width: `calc(100% - ${NAV.WIDTH}px)`,
-				// }),
 				...sx,
 			}}
 			{...props}

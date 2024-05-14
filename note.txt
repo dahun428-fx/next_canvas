@@ -1,0 +1,13 @@
+*** api.
+
+page load --> redux --> api --> promise return --> function --> VDOM (render)
+
+* revision
+> SSR & SSG 
+( getstaticprops )
+
+get api data from open api 
+
+promise return --> function
+
+-> pageload --> VDOM
