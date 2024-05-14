@@ -11,3 +11,6 @@ get api data from open api
 promise return --> function
 
 -> pageload --> VDOM
+
+1. DashboardLayout
+- searchRegionList, 

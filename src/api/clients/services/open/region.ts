@@ -16,6 +16,8 @@ const resource: { [key: string]: string } = {
 	'2022': '/3074462/v1/uddi:fe3ae686-8f7d-4d82-8c3a-901a02a0aa75',
 } as const;
 
+export const defaultPageNumber = 1;
+export const defaultPerPage = 50;
 export const RegionResourceYear = Object.keys(resource);
 
 const url = `https://api.odcloud.kr/api`;
