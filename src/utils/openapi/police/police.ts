@@ -1,5 +1,8 @@
 import { ViolentData } from '@/components/pages/Violent/ViolentMain';
-import { Police } from '@/models/api/open/police/SearchPoliceResponse';
+import {
+	Police,
+	SearchPoliceReseponse,
+} from '@/models/api/open/police/SearchPoliceResponse';
 import {
 	Violence,
 	ViolenceItem,
@@ -135,17 +138,19 @@ export const get_data_by_city = (data: Violence[], city: string) => {
 };
 
 export const find_by_year_and_office = (
-	datas: ViolenceState,
+	datas: SearchPoliceReseponse[],
 	year: PoliceYear,
 	area?: string,
 	office?: string
 ) => {
-	const foundIndex = datas.items.findIndex(item => item.year === year);
+	const foundIndex = datas.findIndex(
+		item => `${item.data[0].발생년도}` === year
+	);
 	if (foundIndex < 0) {
 		return null;
 	}
 
-	let resultData = datas.items[foundIndex].data;
+	let resultData = datas[foundIndex].data;
 	if (area) {
 		resultData = resultData.reduce((prev: ViolenceItem[], curr) => {
 			if (curr.경찰서.includes(area)) {

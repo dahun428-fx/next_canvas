@@ -32,6 +32,12 @@ export function loadOperations(dispatch: Dispatch) {
 	};
 }
 
+export function setOperations(dispatch: Dispatch) {
+	return (violenceItems: SearchPoliceReseponse[]) => {
+		dispatch(actions.load(violenceItems));
+	};
+}
+
 export function updateChartTypeOperation(dispatch: Dispatch) {
 	return (chartType: ChartType) => {
 		dispatch(actions.updateChartType(chartType));

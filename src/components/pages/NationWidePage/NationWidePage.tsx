@@ -47,24 +47,28 @@ import React, {
 } from 'react';
 import styles from './NationWidePage.module.scss';
 import { PoliceResourceYears } from '@/api/clients/services/open/police';
-import { RegionState } from '@/store/modules/common/region';
+import { RegionResponse, RegionState } from '@/store/modules/common/region';
 import {
 	CrimeValueType,
 	RegionItem,
 	data_merge_by_cirme,
 	data_merge_by_city,
 } from '@/utils/openapi/region/region';
-import { Police } from '@/models/api/open/police/SearchPoliceResponse';
+import {
+	Police,
+	SearchPoliceReseponse,
+} from '@/models/api/open/police/SearchPoliceResponse';
 import { RegionResourceYear } from '@/api/clients/services/open/region';
+import { NationTitle } from './NationTitle';
 
 type Props = {
-	violenceResponse: ViolenceState;
-	regionResponse: RegionState;
+	violenceItems: SearchPoliceReseponse[];
+	regionItems: RegionResponse[];
 };
 
 export const NationWidePage: React.FC<Props> = ({
-	violenceResponse,
-	regionResponse,
+	regionItems,
+	violenceItems,
 }) => {
 	const [nowYear, setNowYear] = useState<PoliceYear>('2022');
 	const [selectedCity, setSelectedCity] = useState('서울');
@@ -74,13 +78,13 @@ export const NationWidePage: React.FC<Props> = ({
 
 	const regionDatas = useMemo(() => {
 		let result: RegionItem[] = [];
-		regionResponse.items.forEach(item => {
+		regionItems.forEach(item => {
 			if (item.year === nowYear) {
 				result = item.items;
 			}
 		});
 		return result;
-	}, [nowYear, regionResponse.items]);
+	}, [nowYear, regionItems]);
 
 	const regionMergedDataCrime = useMemo(() => {
 		return data_merge_by_cirme(regionDatas);
@@ -89,14 +93,15 @@ export const NationWidePage: React.FC<Props> = ({
 	const regionMergedDataCity = useMemo(() => {
 		return data_merge_by_city(regionDatas);
 	}, [regionDatas, nowYear]);
+
 	const dataByOffice: Police | null = useMemo(() => {
-		return find_by_year_and_office(violenceResponse, nowYear);
-	}, [violenceResponse.items, nowYear]);
+		return find_by_year_and_office(violenceItems, nowYear);
+	}, [violenceItems, nowYear]);
 
 	const dataByCity: CustomChartLineData = useMemo(() => {
-		return getDataByYear(violenceResponse.items, nowYear, 'total');
-	}, [violenceResponse.items, nowYear]);
-
+		return getDataByYear(violenceItems, nowYear, 'total');
+	}, [violenceItems, nowYear]);
+	console.log('data by city : ', dataByCity);
 	const totalCountWithDataByCity = useMemo(() => {
 		let totalcount = 0;
 		dataByCityLabels.map(item => {
@@ -163,13 +168,13 @@ export const NationWidePage: React.FC<Props> = ({
 	}, [regionMergedDataCrime]);
 
 	const dataByCriminalOne: CustomChartDoughnutData = useMemo(() => {
-		return getDataByCriminal(violenceResponse.items, nowYear, ['강도', '살인']);
-	}, [violenceResponse, nowYear]);
+		return getDataByCriminal(violenceItems, nowYear, ['강도', '살인']);
+	}, [violenceItems, nowYear]);
 	const dataByCriminalTwo: CustomChartDoughnutData = useMemo(() => {
-		return getDataByCriminal(violenceResponse.items, nowYear, ['절도', '폭력']);
-	}, [violenceResponse, nowYear]);
+		return getDataByCriminal(violenceItems, nowYear, ['절도', '폭력']);
+	}, [violenceItems, nowYear]);
 
-	if (violenceResponse.items.length < 1) {
+	if (violenceItems.length < 1) {
 		return null;
 	}
 
@@ -186,28 +191,7 @@ export const NationWidePage: React.FC<Props> = ({
 		<Box>
 			<Stack spacing={2}>
 				<Box sx={{ padding: 1, margin: 1 }}>
-					<Typography variant="h6">
-						<Select
-							variant="standard"
-							// select
-
-							value={nowYear}
-							defaultValue={nowYear}
-							sx={{ height: '30px', width: '12ch', textAlign: 'right' }}
-							onChange={(event: SelectChangeEvent) => {
-								setNowYear(event.target.value as string);
-							}}
-						>
-							{resourceYear.map(item => {
-								return (
-									<MenuItem key={item} value={item}>
-										{item}
-									</MenuItem>
-								);
-							})}
-						</Select>
-						년도 범죄 발생현황
-					</Typography>
+					<NationTitle nowYear={nowYear} setNowYear={setNowYear} />
 				</Box>
 				<Divider />
 				<Grid container>

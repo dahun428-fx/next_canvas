@@ -42,6 +42,12 @@ export function loadOperations(dispatch: Dispatch) {
 	};
 }
 
+export function setOperations(dispatch: Dispatch) {
+	return (regionItems: RegionResponse[]) => {
+		dispatch(actions.load(regionItems));
+	};
+}
+
 export function updateChartTypeOperation(dispatch: Dispatch) {
 	return (chartType: ChartType) => {
 		dispatch(actions.updateChartType(chartType));

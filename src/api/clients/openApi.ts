@@ -96,3 +96,13 @@ const generateApi = () => {
 };
 
 export const openApi = generateApi();
+
+function getFullFill<T>(
+	args: PromiseSettledResult<T>[]
+): PromiseFulfilledResult<T>[] {
+	return args.map(item => {
+		if (item.status === 'fulfilled') {
+			return item;
+		}
+	}) as PromiseFulfilledResult<T>[];
+}

@@ -1,10 +1,17 @@
 import {
+	PoliceRequestPageNumberDefault,
+	PoliceRequestPerPageDefault,
+	PoliceResourceYears,
+	searchPoliceList,
+} from '@/api/clients/services/open/police';
+import {
 	RegionResourceYear,
 	defaultPageNumber,
 	defaultPerPage,
 	searchRegionList,
 } from '@/api/clients/services/open/region';
 import { NationWidePage } from '@/components/pages/NationWidePage';
+import { SearchPoliceReseponse } from '@/models/api/open/police/SearchPoliceResponse';
 import { SearchRegionResponse } from '@/models/api/open/region/SearchRegionResponse';
 import { RegionResponse } from '@/store/modules/common/region';
 import { changeToRegionalData } from '@/utils/openapi/region/region';
@@ -12,41 +19,62 @@ import { GetStaticProps, NextPage } from 'next';
 
 type Props = {
 	regionItems: RegionResponse[];
+	violenceItems: SearchPoliceReseponse[];
 };
 
-const NationWide: NextPage<Props> = ({ regionItems }) => {
-	console.log('from getstatic props ===> ', regionItems);
-	return <NationWidePage />;
+const NationWide: NextPage<Props> = ({ regionItems, violenceItems }) => {
+	return (
+		<NationWidePage regionItems={regionItems} violenceItems={violenceItems} />
+	);
 };
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-	type SettledType = {
-		response: SearchRegionResponse;
-		year: string;
-	};
-
 	try {
-		const promise = await Promise.allSettled(
-			RegionResourceYear.map(async item => {
-				const year = item;
-				const page = defaultPageNumber; //default
-				const perPage = defaultPerPage; //default
-				const response = await searchRegionList({
-					page,
-					perPage,
-					year: year,
-				});
-				return { response, year: year };
-			})
-		);
+		const [regionPromise, policePromise] = await Promise.all([
+			await Promise.allSettled(
+				RegionResourceYear.map(async item => {
+					const year = item;
+					const page = defaultPageNumber; //default
+					const perPage = defaultPerPage; //default
+					const response = await searchRegionList({
+						page,
+						perPage,
+						year: year,
+					});
+					return { response, year: year };
+				})
+			),
+			await Promise.allSettled(
+				PoliceResourceYears.map(async item => {
+					const year = item;
+					const page = PoliceRequestPageNumberDefault;
+					const perPage = PoliceRequestPerPageDefault;
+					const response = await searchPoliceList({
+						page,
+						perPage,
+						year: year,
+					});
+					return response;
+				})
+			),
+		]);
 
-		const fulfilledPromise = promise.map(item => {
+		const fulfilledRegionPromise = regionPromise.map(item => {
 			if (item.status === 'fulfilled') {
 				return item;
 			}
-		}) as PromiseFulfilledResult<SettledType>[];
+		}) as PromiseFulfilledResult<{
+			response: SearchRegionResponse;
+			year: string;
+		}>[];
 
-		const regionItems: RegionResponse[] = fulfilledPromise.map(item => {
+		const fulfiiledPolicePromise = policePromise.map(item => {
+			if (item.status === 'fulfilled') {
+				return item;
+			}
+		}) as PromiseFulfilledResult<SearchPoliceReseponse>[];
+
+		const regionItems: RegionResponse[] = fulfilledRegionPromise.map(item => {
 			const { response, year } = item.value;
 			return {
 				currentCount: response.currentCount,
@@ -59,9 +87,19 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 			};
 		});
 
+		const violenceItems: SearchPoliceReseponse[] = fulfiiledPolicePromise.map(
+			item => {
+				return {
+					...item.value,
+					year: `${item.value.data[0].발생년도}`,
+				};
+			}
+		);
+
 		return {
 			props: {
 				regionItems,
+				violenceItems,
 			},
 			revalidate: 1800,
 		};

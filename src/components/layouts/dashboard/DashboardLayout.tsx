@@ -41,22 +41,22 @@ export const DashboardLayout: React.FC<Props> = ({ children }) => {
 	const dispatch = useDispatch();
 
 	const pageRoute = useSelector(selectBottomPageRoute);
-	useEffect(() => {
-		if (!initialize.current) {
-			if (regionResponse.items.length < 1) {
-				RegionLoadOperation(dispatch)();
-			}
-			if (violenceResponse.items.length < 1) {
-				violenceLoadOperation(dispatch)();
-			}
-			initialize.current = true;
-		}
-	}, [
-		dispatch,
-		regionResponse.items.length,
-		violenceResponse.items.length,
-		initialize.current,
-	]);
+	// useEffect(() => {
+	// 	if (!initialize.current) {
+	// 		if (regionResponse.items.length < 1) {
+	// 			RegionLoadOperation(dispatch)();
+	// 		}
+	// 		if (violenceResponse.items.length < 1) {
+	// 			violenceLoadOperation(dispatch)();
+	// 		}
+	// 		initialize.current = true;
+	// 	}
+	// }, [
+	// 	dispatch,
+	// 	regionResponse.items.length,
+	// 	violenceResponse.items.length,
+	// 	initialize.current,
+	// ]);
 
 	useEffect(() => {
 		if (pageRoute) {
