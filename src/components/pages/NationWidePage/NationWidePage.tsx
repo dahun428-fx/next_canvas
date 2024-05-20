@@ -60,112 +60,39 @@ import {
 } from '@/models/api/open/police/SearchPoliceResponse';
 import { RegionResourceYear } from '@/api/clients/services/open/region';
 import { NationTitle } from './NationTitle';
+import {
+	PoliceCityMergedType,
+	PoliceYearType,
+} from '@/utils/openapi/police/data';
+import { NationCardList } from './NationCardList';
+import { NationMainChart } from './NationMainChart';
+import { NationMainTable } from './NationMainTable';
 
 type Props = {
 	violenceItems: SearchPoliceReseponse[];
 	regionItems: RegionResponse[];
+	policeTotalData: PoliceCityMergedType[];
+	policeYearlyData: PoliceYearType[];
 };
 
 export const NationWidePage: React.FC<Props> = ({
 	regionItems,
 	violenceItems,
+	policeTotalData,
+	policeYearlyData,
 }) => {
 	const [nowYear, setNowYear] = useState<PoliceYear>('2022');
 	const [selectedCity, setSelectedCity] = useState('서울');
 
 	const dataByCityLabels = [...policeCityArray];
-	const resourceYear = [...RegionResourceYear].reverse();
-
-	const regionDatas = useMemo(() => {
-		let result: RegionItem[] = [];
-		regionItems.forEach(item => {
-			if (item.year === nowYear) {
-				result = item.items;
-			}
-		});
-		return result;
-	}, [nowYear, regionItems]);
-
-	const regionMergedDataCrime = useMemo(() => {
-		return data_merge_by_cirme(regionDatas);
-	}, [regionDatas, nowYear]);
-
-	const regionMergedDataCity = useMemo(() => {
-		return data_merge_by_city(regionDatas);
-	}, [regionDatas, nowYear]);
-
-	const dataByOffice: Police | null = useMemo(() => {
-		return find_by_year_and_office(violenceItems, nowYear);
-	}, [violenceItems, nowYear]);
 
 	const dataByCity: CustomChartLineData = useMemo(() => {
 		return getDataByYear(violenceItems, nowYear, 'total');
 	}, [violenceItems, nowYear]);
-	console.log('data by city : ', dataByCity);
-	const totalCountWithDataByCity = useMemo(() => {
-		let totalcount = 0;
-		dataByCityLabels.map(item => {
-			totalcount += dataByCity[item];
-		});
-		return totalcount;
-	}, [dataByCity]);
 
-	const lowestCity = useMemo(() => {
-		let minCity: string = '';
-		let min: number = Number.MAX_SAFE_INTEGER;
-		dataByCityLabels.forEach((item, index) => {
-			if (min > dataByCity[item]) {
-				minCity = item;
-				min = dataByCity[item];
-			}
-		});
-		return minCity;
-	}, [dataByCity]);
-
-	const highestCity = useMemo(() => {
-		let maxCity: string = '';
-		let max: number = 0;
-		dataByCityLabels.forEach((item, index) => {
-			if (max < dataByCity[item]) {
-				maxCity = item;
-				max = dataByCity[item];
-			}
-		});
-		return maxCity;
-	}, [dataByCity]);
-
-	const lowestCrime: CrimeValueType = useMemo(() => {
-		const keys = Object.keys(regionMergedDataCrime);
-		let crimeName = '';
-		let min = Number.MAX_SAFE_INTEGER;
-		keys.forEach((item, index) => {
-			const value = regionMergedDataCrime[item];
-			if (min > value) {
-				min = value;
-				crimeName = item;
-			}
-		});
-		return {
-			crime: crimeName,
-			count: regionMergedDataCrime[crimeName],
-		};
-	}, [regionMergedDataCrime]);
-	const highestCrime: CrimeValueType = useMemo(() => {
-		const keys = Object.keys(regionMergedDataCrime);
-		let crimeName = '';
-		let max = 0;
-		keys.forEach((item, index) => {
-			const value = regionMergedDataCrime[item];
-			if (max < value) {
-				max = value;
-				crimeName = item;
-			}
-		});
-		return {
-			crime: crimeName,
-			count: regionMergedDataCrime[crimeName],
-		};
-	}, [regionMergedDataCrime]);
+	const totalCountByYear = useMemo(() => {
+		return policeYearlyData.filter(item => item.year === nowYear)[0].totalCount;
+	}, [nowYear]);
 
 	const dataByCriminalOne: CustomChartDoughnutData = useMemo(() => {
 		return getDataByCriminal(violenceItems, nowYear, ['강도', '살인']);
@@ -194,116 +121,27 @@ export const NationWidePage: React.FC<Props> = ({
 					<NationTitle nowYear={nowYear} setNowYear={setNowYear} />
 				</Box>
 				<Divider />
-				<Grid container>
-					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard
-							type="total"
-							year={nowYear}
-							totalCrimeCount={totalCountWithDataByCity}
-						/>
-					</Grid>
-					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard
-							type="MaxMin"
-							year={nowYear}
-							highestCity={highestCity}
-							lowestCity={lowestCity}
-						/>
-					</Grid>
-					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard
-							type="crimeType"
-							year={nowYear}
-							lowestCrime={lowestCrime}
-							highestCrime={highestCrime}
-						/>
-					</Grid>
-					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard
-							type="figure"
-							year={nowYear}
-							crimeData={regionMergedDataCrime}
-						/>
-					</Grid>
-					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard type="police" year={nowYear} office={dataByOffice} />
-					</Grid>
-					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard
-							type="category"
-							year={nowYear}
-							crimeData={regionMergedDataCity}
-							selectedCity={`서울`}
-						/>
-					</Grid>
-				</Grid>
+				<NationCardList
+					{...{
+						nowYear,
+						policeYearlyData,
+						violenceItems,
+						regionItems,
+					}}
+				/>
 				<Stack>
-					<Card
-						variant="outlined"
-						sx={{
-							overflow: 'auto',
-							margin: 2,
-							textAlign: 'center',
+					<NationMainChart
+						{...{
+							nowYear,
+							policeYearlyData,
 						}}
-					>
-						<Typography variant="overline" mt={1}>
-							{nowYear}년도 전국 지역별 범죄상황
-						</Typography>
-						<Box
-							sx={{
-								minWidth: 700,
-								overflow: 'auto',
-							}}
-						>
-							<CustomChart
-								dataLabels={dataByCityLabels}
-								chartLineData={dataByCity}
-								chartType="bar"
-								// isResponseSive={false}
-							/>
-						</Box>
-					</Card>
-					<Card variant="outlined" sx={{ margin: 2, textAlign: 'center' }}>
-						<TableContainer>
-							<Table sx={{ minWidth: 700 }} aria-label="customized table">
-								<TableHead>
-									<TableRow>
-										{dataByCityLabels.map((item, index) => {
-											return <TableCell key={index}>{item}</TableCell>;
-										})}
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									<TableRow>
-										{dataByCityLabels.map((item, index) => {
-											const value = dataByCity[item];
-											const digited = `${digit(value)}`;
-											const percent = `${percentage(value, totalCountWithDataByCity)}`;
-											const label = `${digited} ( ${percent} ) `;
-											return (
-												<TableCell key={index} component="th" scope="row">
-													{digited}
-												</TableCell>
-											);
-										})}
-									</TableRow>
-									<TableRow>
-										{dataByCityLabels.map((item, index) => {
-											const value = dataByCity[item];
-											const digited = `${digit(value)}`;
-											const percent = `${percentage(value, totalCountWithDataByCity)}`;
-											const label = `${digited} ( ${percent} ) `;
-											return (
-												<TableCell key={index} component="th" scope="row">
-													{`${percent}`}
-												</TableCell>
-											);
-										})}
-									</TableRow>
-								</TableBody>
-							</Table>
-						</TableContainer>
-					</Card>
+					/>
+					<NationMainTable
+						{...{
+							nowYear,
+							policeYearlyData,
+						}}
+					/>
 					<Grid container>
 						<Grid item xs={6} sm={6} md={6}>
 							<Card variant="outlined" sx={{ margin: 2, textAlign: 'center' }}>

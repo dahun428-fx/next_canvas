@@ -7,6 +7,7 @@ export interface SearchPoliceReseponse extends OpenApiResponse {
 	page: number;
 	perPage: number;
 	totalCount: number;
+	year: string;
 }
 
 export interface Police {

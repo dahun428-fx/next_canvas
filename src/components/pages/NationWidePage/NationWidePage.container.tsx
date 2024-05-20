@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { NationWidePage as Presenter } from './NationWidePage';
 import { useSelector } from '@/store/hooks';
 import {
@@ -12,6 +12,12 @@ import {
 } from '@/store/modules/common/region';
 import { SearchPoliceReseponse } from '@/models/api/open/police/SearchPoliceResponse';
 import { useDispatch } from 'react-redux';
+import {
+	PoliceCityMergedType,
+	PoliceYearType,
+	police_total_data_by_crime,
+	police_total_data_by_year,
+} from '@/utils/openapi/police/data';
 
 type Props = {
 	regionItems: RegionResponse[];
@@ -25,6 +31,14 @@ export const NationWidePage: React.FC<Props> = ({
 	const initailized = useRef(false);
 
 	const dispatch = useDispatch();
+
+	const policeTotalData: PoliceCityMergedType[] = useMemo(() => {
+		return police_total_data_by_crime(violenceItems);
+	}, [violenceItems]);
+
+	const policeYearlyData: PoliceYearType[] = useMemo(() => {
+		return police_total_data_by_year(violenceItems);
+	}, [violenceItems]);
 
 	useEffect(() => {
 		if (!initailized.current) {
@@ -40,7 +54,14 @@ export const NationWidePage: React.FC<Props> = ({
 		regionSetOperations,
 		initailized,
 	]);
-	return <Presenter regionItems={regionItems} violenceItems={violenceItems} />;
+	return (
+		<Presenter
+			regionItems={regionItems}
+			violenceItems={violenceItems}
+			policeTotalData={policeTotalData}
+			policeYearlyData={policeYearlyData}
+		/>
+	);
 };
 
 NationWidePage.displayName = 'NationWidePage';

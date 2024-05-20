@@ -1,0 +1,1 @@
+export { NationMainTable } from './NationMainTable';

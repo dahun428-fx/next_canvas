@@ -86,12 +86,11 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 				year: year,
 			};
 		});
-
 		const violenceItems: SearchPoliceReseponse[] = fulfiiledPolicePromise.map(
 			item => {
 				return {
 					...item.value,
-					year: `${item.value.data[0].발생년도}`,
+					year: `${item.value.data[0].발생년도 ?? item.value.data[0].발생연도}`,
 				};
 			}
 		);

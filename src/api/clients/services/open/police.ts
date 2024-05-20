@@ -21,6 +21,8 @@ const resource: { [key: string]: string } = {
 } as const;
 
 export const PoliceResourceYears = Object.keys(resource);
+export const PoliceRequestPageNumberDefault = 1;
+export const PoliceRequestPerPageDefault = 300;
 
 const url = `https://api.odcloud.kr/api`;
 

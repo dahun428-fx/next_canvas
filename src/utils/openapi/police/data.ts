@@ -1,21 +1,5 @@
-import {
-	Police,
-	SearchPoliceReseponse,
-} from '@/models/api/open/police/SearchPoliceResponse';
-import { Violence } from '@/store/modules/common/violence';
+import { SearchPoliceReseponse } from '@/models/api/open/police/SearchPoliceResponse';
 import { isObject } from 'chart.js/helpers';
-
-export const mergeByYearly = (violences: Violence[]) => {
-	return violences.map((violence, index) => {
-		const _data = police_city_data(violence.data);
-		const year = violence.data[0].발생년도
-			? `${violence.data[0].발생년도}`
-			: `${violence.data[0].발생연도}`;
-		// return { [year]: _data };
-		return { [year]: _data };
-	});
-	// return result;
-};
 
 /**
  * 모든 데이터를 도시별, 연도별로 변경한다.
@@ -39,15 +23,39 @@ export const mergeByYearly = (violences: Violence[]) => {
 export const police_total_data_by_crime = (
 	data: SearchPoliceReseponse[]
 ): PoliceCityMergedType[] => {
+	let resultArray: PoliceCityMergedType[] = [];
 	police_total_data_by_year(data).map((toplevel: PoliceYearType) => {
-		//toplevel -> PoliceYearType
-		return Object.values(toplevel).map((secondlevel: PoliceCityType[]) => {
-			return secondlevel.map(item => {
-				const { city, 강도, 살인, 절도, 폭력 } = item;
-				// const foundIndex =
-			});
+		toplevel.data.map((item: PoliceCityType) => {
+			const { city, 강도, 살인, 절도, 폭력 } = item;
+			const foundIndex = resultArray.findIndex(
+				arrayItem => arrayItem.city === city
+			);
+			const total = 강도 + 살인 + 절도 + 폭력;
+			if (foundIndex >= 0) {
+				resultArray[foundIndex].강도 = [...resultArray[foundIndex].강도, 강도];
+				resultArray[foundIndex].살인 = [...resultArray[foundIndex].살인, 살인];
+				resultArray[foundIndex].절도 = [...resultArray[foundIndex].절도, 절도];
+				resultArray[foundIndex].폭력 = [...resultArray[foundIndex].폭력, 폭력];
+				resultArray[foundIndex].total = [
+					...resultArray[foundIndex].total,
+					total,
+				];
+			} else {
+				let newArray = {
+					city,
+					강도: [강도],
+					살인: [살인],
+					절도: [절도],
+					폭력: [폭력],
+					total: [total],
+				};
+
+				resultArray.push(newArray);
+			}
 		});
 	});
+
+	return resultArray;
 };
 
 /**
@@ -74,19 +82,27 @@ export const police_total_data_by_crime = (
  */
 export const police_city_data = (data: PoliceDataType[]): PoliceCityType[] => {
 	return police_city.map((cityname, index) => {
-		const filteredData = data.filter(
-			item => item.경찰서.slice(0, 2) === cityname
-		);
+		const filteredData = data.filter(item => {
+			if (
+				isObject(item) &&
+				item?.경찰서 &&
+				item.경찰서.slice(0, 2) === cityname
+			) {
+				return item;
+			}
+		});
 
 		let 강도 = 0;
 		let 살인 = 0;
 		let 절도 = 0;
 		let 폭력 = 0;
+		let totalCount = 0;
 		filteredData.forEach(item => {
 			강도 += item.강도;
 			살인 += item.살인;
 			절도 += item.절도;
 			폭력 += item.폭력;
+			totalCount += item.강도 + item.살인 + item.절도 + item.폭력;
 		});
 		return {
 			city: cityname,
@@ -94,6 +110,7 @@ export const police_city_data = (data: PoliceDataType[]): PoliceCityType[] => {
 			살인,
 			절도,
 			폭력,
+			totalCount,
 		};
 	});
 };
@@ -117,11 +134,19 @@ export const police_total_data_by_year = (
 	data: SearchPoliceReseponse[]
 ): PoliceYearType[] => {
 	return data.map(police => {
+		let totalCount = 0;
 		const year = police.data[0].발생년도
 			? `${police.data[0].발생년도}`
 			: `${police.data[0].발생연도}`;
+
+		const data = police_city_data(police.data);
+		data.forEach(item => {
+			totalCount += item.totalCount ?? 0;
+		});
 		return {
-			[year]: police_city_data(police.data),
+			year: year,
+			data: data,
+			totalCount,
 		};
 	});
 };
@@ -136,7 +161,9 @@ export type PoliceCityMergedType = {
 };
 
 export type PoliceYearType = {
-	[year: string]: PoliceCityType[];
+	year: string;
+	data: PoliceCityType[];
+	totalCount: number;
 };
 
 export type PoliceCityType = {
@@ -145,9 +172,10 @@ export type PoliceCityType = {
 	살인: number;
 	절도: number;
 	폭력: number;
+	totalCount: number;
 };
 
-const police_city = [
+export const police_city = [
 	'서울',
 	'경기',
 	'인천',
