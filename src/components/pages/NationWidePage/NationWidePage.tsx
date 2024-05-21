@@ -1,11 +1,12 @@
 import { PoliceYear } from '@/utils/openapi/police/police';
-import { Box, Divider, Stack } from '@mui/material';
+import { Box, Divider, SelectChangeEvent, Stack } from '@mui/material';
 import React, { useState } from 'react';
 import { RegionResponse } from '@/store/modules/common/region';
 import { SearchPoliceReseponse } from '@/models/api/open/police/SearchPoliceResponse';
 import { NationTitle } from './NationTitle';
 import {
 	PoliceCityMergedType,
+	PoliceYearRange,
 	PoliceYearType,
 } from '@/utils/openapi/police/data';
 import { NationCardList } from './NationCardList';
@@ -14,19 +15,22 @@ import { NationMainTable } from './NationMainTable';
 import { NationChartList } from './NationChatList';
 
 type Props = {
+	nowYear: string;
 	violenceItems: SearchPoliceReseponse[];
 	regionItems: RegionResponse[];
 	// policeTotalData: PoliceCityMergedType[];
 	policeYearlyData: PoliceYearType[];
+	setNowYear: (event: SelectChangeEvent) => void;
 };
 
 export const NationWidePage: React.FC<Props> = ({
+	nowYear,
 	regionItems,
 	violenceItems,
 	// policeTotalData,
 	policeYearlyData,
+	setNowYear,
 }) => {
-	const [nowYear, setNowYear] = useState<PoliceYear>('2022');
 	const [selectedCity, setSelectedCity] = useState('서울');
 
 	if (violenceItems.length < 1) {

@@ -1,12 +1,22 @@
 import { Police } from '@/models/api/open/police/SearchPoliceResponse';
 import { actions as PoliceActions, actions } from '.';
 import { Dispatch } from 'redux';
-import { searchPoliceList } from '@/api/clients/services/open/police';
+import {
+	PoliceRequestPageNumberDefault,
+	PoliceRequestPerPageDefault,
+	PoliceResourceYears,
+	searchPoliceList,
+} from '@/api/clients/services/open/police';
 import {
 	InitializePoliceRequest,
 	SearchPoliceRequest,
 } from '@/models/api/open/police/SearchPoliceRequest';
 import { ChartType } from 'chart.js';
+import {
+	defaultPageNumber,
+	defaultPerPage,
+} from '@/api/clients/services/open/region';
+import { PoliceYearRange } from '@/utils/openapi/police/data';
 
 type PoliceRequest = Omit<SearchPoliceRequest, 'serviceKey'>;
 
@@ -16,6 +26,19 @@ export function loadOperation(dispatch: Dispatch) {
 
 		await searchPoliceList(policeRequest).then(response => {
 			dispatch(actions.load({ ...response, year: policeRequest.year }));
+		});
+	};
+}
+
+export function fetchDataOperation(dispatch: Dispatch) {
+	return async (year: PoliceYearRange) => {
+		const request: PoliceRequest = {
+			page: PoliceRequestPageNumberDefault,
+			perPage: PoliceRequestPerPageDefault,
+			year: year,
+		};
+		await searchPoliceList(request).then(response => {
+			dispatch(actions.load({ ...response, year: request.year }));
 		});
 	};
 }

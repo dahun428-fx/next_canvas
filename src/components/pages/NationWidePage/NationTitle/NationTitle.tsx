@@ -3,7 +3,7 @@ import { MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
 
 type Props = {
 	nowYear: string;
-	setNowYear: (value: string) => void;
+	setNowYear: (event: SelectChangeEvent) => void;
 };
 
 export const NationTitle: React.FC<Props> = ({ nowYear, setNowYear }) => {
@@ -16,9 +16,7 @@ export const NationTitle: React.FC<Props> = ({ nowYear, setNowYear }) => {
 				value={nowYear}
 				defaultValue={nowYear}
 				sx={{ height: '30px', width: '12ch', textAlign: 'right' }}
-				onChange={(event: SelectChangeEvent) => {
-					setNowYear(event.target.value as string);
-				}}
+				onChange={setNowYear}
 			>
 				{resourceYear.map(item => {
 					return (

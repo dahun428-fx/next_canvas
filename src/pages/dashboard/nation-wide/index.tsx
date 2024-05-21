@@ -16,6 +16,7 @@ import { SearchPoliceReseponse } from '@/models/api/open/police/SearchPoliceResp
 import { SearchRegionResponse } from '@/models/api/open/region/SearchRegionResponse';
 import { RegionResponse } from '@/store/modules/common/region';
 import {
+	PoliceYearRange,
 	PoliceYearType,
 	police_total_data_by_year,
 } from '@/utils/openapi/police/data';
@@ -27,6 +28,7 @@ type Props = {
 	regionItems: RegionResponse[];
 	violenceItems: SearchPoliceReseponse[];
 	policeYearlyData: PoliceYearType[];
+	initialYear: string;
 };
 
 const NationWidePage = dynamic<Props>(
@@ -41,9 +43,11 @@ const NationWide: NextPage<Props> = ({
 	regionItems,
 	violenceItems,
 	policeYearlyData,
+	initialYear,
 }) => {
 	return (
 		<NationWidePage
+			initialYear={initialYear}
 			policeYearlyData={policeYearlyData}
 			regionItems={regionItems}
 			violenceItems={violenceItems}
@@ -52,10 +56,13 @@ const NationWide: NextPage<Props> = ({
 };
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
+	//최신 데이터 2022 년도 것만 불러옴
 	try {
+		const firstInitialYear = RegionResourceYear[RegionResourceYear.length - 1];
+
 		const [regionPromise, policePromise] = await Promise.all([
 			await Promise.allSettled(
-				RegionResourceYear.map(async item => {
+				[firstInitialYear].map(async item => {
 					const year = item;
 					const page = defaultPageNumber; //default
 					const perPage = defaultPerPage; //default
@@ -68,7 +75,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 				})
 			),
 			await Promise.allSettled(
-				PoliceResourceYears.map(async item => {
+				[firstInitialYear].map(async item => {
 					const year = item;
 					const page = PoliceRequestPageNumberDefault;
 					const perPage = PoliceRequestPerPageDefault;
@@ -125,6 +132,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 				regionItems,
 				violenceItems,
 				policeYearlyData,
+				initialYear: firstInitialYear,
 			},
 			revalidate: 1800,
 		};

@@ -175,18 +175,6 @@ export type PoliceCityType = {
 	totalCount: number;
 };
 
-// export const PoliceCrimeType = {
-// 	ROBBER: '강도',
-// 	MURDER: '살인',
-// 	THEFT: '절도',
-// 	VIOLENCE: '폭력',
-// } as const;
-
-// export type PoliceCrimeType =
-// 	(typeof PoliceCrimeType)[keyof typeof PoliceCrimeType];
-
-// 	PoliceCrimeType.MURDER
-
 export const police_city = [
 	'서울',
 	'경기',
@@ -216,3 +204,14 @@ export interface PoliceDataType {
 	절도: number;
 	폭력: number;
 }
+
+export type PoliceYearRange =
+	| '2014'
+	| '2015'
+	| '2016'
+	| '2017'
+	| '2018'
+	| '2019'
+	| '2020'
+	| '2021'
+	| '2022';
