@@ -10,21 +10,44 @@ import {
 	defaultPerPage,
 	searchRegionList,
 } from '@/api/clients/services/open/region';
-import { NationWidePage } from '@/components/pages/NationWidePage';
+import { LoadingBar } from '@/components/common/Loading/LoadingBar';
+// import { NationWidePage } from '@/components/pages/NationWidePage';
 import { SearchPoliceReseponse } from '@/models/api/open/police/SearchPoliceResponse';
 import { SearchRegionResponse } from '@/models/api/open/region/SearchRegionResponse';
 import { RegionResponse } from '@/store/modules/common/region';
+import {
+	PoliceYearType,
+	police_total_data_by_year,
+} from '@/utils/openapi/police/data';
 import { changeToRegionalData } from '@/utils/openapi/region/region';
 import { GetStaticProps, NextPage } from 'next';
+import dynamic from 'next/dynamic';
 
 type Props = {
 	regionItems: RegionResponse[];
 	violenceItems: SearchPoliceReseponse[];
+	policeYearlyData: PoliceYearType[];
 };
 
-const NationWide: NextPage<Props> = ({ regionItems, violenceItems }) => {
+const NationWidePage = dynamic<Props>(
+	() =>
+		import('@/components/pages/NationWidePage').then(
+			module => module.NationWidePage
+		),
+	{ ssr: false, loading: () => <LoadingBar /> }
+);
+
+const NationWide: NextPage<Props> = ({
+	regionItems,
+	violenceItems,
+	policeYearlyData,
+}) => {
 	return (
-		<NationWidePage regionItems={regionItems} violenceItems={violenceItems} />
+		<NationWidePage
+			policeYearlyData={policeYearlyData}
+			regionItems={regionItems}
+			violenceItems={violenceItems}
+		/>
 	);
 };
 
@@ -95,10 +118,13 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 			}
 		);
 
+		const policeYearlyData = police_total_data_by_year(violenceItems);
+
 		return {
 			props: {
 				regionItems,
 				violenceItems,
+				policeYearlyData,
 			},
 			revalidate: 1800,
 		};

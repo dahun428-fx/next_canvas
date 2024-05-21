@@ -17,11 +17,13 @@ import {
 type Props = {
 	regionItems: RegionResponse[];
 	violenceItems: SearchPoliceReseponse[];
+	policeYearlyData: PoliceYearType[];
 };
 
 export const NationWidePage: React.FC<Props> = ({
 	regionItems,
 	violenceItems,
+	policeYearlyData,
 }) => {
 	const initailized = useRef(false);
 
@@ -31,9 +33,9 @@ export const NationWidePage: React.FC<Props> = ({
 	// 	return police_total_data_by_crime(violenceItems);
 	// }, [violenceItems]);
 
-	const policeYearlyData: PoliceYearType[] = useMemo(() => {
-		return police_total_data_by_year(violenceItems);
-	}, [violenceItems]);
+	// const policeYearlyData: PoliceYearType[] = useMemo(() => {
+	// 	return police_total_data_by_year(violenceItems);
+	// }, [violenceItems]);
 
 	useEffect(() => {
 		if (!initailized.current) {
