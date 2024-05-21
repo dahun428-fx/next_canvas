@@ -1,64 +1,8 @@
-import { CustomChart } from '@/components/common/utils/CustomChart';
-import {
-	CustomChartDoughnutData,
-	CustomChartLineData,
-} from '@/components/common/utils/CustomChart/CustomChart';
-import { CustomCard } from '@/components/ui/card';
-import { useSelector } from '@/store/hooks';
-import { ViolenceState, selectViolence } from '@/store/modules/common/violence';
-import { digit, percentage } from '@/utils/number';
-import {
-	PoliceYear,
-	find_by_year_and_office,
-	getDataByCriminal,
-	getDataByYear,
-	mergeByCityWithYear,
-	policeCityArray,
-} from '@/utils/openapi/police/police';
-import {
-	Box,
-	Card,
-	Divider,
-	Grid,
-	List,
-	ListItem,
-	MenuItem,
-	Paper,
-	Select,
-	SelectChangeEvent,
-	Stack,
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableHead,
-	TableRow,
-	TextField,
-	Typography,
-	styled,
-	useTheme,
-} from '@mui/material';
-import React, {
-	ChangeEvent,
-	Suspense,
-	useEffect,
-	useMemo,
-	useState,
-} from 'react';
-import styles from './NationWidePage.module.scss';
-import { PoliceResourceYears } from '@/api/clients/services/open/police';
-import { RegionResponse, RegionState } from '@/store/modules/common/region';
-import {
-	CrimeValueType,
-	RegionItem,
-	data_merge_by_cirme,
-	data_merge_by_city,
-} from '@/utils/openapi/region/region';
-import {
-	Police,
-	SearchPoliceReseponse,
-} from '@/models/api/open/police/SearchPoliceResponse';
-import { RegionResourceYear } from '@/api/clients/services/open/region';
+import { PoliceYear } from '@/utils/openapi/police/police';
+import { Box, Divider, Stack } from '@mui/material';
+import React, { useState } from 'react';
+import { RegionResponse } from '@/store/modules/common/region';
+import { SearchPoliceReseponse } from '@/models/api/open/police/SearchPoliceResponse';
 import { NationTitle } from './NationTitle';
 import {
 	PoliceCityMergedType,
@@ -67,39 +11,23 @@ import {
 import { NationCardList } from './NationCardList';
 import { NationMainChart } from './NationMainChart';
 import { NationMainTable } from './NationMainTable';
+import { NationChartList } from './NationChatList';
 
 type Props = {
 	violenceItems: SearchPoliceReseponse[];
 	regionItems: RegionResponse[];
-	policeTotalData: PoliceCityMergedType[];
+	// policeTotalData: PoliceCityMergedType[];
 	policeYearlyData: PoliceYearType[];
 };
 
 export const NationWidePage: React.FC<Props> = ({
 	regionItems,
 	violenceItems,
-	policeTotalData,
+	// policeTotalData,
 	policeYearlyData,
 }) => {
 	const [nowYear, setNowYear] = useState<PoliceYear>('2022');
 	const [selectedCity, setSelectedCity] = useState('서울');
-
-	const dataByCityLabels = [...policeCityArray];
-
-	const dataByCity: CustomChartLineData = useMemo(() => {
-		return getDataByYear(violenceItems, nowYear, 'total');
-	}, [violenceItems, nowYear]);
-
-	const totalCountByYear = useMemo(() => {
-		return policeYearlyData.filter(item => item.year === nowYear)[0].totalCount;
-	}, [nowYear]);
-
-	const dataByCriminalOne: CustomChartDoughnutData = useMemo(() => {
-		return getDataByCriminal(violenceItems, nowYear, ['강도', '살인']);
-	}, [violenceItems, nowYear]);
-	const dataByCriminalTwo: CustomChartDoughnutData = useMemo(() => {
-		return getDataByCriminal(violenceItems, nowYear, ['절도', '폭력']);
-	}, [violenceItems, nowYear]);
 
 	if (violenceItems.length < 1) {
 		return null;
@@ -142,67 +70,12 @@ export const NationWidePage: React.FC<Props> = ({
 							policeYearlyData,
 						}}
 					/>
-					<Grid container>
-						<Grid item xs={6} sm={6} md={6}>
-							<Card variant="outlined" sx={{ margin: 2, textAlign: 'center' }}>
-								<Typography
-									variant="overline"
-									sx={{ margin: 2, textAlign: 'center' }}
-								>
-									{nowYear}년도 범죄별 통계
-									{`  [${Object.keys(dataByCriminalOne).toString()}]`}
-								</Typography>
-								<Box
-									sx={{
-										height: '350px',
-										display: 'flex',
-										justifyContent: 'center',
-									}}
-								>
-									<CustomChart
-										className={styles.gap}
-										dataLabels={Object.keys(dataByCriminalOne)}
-										chartDoughnutData={dataByCriminalOne}
-										chartType="doughnut"
-										labelPositon="bottom"
-										// isResponseSive={false}
-										needDigit
-										needPercent
-									/>
-								</Box>
-							</Card>
-						</Grid>
-						<Grid item xs={6} sm={6} md={6}>
-							<Card variant="outlined" sx={{ margin: 2, textAlign: 'center' }}>
-								<Typography
-									variant="overline"
-									sx={{ margin: 2, textAlign: 'center' }}
-								>
-									{nowYear}년도 범죄별 통계
-									{`  [${Object.keys(dataByCriminalTwo).toString()}]`}
-								</Typography>
-								<Box
-									sx={{
-										height: '350px',
-										display: 'flex',
-										justifyContent: 'center',
-									}}
-								>
-									<CustomChart
-										className={styles.gap}
-										dataLabels={Object.keys(dataByCriminalTwo)}
-										chartDoughnutData={dataByCriminalTwo}
-										chartType="doughnut"
-										labelPositon="bottom"
-										colors={['#7B68EE', '#32CD32']}
-										// isResponseSive={false}
-										needDigit
-										needPercent
-									/>
-								</Box>
-							</Card>
-						</Grid>
-					</Grid>
+					<NationChartList
+						{...{
+							nowYear,
+							policeYearlyData,
+						}}
+					/>
 				</Stack>
 			</Stack>
 		</Box>

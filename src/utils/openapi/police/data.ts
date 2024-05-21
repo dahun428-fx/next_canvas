@@ -175,6 +175,18 @@ export type PoliceCityType = {
 	totalCount: number;
 };
 
+// export const PoliceCrimeType = {
+// 	ROBBER: '강도',
+// 	MURDER: '살인',
+// 	THEFT: '절도',
+// 	VIOLENCE: '폭력',
+// } as const;
+
+// export type PoliceCrimeType =
+// 	(typeof PoliceCrimeType)[keyof typeof PoliceCrimeType];
+
+// 	PoliceCrimeType.MURDER
+
 export const police_city = [
 	'서울',
 	'경기',

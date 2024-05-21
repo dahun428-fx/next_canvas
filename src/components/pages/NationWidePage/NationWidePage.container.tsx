@@ -1,13 +1,8 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { NationWidePage as Presenter } from './NationWidePage';
-import { useSelector } from '@/store/hooks';
-import {
-	selectViolence,
-	setOperations as violenceSetOperations,
-} from '@/store/modules/common/violence';
+import { setOperations as violenceSetOperations } from '@/store/modules/common/violence';
 import {
 	RegionResponse,
-	selectRegion,
 	setOperations as regionSetOperations,
 } from '@/store/modules/common/region';
 import { SearchPoliceReseponse } from '@/models/api/open/police/SearchPoliceResponse';
@@ -32,9 +27,9 @@ export const NationWidePage: React.FC<Props> = ({
 
 	const dispatch = useDispatch();
 
-	const policeTotalData: PoliceCityMergedType[] = useMemo(() => {
-		return police_total_data_by_crime(violenceItems);
-	}, [violenceItems]);
+	// const policeTotalData: PoliceCityMergedType[] = useMemo(() => {
+	// 	return police_total_data_by_crime(violenceItems);
+	// }, [violenceItems]);
 
 	const policeYearlyData: PoliceYearType[] = useMemo(() => {
 		return police_total_data_by_year(violenceItems);
@@ -58,7 +53,7 @@ export const NationWidePage: React.FC<Props> = ({
 		<Presenter
 			regionItems={regionItems}
 			violenceItems={violenceItems}
-			policeTotalData={policeTotalData}
+			// policeTotalData={policeTotalData}
 			policeYearlyData={policeYearlyData}
 		/>
 	);
