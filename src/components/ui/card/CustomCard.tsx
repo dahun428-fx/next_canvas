@@ -57,8 +57,8 @@ export const CustomCard: React.FC<Props> = ({ type, ...props }) => {
 		return <div></div>;
 	};
 	return (
-		<Box sx={{ minWidth: 200, margin: 1 }}>
-			<Card sx={{ minHeight: 200 }} variant="outlined">
+		<Box sx={{ maxWidth: 400, minWidth: 200, margin: 1 }}>
+			<Card sx={{ height: 200 }} variant="outlined">
 				{type && cardContent()}
 			</Card>
 		</Box>
