@@ -33,7 +33,7 @@ export const NationCardList: React.FC<Props> = ({
 	regionItems,
 }) => {
 	const filteredViolenceData = useMemo(() => {
-		return violenceItems.filter(item => item.year === nowYear)[0].data ?? null;
+		return violenceItems.filter(item => item.year === nowYear)[0]?.data ?? null;
 	}, [nowYear, violenceItems]);
 
 	const filteredPoliceData: PoliceYearType = useMemo(() => {
@@ -41,7 +41,7 @@ export const NationCardList: React.FC<Props> = ({
 	}, [nowYear, policeYearlyData]);
 
 	const filteredRegionData: RegionItem[] = useMemo(() => {
-		return regionItems.filter(item => item.year === nowYear)[0].items ?? null;
+		return regionItems.filter(item => item.year === nowYear)[0]?.items ?? null;
 	}, [nowYear, regionItems]);
 
 	const totalCountByYear = useMemo(() => {

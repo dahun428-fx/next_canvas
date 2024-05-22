@@ -7,6 +7,7 @@ export interface SearchRegionResponse extends OpenApiResponse {
 	page: number;
 	perPage: number;
 	totalCount: number;
+	year?: string;
 }
 
 /*

@@ -6,10 +6,16 @@ import React, {
 	useState,
 } from 'react';
 import { NationWidePage as Presenter } from './NationWidePage';
-import { setOperations as violenceSetOperations } from '@/store/modules/common/violence';
+import {
+	loadOperations as violenceLoadOperation,
+	selectViolenceItems,
+	setOperations as violenceSetOperations,
+} from '@/store/modules/common/violence';
 import {
 	RegionResponse,
+	loadOperations as regionLoadOperation,
 	setOperations as regionSetOperations,
+	selectRegionItems,
 } from '@/store/modules/common/region';
 import { SearchPoliceReseponse } from '@/models/api/open/police/SearchPoliceResponse';
 import { useDispatch } from 'react-redux';
@@ -55,42 +61,29 @@ export const NationWidePage: React.FC<Props> = ({
 		initialYear as PoliceYearRange
 	);
 
-	const getData = useMemo(async () => {
+	const policeResponse = useSelector(selectViolenceItems);
+	const regionResponse = useSelector(selectRegionItems);
+
+	const datas = useMemo(() => {
+		return police_total_data_by_year(policeResponse);
+	}, [policeResponse, nowYear]);
+
+	const hasItems = useMemo(() => {
 		if (nowYear === initialYear) {
-			return policeYearlyData;
+			return true;
 		}
-		const year = nowYear;
-		const page = PoliceRequestPageNumberDefault;
-		const perPage = PoliceRequestPerPageDefault;
-		const response = await searchPoliceList({
-			page,
-			perPage,
-			year: year,
-		});
-		const searchItems: SearchPoliceReseponse = {
-			...response,
-			year: year,
-		};
-		const policeYearlyData = police_total_data_by_year([searchItems]);
-		return policeYearlyData;
-	}, [policeYearlyData, nowYear]);
+		return (
+			policeResponse.some(item => item.year === nowYear) &&
+			regionResponse.some(item => item.year === nowYear)
+		);
+	}, [policeResponse, regionResponse, nowYear]);
 
-	// const policeResponse = useSelector(selectPolice);
-	// const policeTotalData: PoliceCityMergedType[] = useMemo(() => {
-	// 	return police_total_data_by_crime(violenceItems);
-	// }, [violenceItems]);
-
-	// const policeYearlyData: PoliceYearType[] = useMemo(() => {
-	// 	return police_total_data_by_year(violenceItems);
-	// }, [violenceItems]);
-
-	// const police_yearly_data = useMemo(async()=>{
-
-	// },[dispatch, nowYear])
-
-	// useEffect(() => {
-	// 	fetchDataOperation(dispatch)(nowYear);
-	// }, [dispatch, nowYear]);
+	useEffect(() => {
+		if (!hasItems) {
+			regionLoadOperation(dispatch)(nowYear);
+			violenceLoadOperation(dispatch)(nowYear);
+		}
+	}, [nowYear, dispatch, hasItems]);
 
 	useEffect(() => {
 		if (!initailized.current) {
@@ -107,7 +100,13 @@ export const NationWidePage: React.FC<Props> = ({
 		initailized,
 	]);
 
-	if (!policeYearlyData) {
+	if (
+		!policeResponse ||
+		policeResponse.length < 1 ||
+		regionResponse.length < 1 ||
+		!regionResponse ||
+		!policeYearlyData
+	) {
 		return null;
 	}
 	return (
@@ -116,10 +115,11 @@ export const NationWidePage: React.FC<Props> = ({
 			setNowYear={(event: SelectChangeEvent) =>
 				setNowYear(event.target.value as PoliceYearRange)
 			}
-			regionItems={regionItems}
-			violenceItems={violenceItems}
+			regionItems={regionResponse}
+			violenceItems={policeResponse}
+			policeYearlyData={datas}
 			// policeTotalData={policeTotalData}
-			policeYearlyData={getData}
+			// policeYearlyData={getData}
 		/>
 	);
 };

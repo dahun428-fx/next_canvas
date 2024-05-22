@@ -4,5 +4,10 @@ export interface SearchRegionRequest extends OpenApiRequest {
 	year: string;
 	page: number;
 	perPage: number;
-	serviceKey: string;
 }
+
+export const InitializeRegionRequest: SearchRegionRequest = {
+	page: 1,
+	perPage: 300,
+	year: '2022',
+};

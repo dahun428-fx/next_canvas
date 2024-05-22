@@ -63,6 +63,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 		const [regionPromise, policePromise] = await Promise.all([
 			await Promise.allSettled(
 				[firstInitialYear].map(async item => {
+					// RegionResourceYear.map(async item => {
 					const year = item;
 					const page = defaultPageNumber; //default
 					const perPage = defaultPerPage; //default
@@ -71,11 +72,13 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 						perPage,
 						year: year,
 					});
-					return { response, year: year };
+					response.year = year;
+					return response;
 				})
 			),
 			await Promise.allSettled(
 				[firstInitialYear].map(async item => {
+					// RegionResourceYear.map(async item => {
 					const year = item;
 					const page = PoliceRequestPageNumberDefault;
 					const perPage = PoliceRequestPerPageDefault;
@@ -93,10 +96,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 			if (item.status === 'fulfilled') {
 				return item;
 			}
-		}) as PromiseFulfilledResult<{
-			response: SearchRegionResponse;
-			year: string;
-		}>[];
+		}) as PromiseFulfilledResult<SearchRegionResponse>[];
 
 		const fulfiiledPolicePromise = policePromise.map(item => {
 			if (item.status === 'fulfilled') {
@@ -105,7 +105,8 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 		}) as PromiseFulfilledResult<SearchPoliceReseponse>[];
 
 		const regionItems: RegionResponse[] = fulfilledRegionPromise.map(item => {
-			const { response, year } = item.value;
+			const response = item.value;
+			const year = response.year ?? firstInitialYear;
 			return {
 				currentCount: response.currentCount,
 				matchCount: response.matchCount,
@@ -113,7 +114,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 				perPage: response.perPage,
 				totalCount: response.totalCount,
 				items: changeToRegionalData(response.data, year),
-				year: year,
+				year: response.year,
 			};
 		});
 		const violenceItems: SearchPoliceReseponse[] = fulfiiledPolicePromise.map(

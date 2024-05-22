@@ -27,7 +27,7 @@ export const PoliceRequestPerPageDefault = 300;
 const url = `https://api.odcloud.kr/api`;
 
 export function searchPoliceList(
-	request: Omit<SearchPoliceRequest, 'serviceKey'>,
+	request: SearchPoliceRequest,
 	cancelToken?: CancelToken
 ): Promise<SearchPoliceReseponse> {
 	const { year } = request;

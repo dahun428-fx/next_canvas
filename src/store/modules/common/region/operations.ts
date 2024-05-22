@@ -7,38 +7,54 @@ import { Dispatch } from 'redux';
 import { RegionResponse, actions } from './slice';
 import { changeToRegionalData } from '@/utils/openapi/region/region';
 import { ChartType } from 'chart.js';
+import { InitializeRegionRequest } from '@/models/api/open/region/SearchRegionRequest';
 
+// export function loadOperations(dispatch: Dispatch) {
+// 	return async () => {
+// 		const page = 1;
+// 		const perPage = 50;
+// 		const promise = Promise.all(
+// 			RegionResourceYear.map(async item => {
+// 				const year = item;
+// 				const response = await searchRegionList({
+// 					page,
+// 					perPage,
+// 					year: year,
+// 				});
+// 				return { response, year: year };
+// 			})
+// 		);
+// 		promise.then(async response => {
+// 			const regionItems: RegionResponse[] = response.map((item, index) => {
+// 				// const result = changeToRegionalData(item.response.data, item.year);
+// 				// console.log('response result ====> ', result);
+// 				return {
+// 					currentCount: item.response.currentCount,
+// 					matchCount: item.response.matchCount,
+// 					page: item.response.page,
+// 					perPage: item.response.perPage,
+// 					totalCount: item.response.totalCount,
+// 					items: changeToRegionalData(item.response.data, item.year),
+// 					year: item.year,
+// 				};
+// 			});
+// 			dispatch(actions.load(regionItems));
+// 		});
+// 	};
+// }
 export function loadOperations(dispatch: Dispatch) {
-	return async () => {
-		const page = 1;
-		const perPage = 50;
-		const promise = Promise.all(
-			RegionResourceYear.map(async item => {
-				const year = item;
-				const response = await searchRegionList({
-					page,
-					perPage,
-					year: year,
-				});
-				return { response, year: year };
-			})
-		);
-		promise.then(async response => {
-			const regionItems: RegionResponse[] = response.map((item, index) => {
-				// const result = changeToRegionalData(item.response.data, item.year);
-				// console.log('response result ====> ', result);
-				return {
-					currentCount: item.response.currentCount,
-					matchCount: item.response.matchCount,
-					page: item.response.page,
-					perPage: item.response.perPage,
-					totalCount: item.response.totalCount,
-					items: changeToRegionalData(item.response.data, item.year),
-					year: item.year,
+	return async (nowYear: string) => {
+		searchRegionList({ ...InitializeRegionRequest, year: nowYear }).then(
+			response => {
+				const { data, year } = response;
+				const regionItem: RegionResponse = {
+					...response,
+					items: changeToRegionalData(data, year ?? nowYear),
+					year: year ?? nowYear,
 				};
-			});
-			dispatch(actions.load(regionItems));
-		});
+				dispatch(actions.load([regionItem]));
+			}
+		);
 	};
 }
 

@@ -22,7 +22,7 @@ export type RegionResponse = {
 const initialState: RegionState = {
 	items: [],
 	chartType: 'doughnut',
-	year: '2015',
+	year: '2022',
 	show: true,
 };
 
@@ -31,9 +31,14 @@ const slice = createSlice({
 	initialState,
 	reducers: {
 		load(state, action: PayloadAction<RegionResponse[]>) {
+			if (state.items.some(item => item.year === action.payload[0].year)) {
+				return {
+					...state,
+				};
+			}
 			return {
 				...state,
-				items: action.payload,
+				items: [...state.items, ...action.payload],
 			};
 		},
 		updateChartType(state, action: PayloadAction<ChartType>) {

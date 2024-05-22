@@ -23,7 +23,7 @@ export const RegionResourceYear = Object.keys(resource);
 const url = `https://api.odcloud.kr/api`;
 
 export function searchRegionList(
-	request: Omit<SearchRegionRequest, 'serviceKey'>,
+	request: SearchRegionRequest,
 	cancelToken?: CancelToken
 ): Promise<SearchRegionResponse> {
 	const { year } = request;
