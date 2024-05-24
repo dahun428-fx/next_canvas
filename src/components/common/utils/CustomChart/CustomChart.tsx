@@ -162,24 +162,6 @@ export const CustomChart: React.FC<Props> = ({
 							backgroundColor: defaultColor,
 							borderColor: defaultColor,
 						},
-						// {
-						// 	label: 1,
-						// 	data: 10,
-						// 	backgroundColor: defaultColor[0],
-						// 	borderColor: defaultColor[0],
-						// },
-						// {
-						// 	label: 2,
-						// 	data: 1,
-						// 	backgroundColor: defaultColor[1],
-						// 	borderColor: defaultColor[1],
-						// },
-						// {
-						// 	label: 3,
-						// 	data:2,
-						// 	backgroundColor: defaultColor[2],
-						// 	borderColor: defaultColor[2],
-						// },
 					],
 				};
 			}

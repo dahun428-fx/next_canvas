@@ -50,6 +50,10 @@ export function range(start: number, end: number): number[] {
  * @param {number} total total
  * @returns {string} '00%'
  */
-export function percentage(value: number, total: number): string {
-	return ((value * 100) / total).toFixed(2) + '%';
+export function percentage(
+	value: number,
+	total: number,
+	fixed?: number
+): string {
+	return ((value * 100) / total).toFixed(fixed) + '%';
 }
