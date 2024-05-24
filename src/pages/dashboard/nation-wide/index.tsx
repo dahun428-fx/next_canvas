@@ -36,7 +36,8 @@ const NationWidePage = dynamic<Props>(
 		import('@/components/pages/NationWidePage').then(
 			module => module.NationWidePage
 		),
-	{ ssr: false, loading: () => <LoadingBar /> }
+	// { ssr: false, loading: () => <LoadingBar /> }
+	{ ssr: false }
 );
 
 const NationWide: NextPage<Props> = ({

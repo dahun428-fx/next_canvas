@@ -11,7 +11,8 @@ import {
 	Stack,
 	Typography,
 } from '@mui/material';
-import React, { ReactElement, ReactNode } from 'react';
+import React, { ReactElement, ReactNode, Suspense } from 'react';
+import { SkeletonCustomCard } from './SkeletonCustomCard';
 
 export type CardContentType =
 	| 'total'
@@ -57,11 +58,13 @@ export const CustomCard: React.FC<Props> = ({ type, ...props }) => {
 		return <div></div>;
 	};
 	return (
-		<Box sx={{ maxWidth: 400, minWidth: 200, margin: 1 }}>
-			<Card sx={{ height: 200 }} variant="outlined">
-				{type && cardContent()}
-			</Card>
-		</Box>
+		<Suspense fallback={<SkeletonCustomCard />}>
+			<Box sx={{ maxWidth: 400, minWidth: 200, margin: 1 }}>
+				<Card sx={{ height: 200 }} variant="outlined">
+					{type && cardContent()}
+				</Card>
+			</Box>
+		</Suspense>
 	);
 };
 

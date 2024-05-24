@@ -45,13 +45,13 @@ export const NationCardList: React.FC<Props> = ({
 	}, [nowYear, regionItems]);
 
 	const totalCountByYear = useMemo(() => {
-		return filteredPoliceData.totalCount ?? 0;
+		return filteredPoliceData?.totalCount ?? 0;
 	}, [filteredPoliceData]);
 
 	const lowestCity = useMemo(() => {
 		let min: number = Number.MAX_SAFE_INTEGER;
 		let cityname: string = '';
-		filteredPoliceData.data.forEach(item => {
+		filteredPoliceData?.data?.forEach(item => {
 			if (min > item.totalCount) {
 				min = item.totalCount;
 				cityname = item.city;
@@ -63,7 +63,7 @@ export const NationCardList: React.FC<Props> = ({
 	const highestCity = useMemo(() => {
 		let max: number = 0;
 		let cityname: string = '';
-		filteredPoliceData.data.forEach(item => {
+		filteredPoliceData?.data?.forEach(item => {
 			if (max < item.totalCount) {
 				max = item.totalCount;
 				cityname = item.city;
@@ -117,10 +117,6 @@ export const NationCardList: React.FC<Props> = ({
 	const officeData = useMemo(() => {
 		return filteredViolenceData[0];
 	}, [filteredViolenceData]);
-
-	if (!filteredPoliceData || !filteredRegionData) {
-		return null;
-	}
 
 	return (
 		<Grid container>

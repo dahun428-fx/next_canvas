@@ -14,6 +14,8 @@ import { NationMainChart } from './NationMainChart';
 import { NationMainTable } from './NationMainTable';
 import { NationChartList } from './NationChatList';
 import { RegionItem } from '@/utils/openapi/region/region';
+import { SkeletonCustomCard } from '@/components/ui/card/SkeletonCustomCard';
+import { NationCardListSkeleton } from './NationCardList/NationCardListSkeleton';
 
 type Props = {
 	nowYear: string;
@@ -63,37 +65,41 @@ export const NationWidePage: React.FC<Props> = ({
 					<NationTitle nowYear={nowYear} setNowYear={setNowYear} />
 				</Box>
 				<Divider />
-				{filteredViolenceData && filteredPoliceData && filteredRegionData && (
-					<>
-						<NationCardList
+				{filteredViolenceData && filteredPoliceData && filteredRegionData ? (
+					<NationCardList
+						{...{
+							nowYear,
+							policeYearlyData,
+							violenceItems,
+							regionItems,
+						}}
+					/>
+				) : (
+					<NationCardListSkeleton count={6} />
+				)}
+				{filteredPoliceData ? (
+					<Stack>
+						<NationMainChart
 							{...{
 								nowYear,
 								policeYearlyData,
-								violenceItems,
-								regionItems,
 							}}
 						/>
-						<Stack>
-							<NationMainChart
-								{...{
-									nowYear,
-									policeYearlyData,
-								}}
-							/>
-							<NationMainTable
-								{...{
-									nowYear,
-									policeYearlyData,
-								}}
-							/>
-							<NationChartList
-								{...{
-									nowYear,
-									policeYearlyData,
-								}}
-							/>
-						</Stack>
-					</>
+						<NationMainTable
+							{...{
+								nowYear,
+								policeYearlyData,
+							}}
+						/>
+						<NationChartList
+							{...{
+								nowYear,
+								policeYearlyData,
+							}}
+						/>
+					</Stack>
+				) : (
+					<></>
 				)}
 			</Stack>
 		</Box>

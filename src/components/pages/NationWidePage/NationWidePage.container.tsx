@@ -100,15 +100,15 @@ export const NationWidePage: React.FC<Props> = ({
 		initailized,
 	]);
 
-	if (
-		!policeResponse ||
-		policeResponse.length < 1 ||
-		regionResponse.length < 1 ||
-		!regionResponse ||
-		!policeYearlyData
-	) {
-		return null;
-	}
+	// if (
+	// 	!policeResponse ||
+	// 	policeResponse.length < 1 ||
+	// 	regionResponse.length < 1 ||
+	// 	!regionResponse ||
+	// 	!policeYearlyData
+	// ) {
+	// 	return null;
+	// }
 	return (
 		<Presenter
 			nowYear={nowYear}
