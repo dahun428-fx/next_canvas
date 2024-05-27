@@ -23,8 +23,6 @@ import {
 import { GetStaticProps } from 'next';
 import {
 	RegionResourceYear,
-	defaultPageNumber,
-	defaultPerPage,
 	searchRegionList,
 } from '@/api/clients/services/open/region';
 type Props = {
@@ -34,29 +32,9 @@ type Props = {
 export const DashboardLayout: React.FC<Props> = ({ children }) => {
 	const [open, setOpen] = useState(true);
 
-	const initialize = useRef(false);
-	const regionResponse = useSelector(selectRegion);
-	const violenceResponse = useSelector(selectViolence);
-
 	const dispatch = useDispatch();
 
 	const pageRoute = useSelector(selectBottomPageRoute);
-	// useEffect(() => {
-	// 	if (!initialize.current) {
-	// 		if (regionResponse.items.length < 1) {
-	// 			RegionLoadOperation(dispatch)();
-	// 		}
-	// 		if (violenceResponse.items.length < 1) {
-	// 			violenceLoadOperation(dispatch)();
-	// 		}
-	// 		initialize.current = true;
-	// 	}
-	// }, [
-	// 	dispatch,
-	// 	regionResponse.items.length,
-	// 	violenceResponse.items.length,
-	// 	initialize.current,
-	// ]);
 
 	useEffect(() => {
 		if (pageRoute) {

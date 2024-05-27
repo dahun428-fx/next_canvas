@@ -1,15 +1,32 @@
 import { useEffect, useRef } from 'react';
 import { CrimeRegionPage as Presenter } from './CrimeRegionPage';
 import { useSelector } from '@/store/hooks';
-import { loadOperations, selectRegion } from '@/store/modules/common/region';
+import {
+	RegionResponse,
+	loadOperations,
+	selectRegion,
+} from '@/store/modules/common/region';
 import { useDispatch } from 'react-redux';
 import { ChartType } from 'chart.js';
 import {
 	bottomBarAddChartTypesOpertion,
 	bottomBarUpdatePageRouteOperation,
 } from '@/store/modules/common/bottom';
+import { GetStaticProps } from 'next';
+import {
+	RegionResourceYear,
+	regionRequestPageNumber,
+	regionRequestPerPage,
+	searchRegionList,
+} from '@/api/clients/services/open/region';
+import { SearchRegionResponse } from '@/models/api/open/region/SearchRegionResponse';
+import { changeToRegionalData } from '@/utils/openapi/region/region';
 
-type Props = {};
+type Props = {
+	// regionItems: RegionResponse[];
+	// initialYear: string;
+};
+
 export const CrimeRegionPage: React.FC<Props> = () => {
 	const dispatch = useDispatch();
 
@@ -34,4 +51,5 @@ export const CrimeRegionPage: React.FC<Props> = () => {
 
 	return <Presenter />;
 };
+
 CrimeRegionPage.displayName = 'CrimeRegionPage';

@@ -6,8 +6,8 @@ import {
 } from '@/api/clients/services/open/police';
 import {
 	RegionResourceYear,
-	defaultPageNumber,
-	defaultPerPage,
+	regionRequestPageNumber,
+	regionRequestPerPage,
 	searchRegionList,
 } from '@/api/clients/services/open/region';
 import { LoadingBar } from '@/components/common/Loading/LoadingBar';
@@ -66,8 +66,8 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 				[firstInitialYear].map(async item => {
 					// RegionResourceYear.map(async item => {
 					const year = item;
-					const page = defaultPageNumber; //default
-					const perPage = defaultPerPage; //default
+					const page = regionRequestPageNumber; //default
+					const perPage = regionRequestPerPage; //default
 					const response = await searchRegionList({
 						page,
 						perPage,

@@ -43,18 +43,42 @@ import { InitializeRegionRequest } from '@/models/api/open/region/SearchRegionRe
 // 	};
 // }
 export function loadOperations(dispatch: Dispatch) {
-	return async (nowYear: string) => {
-		searchRegionList({ ...InitializeRegionRequest, year: nowYear }).then(
-			response => {
-				const { data, year } = response;
-				const regionItem: RegionResponse = {
-					...response,
-					items: changeToRegionalData(data, year ?? nowYear),
-					year: year ?? nowYear,
-				};
-				dispatch(actions.load([regionItem]));
-			}
+	return async (yearData: string | string[]) => {
+		const years: string[] =
+			typeof yearData === 'string' ? [yearData] : [...yearData];
+
+		const promise = await Promise.allSettled(
+			years.map(async nowYear => {
+				const response = await searchRegionList({
+					...InitializeRegionRequest,
+					year: nowYear,
+				});
+
+				response.year = nowYear;
+				return response;
+			})
 		);
+
+		const fulfilledRegionPromise = promise.map(item => {
+			if (item.status === 'fulfilled') {
+				return item;
+			}
+		}) as PromiseFulfilledResult<SearchRegionResponse>[];
+
+		const regionItems: RegionResponse[] = fulfilledRegionPromise.map(item => {
+			const response = item.value;
+			const year = response.year ?? years[0];
+			return {
+				currentCount: response.currentCount,
+				matchCount: response.matchCount,
+				page: response.page,
+				perPage: response.perPage,
+				totalCount: response.totalCount,
+				items: changeToRegionalData(response.data, year),
+				year: response.year,
+			};
+		});
+		dispatch(actions.load(regionItems));
 	};
 }
 

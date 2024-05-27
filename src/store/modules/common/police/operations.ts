@@ -12,10 +12,6 @@ import {
 	SearchPoliceRequest,
 } from '@/models/api/open/police/SearchPoliceRequest';
 import { ChartType } from 'chart.js';
-import {
-	defaultPageNumber,
-	defaultPerPage,
-} from '@/api/clients/services/open/region';
 import { PoliceYearRange } from '@/utils/openapi/police/data';
 
 type PoliceRequest = Omit<SearchPoliceRequest, 'serviceKey'>;
