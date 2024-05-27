@@ -1,6 +1,6 @@
-import { CustomChart } from '@/components/common/utils/CustomChart';
+import { SingleChartType } from '@/components/ui/chart/CustomChart';
+import { ChartBox } from '@/components/ui/chart/chartBox';
 import { PoliceYearType, police_city } from '@/utils/openapi/police/data';
-import { Box, Card, Typography } from '@mui/material';
 import { useMemo } from 'react';
 
 type Props = {
@@ -22,7 +22,7 @@ export const NationMainChart: React.FC<Props> = ({
 	/**
 	 * {[key : string] : number}
 	 */
-	const chartDatas: { [key: string]: number } = useMemo(() => {
+	const chartDatas: Record<string, number> = useMemo(() => {
 		const data = policeYearlyData.filter(item => item.year === nowYear);
 		const map = new Map<string, number>();
 		data.forEach(item => {
@@ -33,32 +33,31 @@ export const NationMainChart: React.FC<Props> = ({
 		return Object.fromEntries(map);
 	}, [policeYearlyData, nowYear]);
 
+	const datas: SingleChartType = {
+		chartLabels: cityLabels,
+		chartType: 'bar',
+		data: chartDatas,
+		percentOff: true,
+		digitOff: true,
+	};
+
 	return (
-		<Card
-			variant="outlined"
-			sx={{
-				overflow: 'auto',
+		<ChartBox
+			title={`${nowYear}년도 전국 지역별 범죄상황`}
+			cardStyle={{
 				margin: 2,
+				overflow: 'auto',
 				textAlign: 'center',
 			}}
-		>
-			<Typography variant="overline" mt={1}>
-				{nowYear}년도 전국 지역별 범죄상황
-			</Typography>
-			<Box
-				sx={{
-					minWidth: 700,
-					overflow: 'auto',
-				}}
-			>
-				<CustomChart
-					dataLabels={cityLabels}
-					chartLineData={chartDatas}
-					chartType="bar"
-					// isResponseSive={false}
-				/>
-			</Box>
-		</Card>
+			titleStyle={{
+				marginTop: 1,
+			}}
+			boxStyle={{
+				minWidth: 700,
+				overflow: 'auto',
+			}}
+			chartData={datas}
+		/>
 	);
 };
 NationMainChart.displayName = 'NationMainChart';

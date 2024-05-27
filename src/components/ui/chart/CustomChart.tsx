@@ -14,6 +14,7 @@ import { digit, percentage } from '@/utils/number';
 ChartJS.register(...registerables);
 
 interface CustomChartTypeBase {
+	className?: string;
 	chartType: ChartType;
 	chartLabels: string[];
 	chartName?: string | ReactNode;
@@ -27,6 +28,11 @@ interface CustomChartTypeBase {
 	height?: number | string;
 }
 
+export interface MultiChartDataType {
+	label: string;
+	data: number[];
+}
+
 /**
  * Only Accept 'doughnut', 'pie', 'polarArea'
  */
@@ -37,10 +43,7 @@ export interface SingleChartType extends CustomChartTypeBase {
  * Only Accept 'line', 'bar'
  */
 export interface MultiChartType extends CustomChartTypeBase {
-	data: {
-		label: string;
-		data: number[];
-	}[];
+	data: MultiChartDataType[];
 }
 
 // 조건부 타입을 사용하여 CustomChartType을 정의합니다.
@@ -51,9 +54,7 @@ type CustomChartType<T extends ChartType = ChartType> = T extends
 	? SingleChartType
 	: MultiChartType;
 
-type Props = {
-	className?: string;
-} & CustomChartType;
+type Props = CustomChartType;
 
 /**
  * Make Chart By Chart.js
@@ -167,7 +168,7 @@ export const CustomChart: React.FC<Props> = ({
 			};
 		} else {
 			return {
-				labels: chartLabels,
+				labels: customLabels,
 				datasets: data.map((item, index) => {
 					return {
 						...item,

@@ -1,9 +1,6 @@
-import { CustomChart } from '@/components/common/utils/CustomChart';
-import { SearchPoliceReseponse } from '@/models/api/open/police/SearchPoliceResponse';
 import { PoliceYearType } from '@/utils/openapi/police/data';
-import { Box, Card, Grid, Typography } from '@mui/material';
-import { useCallback, useMemo } from 'react';
-import styles from './NationChartList.module.scss';
+import { Grid } from '@mui/material';
+import { useMemo } from 'react';
 import { NationChartItem } from './NationChartItem';
 
 type Props = {

@@ -1,21 +1,23 @@
-import { PoliceYear } from '@/utils/openapi/police/police';
-import { Box, Divider, SelectChangeEvent, Stack } from '@mui/material';
+import {
+	Box,
+	Card,
+	Divider,
+	SelectChangeEvent,
+	Skeleton,
+	Stack,
+} from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import { RegionResponse } from '@/store/modules/common/region';
 import { SearchPoliceReseponse } from '@/models/api/open/police/SearchPoliceResponse';
 import { NationTitle } from './NationTitle';
-import {
-	PoliceCityMergedType,
-	PoliceYearRange,
-	PoliceYearType,
-} from '@/utils/openapi/police/data';
+import { PoliceYearType } from '@/utils/openapi/police/data';
 import { NationCardList } from './NationCardList';
 import { NationMainChart } from './NationMainChart';
 import { NationMainTable } from './NationMainTable';
 import { NationChartList } from './NationChatList';
 import { RegionItem } from '@/utils/openapi/region/region';
-import { SkeletonCustomCard } from '@/components/ui/card/SkeletonCustomCard';
 import { NationCardListSkeleton } from './NationCardList/NationCardListSkeleton';
+import styles from './NationWidePage.module.scss';
 
 type Props = {
 	nowYear: string;
@@ -99,7 +101,19 @@ export const NationWidePage: React.FC<Props> = ({
 						/>
 					</Stack>
 				) : (
-					<></>
+					<>
+						<Stack>
+							<Card className={styles.mChart} sx={{ margin: 1 }}>
+								<Skeleton className={styles.mChart} variant="rectangular" />
+							</Card>
+							<Card sx={{ margin: 1 }}>
+								<Skeleton className={styles.mChart} variant="rectangular" />
+							</Card>
+							<Card sx={{ margin: 1 }}>
+								<Skeleton className={styles.mChart} variant="rectangular" />
+							</Card>
+						</Stack>
+					</>
 				)}
 			</Stack>
 		</Box>

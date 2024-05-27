@@ -1,6 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { CustomChart } from './CustomChart';
+import { CustomChart, MultiChartDataType, MultiChartType } from './CustomChart';
 import { ChartType } from 'chart.js';
+import { ChartBox } from './chartBox';
 
 const ChartTypeKeys: ChartType[] = [
 	'bar',
@@ -12,7 +13,7 @@ const ChartTypeKeys: ChartType[] = [
 	'radar',
 	'scatter',
 ];
-
+const doughnutData = { a: 10, b: 20, c: 70 };
 const meta = {
 	component: CustomChart,
 	argTypes: {
@@ -47,12 +48,20 @@ const meta = {
 			},
 		},
 	},
+	args: {
+		chartLabels: Object.keys(doughnutData),
+		chartType: 'doughnut',
+		data: doughnutData,
+		width: 300,
+		height: 300,
+		labelPositon: 'left',
+		// digitOff: false,
+		// percentOff: false,
+	},
 } satisfies Meta<typeof CustomChart>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
-
-const doughnutData = { a: 10, b: 20, c: 70 };
 
 export const _CustomChart: Story = {
 	args: {
@@ -64,5 +73,53 @@ export const _CustomChart: Story = {
 		labelPositon: 'left',
 		// digitOff: false,
 		// percentOff: false,
+	},
+};
+
+// const lineData = [{'a':[1,2,3,4,5]}, {'b'}];
+const lineData: MultiChartDataType[] = [
+	{ label: 'a', data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+	{ label: 'b', data: [10, 9, 8, 7, 6, 5, 4, 3, 2, 1] },
+	{ label: 'c', data: [5, 3, 2, 1, 4, 6, 7, 8, 9, 10] },
+];
+const lineLabelData: string[] = ['a', 'b', 'c'];
+
+export const _CustomChartMulti: Story = {
+	args: {
+		chartLabels: lineLabelData,
+		chartType: 'line',
+		data: lineData,
+		width: 300,
+		height: 300,
+		labelPositon: 'left',
+		// digitOff: false,
+		// percentOff: false,
+	},
+};
+
+export const _CustomChartCard: Story = {
+	args: {
+		..._CustomChart.args,
+	},
+	render: args => {
+		return (
+			<ChartBox
+				title={`2022년도 범죄별 통계`}
+				cardStyle={{
+					margin: 2,
+					textAlign: 'center',
+				}}
+				titleStyle={{
+					margin: 2,
+					textAlign: 'center',
+				}}
+				boxStyle={{
+					height: '350px',
+					display: 'flex',
+					justifyContent: 'center',
+				}}
+				chartData={args}
+			/>
+		);
 	},
 };

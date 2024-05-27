@@ -86,9 +86,11 @@ export const NationCardList: React.FC<Props> = ({
 		let min = Number.MAX_SAFE_INTEGER;
 		keys.forEach((item, index) => {
 			const value = regionMergedDataCrime[item];
-			if (min > value) {
-				min = value;
-				crimeName = item;
+			if (!(value <= 0)) {
+				if (min > value) {
+					min = value;
+					crimeName = item;
+				}
 			}
 		});
 		return {
