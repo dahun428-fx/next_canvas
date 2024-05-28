@@ -1,0 +1,1 @@
+export { AreaFixCardList } from './AreaFixCardList';

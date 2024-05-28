@@ -1,4 +1,4 @@
-import { ViolentData } from '@/components/pages/Violent/ViolentMain';
+import { MultiChartDataType } from '@/components/ui/chart/CustomChart';
 import {
 	Police,
 	SearchPoliceReseponse,
@@ -107,7 +107,7 @@ export const mergeByCity = (data: Police[]) => {
 
 export const get_data_by_city = (data: Violence[], city: string) => {
 	const mergedData = mergeByCityWithYear(data);
-	let datas: ViolentData[] = [];
+	let datas: MultiChartDataType[] = [];
 	mergedData.forEach((item, index) => {
 		if (item.city === city) {
 			datas = [

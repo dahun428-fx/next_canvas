@@ -1,10 +1,4 @@
-import React, {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { NationWidePage as Presenter } from './NationWidePage';
 import {
 	loadOperations as violenceLoadOperation,
@@ -20,25 +14,12 @@ import {
 import { SearchPoliceReseponse } from '@/models/api/open/police/SearchPoliceResponse';
 import { useDispatch } from 'react-redux';
 import {
-	PoliceCityMergedType,
 	PoliceYearRange,
 	PoliceYearType,
-	police_total_data_by_crime,
 	police_total_data_by_year,
 } from '@/utils/openapi/police/data';
 import { SelectChangeEvent } from '@mui/material';
-import {
-	fetchDataOperation,
-	selectPolice,
-	updateItemsOperations,
-} from '@/store/modules/common/police';
 import { useSelector } from '@/store/hooks';
-import { SearchPoliceRequest } from '@/models/api/open/police/SearchPoliceRequest';
-import {
-	PoliceRequestPageNumberDefault,
-	PoliceRequestPerPageDefault,
-	searchPoliceList,
-} from '@/api/clients/services/open/police';
 
 type Props = {
 	regionItems: RegionResponse[];

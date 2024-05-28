@@ -1,4 +1,4 @@
-import { RegionState } from '@/store/modules/common/region';
+import { RegionResponse, RegionState } from '@/store/modules/common/region';
 import { ViolenceState } from '@/store/modules/common/violence';
 import {
 	Box,
@@ -18,7 +18,6 @@ import {
 	Typography,
 } from '@mui/material';
 import { useMemo, useState } from 'react';
-import { ViolentData } from '../Violent/ViolentMain';
 import {
 	get_data_by_city,
 	mergeByCityWithYear,
@@ -38,57 +37,58 @@ import {
 import { digit } from '@/utils/number';
 import styles from './AreaFixPage.module.scss';
 import { CustomCard } from '@/components/ui/card';
+import { MultiChartDataType } from '@/components/ui/chart/CustomChart';
+import { ChartBox } from '@/components/ui/chart/chartBox';
+import { RegionResourceYear } from '@/api/clients/services/open/region';
+import { AreaFixCardList } from './AreaFixCardList';
+import { AreaFixCategoryList } from './AreaFixCategoryList';
+import { AreaFixTable } from './AreaFixTable';
+import { AreaFixMainChart } from './AreaFixMainChart';
 
 type Props = {
-	violenceResponse: ViolenceState;
-	regionResponse: RegionState;
+	regionItems: RegionResponse[];
+	multiChartDataFromCity: (city: string) => MultiChartDataType[];
 };
 
 export const AreaFixPage: React.FC<Props> = ({
-	violenceResponse,
-	regionResponse,
+	regionItems,
+	multiChartDataFromCity,
 }) => {
 	const [selectedCityName, setSelectedCityName] = useState('서울');
 	const [selectedYear, setSelectedYear] = useState('2022');
 
 	const resourceCity = [...regionCityArray];
-	const dataYears = [...PoliceResourceYears];
+	const dataYears = [...RegionResourceYear];
 	const datasForMurderAndRobber = useMemo(() => {
-		let result: ViolentData[] = [];
+		let result: MultiChartDataType[] = [];
 
-		get_data_by_city(violenceResponse.items, selectedCityName).forEach(
-			(item, index) => {
-				if (item.label === '강도' || item.label === '살인') {
-					result.push(item);
-				}
+		multiChartDataFromCity(selectedCityName).forEach((item, index) => {
+			if (item.label === '강도' || item.label === '살인') {
+				result.push(item);
 			}
-		);
+		});
 		return result;
-	}, [violenceResponse.items, selectedCityName]);
+	}, [selectedCityName]);
 	const datasForViolenceAndStolen = useMemo(() => {
-		let result: ViolentData[] = [];
+		let result: MultiChartDataType[] = [];
 
-		get_data_by_city(violenceResponse.items, selectedCityName).forEach(
-			(item, index) => {
-				if (item.label === '절도' || item.label === '폭력') {
-					result.push(item);
-				}
+		multiChartDataFromCity(selectedCityName).forEach((item, index) => {
+			if (item.label === '절도' || item.label === '폭력') {
+				result.push(item);
 			}
-		);
+		});
 		return result;
-	}, [violenceResponse.items, selectedCityName]);
+	}, [selectedCityName]);
 	const datasForTotal = useMemo(() => {
-		let result: ViolentData[] = [];
+		let result: MultiChartDataType[] = [];
 
-		get_data_by_city(violenceResponse.items, selectedCityName).forEach(
-			(item, index) => {
-				if (item.label === '총합') {
-					result.push(item);
-				}
+		multiChartDataFromCity(selectedCityName).forEach((item, index) => {
+			if (item.label === '총합') {
+				result.push(item);
 			}
-		);
+		});
 		return result;
-	}, [violenceResponse.items, selectedCityName]);
+	}, [selectedCityName]);
 
 	const highestCrimeTotal: { [k: string]: number } = useMemo(() => {
 		let max = 0;
@@ -129,7 +129,7 @@ export const AreaFixPage: React.FC<Props> = ({
 	}, [datasForTotal]);
 
 	const selectedRegionData = useMemo(() => {
-		const getDataByYear = regionResponse.items.filter(item => {
+		const getDataByYear = regionItems.filter(item => {
 			if (item.year === selectedYear) {
 				return item.items;
 			}
@@ -149,19 +149,19 @@ export const AreaFixPage: React.FC<Props> = ({
 		})[0];
 
 		return getDataByCityAndYear;
-	}, [selectedYear, selectedCityName, regionResponse.items]);
+	}, [selectedYear, selectedCityName, regionItems]);
 
 	const regionDatas = useMemo(() => {
 		let result: RegionItem[] = [];
-		regionResponse.items.forEach(item => {
+		regionItems.forEach(item => {
 			if (item.year === selectedYear) {
 				result = item.items;
 			}
 		});
 		return result;
-	}, [selectedYear, regionResponse.items]);
+	}, [selectedYear, regionItems]);
 
-	const regionMergedDataCity = useMemo(() => {
+	const regionMergedDataCity: Record<string, number> = useMemo(() => {
 		return data_merge_by_city(regionDatas);
 	}, [regionDatas, selectedYear]);
 
@@ -196,8 +196,6 @@ export const AreaFixPage: React.FC<Props> = ({
 					<Typography variant="h6">
 						<Select
 							variant="standard"
-							// select
-
 							value={selectedCityName}
 							defaultValue={selectedCityName}
 							sx={{ height: '30px', width: '12ch', textAlign: 'center' }}
@@ -217,236 +215,39 @@ export const AreaFixPage: React.FC<Props> = ({
 					</Typography>
 				</Box>
 				<Divider />
-				<Grid container>
-					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard
-							type="category"
-							year={selectedYear}
-							crimeData={regionMergedDataCity}
-							selectedCity={selectedCityName}
-						/>
-					</Grid>
-					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard
-							type="MaxMinYear"
-							highestYearData={highestCrimeTotal}
-							lowestYearData={lowestCrimeTotal}
-							selectedCity={selectedCityName}
-						/>
-					</Grid>
-					<Grid item xs={12} md={4} sm={4}>
-						<CustomCard
-							type="figure"
-							year={selectedYear}
-							crimeData={regionMergedDataCrimeCity}
-						/>
-					</Grid>
-				</Grid>
+				<AreaFixCardList
+					{...{
+						datasForTotal,
+						regionDatas,
+						selectedCityName,
+						selectedYear,
+					}}
+				/>
 				<Stack>
-					<Card
-						variant="outlined"
-						sx={{
-							overflow: 'auto',
-							margin: 2,
-							textAlign: 'center',
+					<AreaFixMainChart
+						{...{
+							datasForMurderAndRobber,
+							datasForViolenceAndStolen,
+							selectedCityName,
 						}}
-					>
-						<Typography mt={2}>
-							{`${selectedCityName} 지역 연도별 범죄 추이`}
-						</Typography>
-						<Stack direction={'row'} mt={2}>
-							<Box
-								sx={{
-									minWidth: 700,
-									overflow: 'auto',
-								}}
-							>
-								<CustomChart
-									dataLabels={dataYears}
-									chartLineDataArray={datasForMurderAndRobber}
-									colors={['#87CEEB', '#E6A4B4']}
-									chartType="line"
-									labelPositon="bottom"
-									// isResponseSive={false}
-								/>
-							</Box>
-							<Divider variant="middle" flexItem />
-							<Box
-								sx={{
-									minWidth: 700,
-									overflow: 'auto',
-								}}
-							>
-								<CustomChart
-									dataLabels={dataYears}
-									chartLineDataArray={datasForViolenceAndStolen}
-									chartType="line"
-									colors={['#A0D8EF', '#F498AD']}
-									labelPositon="bottom"
-									// isResponseSive={false}
-								/>
-							</Box>
-						</Stack>
-					</Card>
-					<Card variant="outlined" sx={{ margin: 2, textAlign: 'center' }}>
-						<TableContainer>
-							<Table sx={{ minWidth: 700 }} aria-label="customized table">
-								<TableHead>
-									<TableRow>
-										<TableCell></TableCell>
-										{PoliceResourceYears.map((item, index) => {
-											return <TableCell key={`${index}`}>{item}</TableCell>;
-										})}
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{datasForMurderAndRobber.map((item, index) => {
-										const data = item.data;
-										return (
-											<TableRow key={index}>
-												<TableCell>{item.label}</TableCell>
-												{data.map((_data, _index) => {
-													return (
-														<TableCell key={`${index}_${index}`}>
-															{digit(_data)}
-														</TableCell>
-													);
-												})}
-											</TableRow>
-										);
-									})}
-									{datasForViolenceAndStolen.map((item, index) => {
-										const data = item.data;
-										return (
-											<TableRow key={index}>
-												<TableCell>{item.label}</TableCell>
-												{data.map((_data, _index) => {
-													return (
-														<TableCell key={`${index}_${index}`}>
-															{digit(_data)}
-														</TableCell>
-													);
-												})}
-											</TableRow>
-										);
-									})}
-									{datasForTotal.map((item, index) => {
-										const data = item.data;
-										return (
-											<TableRow key={index}>
-												<TableCell>{item.label}</TableCell>
-												{data.map((_data, _index) => {
-													return (
-														<TableCell key={`${index}_${index}`}>
-															{digit(_data)}
-														</TableCell>
-													);
-												})}
-											</TableRow>
-										);
-									})}
-								</TableBody>
-							</Table>
-						</TableContainer>
-					</Card>
-					<Box sx={{ padding: 1, margin: 1 }}>
-						<Select
-							variant="standard"
-							// select
-
-							value={selectedYear}
-							defaultValue={selectedYear}
-							sx={{ height: '30px', width: '12ch', textAlign: 'center' }}
-							onChange={(event: SelectChangeEvent) => {
-								setSelectedYear(event.target.value as string);
+					/>
+					<AreaFixTable
+						{...{
+							datasForMurderAndRobber,
+							datasForTotal,
+							datasForViolenceAndStolen,
+						}}
+					/>
+					{selectedRegionData && (
+						<AreaFixCategoryList
+							{...{
+								selectedCityName,
+								selectedRegionData,
+								selectedYear,
+								setSelectedYear,
 							}}
-						>
-							{[...dataYears].reverse().map(item => {
-								return (
-									<MenuItem key={item} value={item}>
-										{item}
-									</MenuItem>
-								);
-							})}
-						</Select>
-					</Box>
-					<Divider flexItem />
-					<Grid container>
-						<Grid item xs={12} sm={6} md={6}>
-							<Card variant="outlined" sx={{ margin: 2, textAlign: 'center' }}>
-								<Typography
-									variant="overline"
-									sx={{ margin: 2, textAlign: 'center' }}
-								>
-									{`${selectedYear} 년도 ${selectedCityName} 지역 범죄 대분류`}
-								</Typography>
-								<Box
-									sx={{
-										height: '700px',
-										display: 'flex',
-										justifyContent: 'center',
-									}}
-								>
-									<CustomChart
-										className={styles.areaChar}
-										dataLabels={makeDoughnutLabels(
-											changeToChartData(selectedRegionData?.category),
-											selectedRegionData?.totalCount
-										)}
-										chartDoughnutData={changeToChartData(
-											selectedRegionData?.category
-										)}
-										chartType={'doughnut'}
-										labelPositon="left"
-									/>
-								</Box>
-							</Card>
-						</Grid>
-						<Grid item xs={12} sm={6} md={6}>
-							<Grid container>
-								{Object.keys(CrimeMainCategory).map((item, index) => {
-									const data = selectedRegionData;
-									const title = `${data.year} 년도 ${data.city_name} 지역 범죄 중분류 차트 - ${item}`;
-									const adjustData = changeToChartDataSub(data.category, item);
-									let totalcount = Object.values(adjustData).reduce(
-										(prev, curr) => {
-											return curr + prev;
-										},
-										0
-									);
-									return (
-										<Grid key={index} item xs={6} sm={6} md={6}>
-											<Card
-												variant="outlined"
-												sx={{ margin: 2, textAlign: 'center' }}
-											>
-												<Typography
-													variant="overline"
-													sx={{ margin: 2, textAlign: 'center' }}
-												>
-													{title}
-												</Typography>
-												<Box
-													sx={{
-														minHeight: '350px',
-														display: 'flex',
-														justifyContent: 'center',
-													}}
-												>
-													<CustomChart
-														dataLabels={makeDoughnutLabels(adjustData)}
-														chartDoughnutData={adjustData}
-														chartType={'doughnut'}
-														labelPositon="left"
-													/>
-												</Box>
-											</Card>
-										</Grid>
-									);
-								})}
-							</Grid>
-						</Grid>
-					</Grid>
+						/>
+					)}
 				</Stack>
 			</Stack>
 		</Box>

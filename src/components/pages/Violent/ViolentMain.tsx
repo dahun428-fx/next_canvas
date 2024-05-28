@@ -9,11 +9,7 @@ import { SyntheticEvent, useMemo, useState } from 'react';
 import { Box, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { ViolentParts } from './ViolentParts/ViolentParts';
-
-export interface ViolentData {
-	label: string;
-	data: number[];
-}
+import { MultiChartDataType } from '@/components/ui/chart/CustomChart';
 
 type Props = {
 	violenceResponse: ViolenceState;
@@ -59,7 +55,7 @@ export const ViolentMain: React.FC<Props> = ({ violenceResponse }) => {
 	}, [violenceResponse]);
 
 	const datasTotal = useMemo(() => {
-		let result: ViolentData[] = [];
+		let result: MultiChartDataType[] = [];
 		mergeByCityWithYear(violenceResponse.items).forEach((item, index) => {
 			if (checkedCityNamesWithTotal.includes(item.city)) {
 				result.push({ label: item.city, data: item.total });
@@ -70,7 +66,7 @@ export const ViolentMain: React.FC<Props> = ({ violenceResponse }) => {
 	}, [violenceResponse, checkedCityNamesWithTotal]);
 
 	const datasForRobber = useMemo(() => {
-		let result: ViolentData[] = [];
+		let result: MultiChartDataType[] = [];
 		mergeByCityWithYear(violenceResponse.items).forEach((item, index) => {
 			if (checkedCityNamesWithRobber.includes(item.city)) {
 				result.push({ label: item.city, data: item.강도 });
@@ -80,7 +76,7 @@ export const ViolentMain: React.FC<Props> = ({ violenceResponse }) => {
 		return result;
 	}, [violenceResponse, checkedCityNamesWithRobber]);
 	const datasForMurder = useMemo(() => {
-		let result: ViolentData[] = [];
+		let result: MultiChartDataType[] = [];
 		mergeByCityWithYear(violenceResponse.items).forEach((item, index) => {
 			if (checkedCityNamesWithMurder.includes(item.city)) {
 				result.push({ label: item.city, data: item.살인 });
@@ -90,7 +86,7 @@ export const ViolentMain: React.FC<Props> = ({ violenceResponse }) => {
 		return result;
 	}, [violenceResponse, checkedCityNamesWithMurder]);
 	const datasForTheft = useMemo(() => {
-		let result: ViolentData[] = [];
+		let result: MultiChartDataType[] = [];
 		mergeByCityWithYear(violenceResponse.items).forEach((item, index) => {
 			if (checkedCityNamesWithTheft.includes(item.city)) {
 				result.push({ label: item.city, data: item.절도 });
@@ -100,7 +96,7 @@ export const ViolentMain: React.FC<Props> = ({ violenceResponse }) => {
 		return result;
 	}, [violenceResponse, checkedCityNamesWithTheft]);
 	const datasForViolence = useMemo(() => {
-		let result: ViolentData[] = [];
+		let result: MultiChartDataType[] = [];
 		mergeByCityWithYear(violenceResponse.items).forEach((item, index) => {
 			if (checkedCityNamesWithViolence.includes(item.city)) {
 				result.push({ label: item.city, data: item.폭력 });

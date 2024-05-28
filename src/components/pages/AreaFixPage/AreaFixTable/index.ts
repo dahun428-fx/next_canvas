@@ -1,0 +1,1 @@
+export { AreaFixTable } from './AreaFixTable';
