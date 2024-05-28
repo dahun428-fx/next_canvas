@@ -1,14 +1,13 @@
-import { VerticalBar } from '@/components/ui/charts/verticalbar';
-import { ViolentData } from '../ViolentMain';
 import { ViolentChartsModalButton } from '../ViolentChartsModalButton';
 import styles from './ViolentCharts.module.scss';
 import { useSelector } from '@/store/hooks';
 import { selectChartType } from '@/store/modules/common/violence';
 import { Box } from '@mui/material';
 import { CustomChart } from '@/components/common/utils/CustomChart';
+import { MultiChartDataType } from '@/components/ui/chart/CustomChart';
 
 type Props = {
-	dataObject: ViolentData[];
+	dataObject: MultiChartDataType[];
 	title: string;
 	labels: string[];
 };

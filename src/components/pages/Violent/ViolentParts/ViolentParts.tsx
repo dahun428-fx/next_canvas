@@ -2,16 +2,16 @@ import { ViolenceState } from '@/store/modules/common/violence';
 import { Grid } from '@mui/material';
 import { ViolentTable } from '../ViolentTable';
 import { SwitchBasic } from '@/components/ui/list/switch';
-import { ViolentData } from '../ViolentMain';
 import styles from '../ViolentMain.module.scss';
 import { ViolentCharts } from '../ViolentCharts';
+import { MultiChartDataType } from '@/components/ui/chart/CustomChart';
 
 type Props = {
 	violenceResponse: ViolenceState;
 	cityNames: string[];
 	title: string;
 	labels: string[];
-	datas: ViolentData[];
+	datas: MultiChartDataType[];
 	checkedCityName?: string[];
 	changeCheckedCityNames: (items: string[]) => void;
 };

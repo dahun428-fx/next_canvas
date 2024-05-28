@@ -1,9 +1,9 @@
 import { TableBasic } from '@/components/ui/tables/tableBasic';
 import { useMemo } from 'react';
-import { ViolentData } from '../ViolentMain';
+import { MultiChartDataType } from '@/components/ui/chart/CustomChart';
 
 type Props = {
-	dataObject: ViolentData[];
+	dataObject: MultiChartDataType[];
 	tableTitle: string;
 	labels: string[];
 };

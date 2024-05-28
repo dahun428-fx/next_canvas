@@ -22,11 +22,11 @@ import {
 } from 'chart.js';
 import Zoom from 'chartjs-plugin-zoom';
 import styles from './VerticalBar.module.scss';
-import { ViolentData } from '@/components/pages/Violent/ViolentMain';
 import { policeChartColor } from '@/utils/openapi/police/police';
 import dynamic from 'next/dynamic';
 import { Button, ButtonGroup, Grid } from '@mui/material';
 import { Chart } from 'react-chartjs-2';
+import { MultiChartDataType } from '../../chart/CustomChart';
 
 ChartJS.register(
 	CategoryScale,
@@ -43,7 +43,7 @@ ChartJS.register(
 
 type Props = {
 	className?: string;
-	dataObject: ViolentData[];
+	dataObject: MultiChartDataType[];
 	chartName?: string;
 	colors?: string[];
 	labels: string[];
@@ -76,7 +76,7 @@ export const VerticalBar: React.FC<Props> = ({
 	}, []);
 
 	const chartRef = useRef<ChartJS | null>(null);
-	const chartDatas: ViolentData[] = dataObject;
+	const chartDatas: MultiChartDataType[] = dataObject;
 
 	const defaultColor = useMemo(() => {
 		if (colors && colors.length === labels.length) {

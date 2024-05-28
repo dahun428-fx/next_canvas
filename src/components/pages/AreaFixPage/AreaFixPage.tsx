@@ -1,44 +1,16 @@
-import { RegionResponse, RegionState } from '@/store/modules/common/region';
-import { ViolenceState } from '@/store/modules/common/violence';
+import { RegionResponse } from '@/store/modules/common/region';
 import {
 	Box,
-	Card,
 	Divider,
-	Grid,
 	MenuItem,
 	Select,
 	SelectChangeEvent,
 	Stack,
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableHead,
-	TableRow,
 	Typography,
 } from '@mui/material';
 import { useMemo, useState } from 'react';
-import {
-	get_data_by_city,
-	mergeByCityWithYear,
-} from '@/utils/openapi/police/police';
-import { CustomChart } from '@/components/common/utils/CustomChart';
-import { PoliceResourceYears } from '@/api/clients/services/open/police';
-import {
-	CrimeMainCategory,
-	RegionItem,
-	changeToChartData,
-	changeToChartDataSub,
-	data_merge_by_cirme_city,
-	data_merge_by_city,
-	makeDoughnutLabels,
-	regionCityArray,
-} from '@/utils/openapi/region/region';
-import { digit } from '@/utils/number';
-import styles from './AreaFixPage.module.scss';
-import { CustomCard } from '@/components/ui/card';
+import { RegionItem, regionCityArray } from '@/utils/openapi/region/region';
 import { MultiChartDataType } from '@/components/ui/chart/CustomChart';
-import { ChartBox } from '@/components/ui/chart/chartBox';
 import { RegionResourceYear } from '@/api/clients/services/open/region';
 import { AreaFixCardList } from './AreaFixCardList';
 import { AreaFixCategoryList } from './AreaFixCategoryList';
@@ -58,7 +30,6 @@ export const AreaFixPage: React.FC<Props> = ({
 	const [selectedYear, setSelectedYear] = useState('2022');
 
 	const resourceCity = [...regionCityArray];
-	const dataYears = [...RegionResourceYear];
 	const datasForMurderAndRobber = useMemo(() => {
 		let result: MultiChartDataType[] = [];
 
@@ -89,44 +60,6 @@ export const AreaFixPage: React.FC<Props> = ({
 		});
 		return result;
 	}, [selectedCityName]);
-
-	const highestCrimeTotal: { [k: string]: number } = useMemo(() => {
-		let max = 0;
-		let maxIdx = 0;
-		if (datasForTotal.length > 0) {
-			datasForTotal[0].data.forEach((item, index) => {
-				if (max < item) {
-					max = item;
-					maxIdx = index;
-				}
-			});
-		}
-		const year = dataYears[maxIdx] ?? 0;
-		const data = datasForTotal[0]?.data[maxIdx] ?? 0;
-
-		return {
-			[year]: data,
-		};
-	}, [datasForTotal]);
-
-	const lowestCrimeTotal: { [k: string]: number } = useMemo(() => {
-		let min = Number.MAX_SAFE_INTEGER;
-		let minIdx = 0;
-		if (datasForTotal.length > 0) {
-			datasForTotal[0].data.forEach((item, index) => {
-				if (min > item) {
-					min = item;
-					minIdx = index;
-				}
-			});
-		}
-		const year = dataYears[minIdx] ?? 0;
-		const data = datasForTotal[0]?.data[minIdx] ?? 0;
-
-		return {
-			[year]: data,
-		};
-	}, [datasForTotal]);
 
 	const selectedRegionData = useMemo(() => {
 		const getDataByYear = regionItems.filter(item => {
@@ -160,14 +93,6 @@ export const AreaFixPage: React.FC<Props> = ({
 		});
 		return result;
 	}, [selectedYear, regionItems]);
-
-	const regionMergedDataCity: Record<string, number> = useMemo(() => {
-		return data_merge_by_city(regionDatas);
-	}, [regionDatas, selectedYear]);
-
-	const regionMergedDataCrimeCity = useMemo(() => {
-		return data_merge_by_cirme_city(regionDatas, selectedCityName);
-	}, [regionDatas, selectedYear, selectedCityName]);
 
 	if (!selectedRegionData) {
 		return null;
