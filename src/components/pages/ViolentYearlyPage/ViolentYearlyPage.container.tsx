@@ -35,7 +35,7 @@ export const ViolentYearlyPage: React.FC<Props> = () => {
 
 	useEffect(() => {
 		if (!initailized.current && violenceResponse.items.length < 1) {
-			loadOperations(dispatch)();
+			loadOperations(dispatch)('2022');
 			initailized.current = true;
 		}
 	}, [dispatch, initailized.current, violenceResponse.items.length]);
