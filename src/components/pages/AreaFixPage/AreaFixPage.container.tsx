@@ -1,12 +1,7 @@
-import { useSelector } from '@/store/hooks';
 import { AreaFixPage as Presenter } from './AreaFixPage';
-import {
-	selectViolence,
-	setOperations as violenceSetOperations,
-} from '@/store/modules/common/violence';
+import { setOperations as violenceSetOperations } from '@/store/modules/common/violence';
 import {
 	RegionResponse,
-	selectRegion,
 	setOperations as regionSetOperations,
 } from '@/store/modules/common/region';
 import { useCallback, useEffect, useRef } from 'react';
@@ -21,14 +16,14 @@ import { MultiChartDataType } from '@/components/ui/chart/CustomChart';
 type Props = {
 	regionItems: RegionResponse[];
 	violenceItems: SearchPoliceReseponse[];
-	policeYearlyData: PoliceYearType[];
+	// policeYearlyData: PoliceYearType[];
 	policeCrimeData: PoliceCityMergedType[];
 	initialYear: string;
 };
 
 export const AreaFixPage: React.FC<Props> = ({
 	initialYear,
-	policeYearlyData,
+	// policeYearlyData,
 	regionItems,
 	violenceItems,
 	policeCrimeData,

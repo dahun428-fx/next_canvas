@@ -16,21 +16,46 @@ import {
 	makeDoughnutLabels,
 } from '@/utils/openapi/region/region';
 import { RegionResourceYear } from '@/api/clients/services/open/region';
+import { RegionResponse } from '@/store/modules/common/region';
+import { useMemo } from 'react';
 
 type Props = {
 	selectedYear: string;
 	selectedCityName: string;
-	selectedRegionData: RegionItem | null;
+	regionItems: RegionResponse[];
 	setSelectedYear: (value: string) => void;
 };
 
 export const AreaFixCategoryList: React.FC<Props> = ({
 	selectedCityName,
-	selectedRegionData,
+	regionItems,
 	selectedYear,
 	setSelectedYear,
 }) => {
 	const dataYears = [...RegionResourceYear];
+
+	const selectedRegionData = useMemo(() => {
+		const getDataByYear = regionItems.filter(item => {
+			if (item.year === selectedYear) {
+				return item.items;
+			}
+		})[0];
+		if (
+			!getDataByYear ||
+			!getDataByYear.items ||
+			getDataByYear.items.length < 1
+		) {
+			return null;
+		}
+
+		const getDataByCityAndYear = getDataByYear.items.filter(item => {
+			if (selectedCityName.includes(item.city_name)) {
+				return item;
+			}
+		})[0];
+
+		return getDataByCityAndYear;
+	}, [selectedYear, selectedCityName, regionItems]);
 
 	if (!selectedRegionData) {
 		return null;

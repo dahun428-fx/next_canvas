@@ -1,6 +1,7 @@
 import { RegionResourceYear } from '@/api/clients/services/open/region';
 import { CustomCard } from '@/components/ui/card';
 import { MultiChartDataType } from '@/components/ui/chart/CustomChart';
+import { RegionResponse } from '@/store/modules/common/region';
 import {
 	RegionItem,
 	data_merge_by_cirme_city,
@@ -12,17 +13,27 @@ import { useMemo } from 'react';
 type Props = {
 	selectedYear: string;
 	selectedCityName: string;
-	regionDatas: RegionItem[];
+	regionItems: RegionResponse[];
 	datasForTotal: MultiChartDataType[];
 };
 
 export const AreaFixCardList: React.FC<Props> = ({
-	regionDatas,
+	regionItems,
 	selectedCityName,
 	selectedYear,
 	datasForTotal,
 }) => {
 	const dataYears = [...RegionResourceYear];
+
+	const regionDatas = useMemo(() => {
+		let result: RegionItem[] = [];
+		regionItems.forEach(item => {
+			if (item.year === selectedYear) {
+				result = item.items;
+			}
+		});
+		return result;
+	}, [selectedYear, regionItems]);
 
 	const regionMergedDataCity: Record<string, number> = useMemo(() => {
 		return data_merge_by_city(regionDatas);

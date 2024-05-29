@@ -61,42 +61,6 @@ export const AreaFixPage: React.FC<Props> = ({
 		return result;
 	}, [selectedCityName]);
 
-	const selectedRegionData = useMemo(() => {
-		const getDataByYear = regionItems.filter(item => {
-			if (item.year === selectedYear) {
-				return item.items;
-			}
-		})[0];
-		if (
-			!getDataByYear ||
-			!getDataByYear.items ||
-			getDataByYear.items.length < 1
-		) {
-			return null;
-		}
-
-		const getDataByCityAndYear = getDataByYear.items.filter(item => {
-			if (selectedCityName.includes(item.city_name)) {
-				return item;
-			}
-		})[0];
-
-		return getDataByCityAndYear;
-	}, [selectedYear, selectedCityName, regionItems]);
-
-	const regionDatas = useMemo(() => {
-		let result: RegionItem[] = [];
-		regionItems.forEach(item => {
-			if (item.year === selectedYear) {
-				result = item.items;
-			}
-		});
-		return result;
-	}, [selectedYear, regionItems]);
-
-	if (!selectedRegionData) {
-		return null;
-	}
 	/**
 	 *
 	 *
@@ -143,7 +107,7 @@ export const AreaFixPage: React.FC<Props> = ({
 				<AreaFixCardList
 					{...{
 						datasForTotal,
-						regionDatas,
+						regionItems,
 						selectedCityName,
 						selectedYear,
 					}}
@@ -163,16 +127,14 @@ export const AreaFixPage: React.FC<Props> = ({
 							datasForViolenceAndStolen,
 						}}
 					/>
-					{selectedRegionData && (
-						<AreaFixCategoryList
-							{...{
-								selectedCityName,
-								selectedRegionData,
-								selectedYear,
-								setSelectedYear,
-							}}
-						/>
-					)}
+					<AreaFixCategoryList
+						{...{
+							selectedCityName,
+							selectedYear,
+							regionItems,
+							setSelectedYear,
+						}}
+					/>
 				</Stack>
 			</Stack>
 		</Box>

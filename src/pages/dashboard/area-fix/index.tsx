@@ -11,31 +11,21 @@ import {
 } from '@/api/clients/services/open/region';
 import { SearchPoliceReseponse } from '@/models/api/open/police/SearchPoliceResponse';
 import { SearchRegionResponse } from '@/models/api/open/region/SearchRegionResponse';
-import { useSelector } from '@/store/hooks';
-import {
-	RegionResponse,
-	loadOperations,
-	selectRegionItems,
-} from '@/store/modules/common/region';
+import { RegionResponse } from '@/store/modules/common/region';
 import {
 	PoliceCityMergedType,
 	PoliceYearType,
 	police_total_data_by_crime,
 	police_total_data_by_year,
 } from '@/utils/openapi/police/data';
-import {
-	RegionItem,
-	changeToRegionalData,
-} from '@/utils/openapi/region/region';
+import { changeToRegionalData } from '@/utils/openapi/region/region';
 import { GetStaticProps, NextPage } from 'next';
 import dynamic from 'next/dynamic';
-import { useEffect, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
 
 type Props = {
 	regionItems: RegionResponse[];
 	violenceItems: SearchPoliceReseponse[];
-	policeYearlyData: PoliceYearType[];
+	// policeYearlyData: PoliceYearType[];
 	policeCrimeData: PoliceCityMergedType[];
 	initialYear: string;
 };
@@ -49,7 +39,7 @@ const AreaFixPage = dynamic<Props>(
 const AreaFix: NextPage<Props> = ({
 	initialYear,
 	regionItems,
-	policeYearlyData,
+	// policeYearlyData,
 	violenceItems,
 	policeCrimeData,
 }) => {
@@ -58,7 +48,7 @@ const AreaFix: NextPage<Props> = ({
 			{...{
 				initialYear,
 				regionItems,
-				policeYearlyData,
+				// policeYearlyData,
 				violenceItems,
 				policeCrimeData,
 			}}
@@ -137,14 +127,14 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 			}
 		);
 
-		const policeYearlyData = police_total_data_by_year(violenceItems);
+		// const policeYearlyData = police_total_data_by_year(violenceItems);
 		const policeCrimeData = police_total_data_by_crime(violenceItems);
 
 		return {
 			props: {
 				regionItems,
 				violenceItems,
-				policeYearlyData,
+				// policeYearlyData,
 				policeCrimeData,
 				initialYear: firstInitialYear,
 			},
