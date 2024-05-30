@@ -97,9 +97,9 @@ export const MainLayout: React.FC = () => {
 	return (
 		<MainLayoutProvider>
 			<Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            {/* header */}
-            {/* <AppBar
+				<CssBaseline />
+				{/* header */}
+				{/* <AppBar
                 enableColorOnDark
                 position="fixed"
                 color="inherit"
@@ -114,17 +114,17 @@ export const MainLayout: React.FC = () => {
                 </Toolbar>
             </AppBar> */}
 
-            {/* drawer */}
-            <Sidebar matchDownMd={matchDownMd}   />
+				{/* drawer */}
+				<Sidebar matchDownMd={matchDownMd} />
 
-            {/* main content */}
-            {/* <Main theme={theme} open={leftDrawerOpened}>
-                {/* breadcrumb */}
-                {/* <Breadcrumbs separator={IconChevronRight} navigation={navigation} icon title rightAlign /> */}
-                {/* <Outlet /> */}
-            {/* </Main> */} */}
-            {/* <Customization /> */}
-        </Box>
+				{/* main content */}
+				{/* <Main theme={theme} open={leftDrawerOpened}> */}
+				{/* breadcrumb */}
+				{/* <Breadcrumbs separator={IconChevronRight} navigation={navigation} icon title rightAlign /> */}
+				{/* <Outlet /> */}
+				{/* </Main> */}
+				{/* <Customization /> */}
+			</Box>
 		</MainLayoutProvider>
 	);
 };
