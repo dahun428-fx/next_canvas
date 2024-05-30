@@ -9,16 +9,20 @@ import { BrowserView, MobileView } from 'react-device-detect';
 
 import { LogoSection } from '../LogoSection';
 import { drawerWidth } from '../constant';
+import { useContext } from 'react';
+import { MainLayoutContext } from '../MainLayout';
 
 type Props = {
-	drawerOpen: boolean;
-	drawerToggle: () => void;
+	matchDownMd: boolean;
+	// drawerOpen: boolean;
 };
 
-export const Sidebar: React.FC<Props> = ({ drawerOpen, drawerToggle }) => {
+export const Sidebar: React.FC<Props> = ({ matchDownMd }) => {
 	const theme = useTheme();
 	const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
 
+	const { onOpen, onClose, opened } = useContext(MainLayoutContext);
+	const drawerOpen = !matchDownMd ? opened : !opened;
 	const drawer = (
 		<>
 			<Box sx={{ display: { xs: 'block', md: 'none' } }}>
@@ -64,7 +68,7 @@ export const Sidebar: React.FC<Props> = ({ drawerOpen, drawerToggle }) => {
 				variant={matchUpMd ? 'persistent' : 'temporary'}
 				anchor="left"
 				open={drawerOpen}
-				onClose={drawerToggle}
+				onClose={onClose}
 				sx={{
 					'& .MuiDrawer-paper': {
 						width: drawerWidth,

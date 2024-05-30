@@ -11,6 +11,13 @@ import {
 import { MenuItem } from '../types';
 // assets
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import { LegacyRef, forwardRef, useContext, useEffect } from 'react';
+import Link from 'next/link';
+import {
+	MainLayoutContext,
+	MainLayoutDispatchContext,
+} from '../../../MainLayout';
+import { borderRadius } from '../../../constant';
 
 type Props = {
 	item: MenuItem;
@@ -18,6 +25,10 @@ type Props = {
 };
 
 export const NavItem: React.FC<Props> = ({ item, level }) => {
+	const { isOpen, opened, onClose, onOpen, onToggle } =
+		useContext(MainLayoutContext);
+	// const {  } = useContext(MainLayoutDispatchContext);
+
 	const theme = useTheme();
 	// const dispatch = useDispatch();
 	// const customization = useSelector((state) => state.customization);
@@ -28,11 +39,15 @@ export const NavItem: React.FC<Props> = ({ item, level }) => {
 		Icon && <Icon stroke={1.5} size="1.3rem" />
 	) : (
 		<FiberManualRecordIcon
+			// sx={{
+			// 	width:
+			// 		customization.isOpen.findIndex(id => id === item?.id) > -1 ? 8 : 6,
+			// 	height:
+			// 		customization.isOpen.findIndex(id => id === item?.id) > -1 ? 8 : 6,
+			// }}
 			sx={{
-				width:
-					customization.isOpen.findIndex(id => id === item?.id) > -1 ? 8 : 6,
-				height:
-					customization.isOpen.findIndex(id => id === item?.id) > -1 ? 8 : 6,
+				width: isOpen.findIndex(id => id === item?.id) > -1 ? 8 : 6,
+				height: isOpen.findIndex(id => id === item?.id) > -1 ? 8 : 6,
 			}}
 			fontSize={level > 0 ? 'inherit' : 'medium'}
 		/>
@@ -44,17 +59,36 @@ export const NavItem: React.FC<Props> = ({ item, level }) => {
 	}
 
 	let listItemProps = {
-		component: forwardRef((props, ref) => (
-			<Link ref={ref} {...props} to={item.url} target={itemTarget} />
-		)),
+		// component: forwardRef(
+		// 	(props, ref: LegacyRef<HTMLAnchorElement> | undefined) => (
+		// 		<Link ref={ref} {...props} target={itemTarget} />
+		// 	)
+		// ),
+		component: forwardRef(
+			(props, ref: LegacyRef<HTMLAnchorElement> | undefined) => {
+				if (item.external) {
+					return (
+						<a ref={ref} href={item.url} target={itemTarget}>
+							{item.title}
+						</a>
+					);
+				}
+				return <Link ref={ref} href={`${item.url}`} target={itemTarget} />;
+			}
+		),
 	};
-	if (item?.external) {
-		listItemProps = { component: 'a', href: item.url, target: itemTarget };
-	}
+	// if (item?.external) {
+	// 	// listItemProps = { component: 'a', href: item.url, target: itemTarget };
+	// 	listItemProps = forwardRef(
+	//         	(props, ref: LegacyRef<HTMLAnchorElement> | undefined) => (
+	//         		<Link ref={ref} {...props} target={itemTarget} />
+	//         	)};
+	// 	// listItemProps = { component: <a href={item.url} target={itemTarget}></a>, href: item.url, target: itemTarget };
+	// }
 
-	const itemHandler = id => {
-		dispatch({ type: MENU_OPEN, id });
-		if (matchesSM) dispatch({ type: SET_MENU, opened: false });
+	const itemHandler = (id?: string) => {
+		onOpen(id ?? '');
+		if (matchesSM) onClose();
 	};
 
 	// active menu item on page load
@@ -64,7 +98,8 @@ export const NavItem: React.FC<Props> = ({ item, level }) => {
 			.split('/')
 			.findIndex(id => id === item.id);
 		if (currentIndex > -1) {
-			dispatch({ type: MENU_OPEN, id: item.id });
+			// dispatch({ type: MENU_OPEN, id: item.id });
+			onOpen(item.id ?? '');
 		}
 		// eslint-disable-next-line
 	}, []);
@@ -72,16 +107,16 @@ export const NavItem: React.FC<Props> = ({ item, level }) => {
 	return (
 		<ListItemButton
 			{...listItemProps}
-			disabled={item.disabled}
+			disabled={item?.disabled}
 			sx={{
-				borderRadius: `${customization.borderRadius}px`,
+				borderRadius: `${borderRadius}px`,
 				mb: 0.5,
 				alignItems: 'flex-start',
 				backgroundColor: level > 1 ? 'transparent !important' : 'inherit',
 				py: level > 1 ? 1 : 1.25,
 				pl: `${level * 24}px`,
 			}}
-			selected={customization.isOpen.findIndex(id => id === item.id) > -1}
+			selected={isOpen.findIndex(id => id === item.id) > -1}
 			onClick={() => itemHandler(item.id)}
 		>
 			<ListItemIcon sx={{ my: 'auto', minWidth: !item?.icon ? 18 : 36 }}>
@@ -91,9 +126,7 @@ export const NavItem: React.FC<Props> = ({ item, level }) => {
 				primary={
 					<Typography
 						variant={
-							customization.isOpen.findIndex(id => id === item.id) > -1
-								? 'h5'
-								: 'body1'
+							isOpen.findIndex(id => id === item.id) > -1 ? 'h5' : 'body1'
 						}
 						color="inherit"
 					>
@@ -104,7 +137,7 @@ export const NavItem: React.FC<Props> = ({ item, level }) => {
 					item.caption && (
 						<Typography
 							variant="caption"
-							sx={{ ...theme.typography.subMenuCaption }}
+							// sx={{ ...theme.typography.subMenuCaption }}
 							display="block"
 							gutterBottom
 						>
