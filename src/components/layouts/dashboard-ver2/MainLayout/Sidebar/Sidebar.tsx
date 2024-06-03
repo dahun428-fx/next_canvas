@@ -12,6 +12,7 @@ import { drawerWidth } from '../constant';
 import { useContext } from 'react';
 import { MainLayoutContext } from '../MainLayout';
 import { MenuList } from './MenuList';
+import { MenuCard } from './MenuCard';
 
 type Props = {
 	matchDownMd: boolean;
@@ -41,13 +42,13 @@ export const Sidebar: React.FC<Props> = ({ matchDownMd }) => {
 					}}
 				>
 					<MenuList />
-					{/* <MenuCard /> */}
+					<MenuCard />
 				</PerfectScrollbar>
 			</BrowserView>
 			<MobileView>
 				<Box sx={{ px: 2 }}>
-					{/* <MenuList /> */}
-					{/* <MenuCard /> */}
+					<MenuList />
+					<MenuCard />
 				</Box>
 			</MobileView>
 		</>

@@ -25,6 +25,7 @@ import {
 	RegionResourceYear,
 	searchRegionList,
 } from '@/api/clients/services/open/region';
+import { Layout } from '../dashboard-ver2/MainLayout/MainLayout';
 type Props = {
 	children?: ReactNode;
 };
@@ -63,6 +64,7 @@ export const DashboardLayout: React.FC<Props> = ({ children }) => {
 				}}
 			>
 				<Nav open={open} setOpen={(value: boolean) => setOpen(value)} />
+				{/* <Layout /> */}
 				<Suspense fallback={<Loading />}>
 					<Main open={open}>{children}</Main>
 				</Suspense>

@@ -1,7 +1,6 @@
 import {
 	AppBar,
 	Box,
-	Breadcrumbs,
 	CssBaseline,
 	Toolbar,
 	useMediaQuery,
@@ -11,15 +10,12 @@ import {
 	Dispatch,
 	ReactNode,
 	createContext,
-	useCallback,
 	useContext,
 	useReducer,
 } from 'react';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
-import { IconChevronRight } from '@tabler/icons-react';
 import { drawerWidth } from './constant';
-import navigation from '../assests/js/menu-items';
 
 type MainLayoutState = {
 	isOpen: any[];

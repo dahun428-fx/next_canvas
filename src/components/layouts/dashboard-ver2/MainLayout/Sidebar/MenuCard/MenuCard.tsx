@@ -55,7 +55,6 @@ const CardStyle = styled(Card)(({ theme }) => ({
 }));
 
 function LinearProgressWithLabel({ value, ...others }: { value: number }) {
-	const theme = useTheme();
 
 	return (
 		<Grid container direction="column" spacing={1} sx={{ mt: 1.5 }}>
@@ -82,7 +81,41 @@ function LinearProgressWithLabel({ value, ...others }: { value: number }) {
 }
 
 export const MenuCard: React.FC<Props> = () => {
-	return <div></div>;
+
+    return (
+        <CardStyle>
+            <CardContent sx={{ p: 2 }}>
+                <List sx={{ p: 0, m: 0 }}>
+                    <ListItem alignItems="flex-start" disableGutters sx={{ p: 0 }}>
+                        <ListItemAvatar sx={{ mt: 0 }}>
+                            <Avatar
+                                variant="rounded"
+                                sx={{
+                                    color: palettePrimary500_Main,
+                                    border: 'none',
+                                    borderColor:palettePrimary500_Main,
+                                    background: '#fff',
+                                    marginRight: '12px'
+                                }}
+                            >
+                                <TableChartOutlinedIcon fontSize="inherit" />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                            sx={{ mt: 0 }}
+                            primary={
+                                <Typography variant="subtitle1" sx={{ color: palettePrimary800 }}>
+                                    Get Extra Space
+                                </Typography>
+                            }
+                            secondary={<Typography variant="caption"> 28/23 GB</Typography>}
+                        />
+                    </ListItem>
+                </List>
+                <LinearProgressWithLabel value={80} />
+            </CardContent>
+        </CardStyle>
+    );
 };
 
 MenuCard.displayName = 'MenuCard';
