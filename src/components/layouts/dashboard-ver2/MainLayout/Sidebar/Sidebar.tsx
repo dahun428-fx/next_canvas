@@ -11,17 +11,18 @@ import { LogoSection } from '../LogoSection';
 import { drawerWidth } from '../constant';
 import { useContext } from 'react';
 import { MainLayoutContext } from '../MainLayout';
+import { MenuList } from './MenuList';
 
 type Props = {
 	matchDownMd: boolean;
-	// drawerOpen: boolean;
 };
 
 export const Sidebar: React.FC<Props> = ({ matchDownMd }) => {
 	const theme = useTheme();
 	const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
 
-	const { onOpen, onClose, opened } = useContext(MainLayoutContext);
+	const { onOpen, onClose, opened, isOpen, onToggle } =
+		useContext(MainLayoutContext);
 	const drawerOpen = !matchDownMd ? opened : !opened;
 	const drawer = (
 		<>
@@ -39,8 +40,7 @@ export const Sidebar: React.FC<Props> = ({ matchDownMd }) => {
 						paddingRight: '16px',
 					}}
 				>
-					<div>dummy</div>
-					{/* <MenuList /> */}
+					<MenuList />
 					{/* <MenuCard /> */}
 				</PerfectScrollbar>
 			</BrowserView>
@@ -68,7 +68,7 @@ export const Sidebar: React.FC<Props> = ({ matchDownMd }) => {
 				variant={matchUpMd ? 'persistent' : 'temporary'}
 				anchor="left"
 				open={drawerOpen}
-				onClose={onClose}
+				onClose={onToggle}
 				sx={{
 					'& .MuiDrawer-paper': {
 						width: drawerWidth,

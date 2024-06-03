@@ -32,10 +32,20 @@ export const NavGroup: React.FC<Props> = ({ item }) => {
 			<List
 				subheader={
 					item.title && (
-						<Typography variant="caption" display="block" gutterBottom>
+						<Typography
+							variant="caption"
+							sx={{ fontSize: '14px' }}
+							display="block"
+							gutterBottom
+						>
 							{item.title}
 							{item.caption && (
-								<Typography variant="caption" display="block" gutterBottom>
+								<Typography
+									variant="caption"
+									sx={{ fontSize: '12px' }}
+									display="block"
+									gutterBottom
+								>
 									{item.caption}
 								</Typography>
 							)}

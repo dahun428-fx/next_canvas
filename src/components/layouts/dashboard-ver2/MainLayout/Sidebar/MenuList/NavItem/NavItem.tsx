@@ -11,13 +11,10 @@ import {
 import { MenuItem } from '../types';
 // assets
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { LegacyRef, forwardRef, useContext, useEffect } from 'react';
-import Link from 'next/link';
-import {
-	MainLayoutContext,
-	MainLayoutDispatchContext,
-} from '../../../MainLayout';
+import { useContext, useEffect } from 'react';
+import { MainLayoutContext } from '../../../MainLayout';
 import { borderRadius } from '../../../constant';
+import { useRouter } from 'next/router';
 
 type Props = {
 	item: MenuItem;
@@ -25,13 +22,10 @@ type Props = {
 };
 
 export const NavItem: React.FC<Props> = ({ item, level }) => {
+	const router = useRouter();
 	const { isOpen, opened, onClose, onOpen, onToggle } =
 		useContext(MainLayoutContext);
-	// const {  } = useContext(MainLayoutDispatchContext);
-
 	const theme = useTheme();
-	// const dispatch = useDispatch();
-	// const customization = useSelector((state) => state.customization);
 	const matchesSM = useMediaQuery(theme.breakpoints.down('lg'));
 
 	const Icon = item.icon;
@@ -39,12 +33,6 @@ export const NavItem: React.FC<Props> = ({ item, level }) => {
 		Icon && <Icon stroke={1.5} size="1.3rem" />
 	) : (
 		<FiberManualRecordIcon
-			// sx={{
-			// 	width:
-			// 		customization.isOpen.findIndex(id => id === item?.id) > -1 ? 8 : 6,
-			// 	height:
-			// 		customization.isOpen.findIndex(id => id === item?.id) > -1 ? 8 : 6,
-			// }}
 			sx={{
 				width: isOpen.findIndex(id => id === item?.id) > -1 ? 8 : 6,
 				height: isOpen.findIndex(id => id === item?.id) > -1 ? 8 : 6,
@@ -58,35 +46,15 @@ export const NavItem: React.FC<Props> = ({ item, level }) => {
 		itemTarget = '_blank';
 	}
 
-	let listItemProps = {
-		// component: forwardRef(
-		// 	(props, ref: LegacyRef<HTMLAnchorElement> | undefined) => (
-		// 		<Link ref={ref} {...props} target={itemTarget} />
-		// 	)
-		// ),
-		component: forwardRef(
-			(props, ref: LegacyRef<HTMLAnchorElement> | undefined) => {
-				if (item.external) {
-					return (
-						<a ref={ref} href={item.url} target={itemTarget}>
-							{item.title}
-						</a>
-					);
-				}
-				return <Link ref={ref} href={`${item.url}`} target={itemTarget} />;
+	const itemHandler = (item: MenuItem) => {
+		const { id, url, external } = item;
+		if (url) {
+			if (external) {
+				location.href = `${url}`;
+			} else {
+				router.push(url);
 			}
-		),
-	};
-	// if (item?.external) {
-	// 	// listItemProps = { component: 'a', href: item.url, target: itemTarget };
-	// 	listItemProps = forwardRef(
-	//         	(props, ref: LegacyRef<HTMLAnchorElement> | undefined) => (
-	//         		<Link ref={ref} {...props} target={itemTarget} />
-	//         	)};
-	// 	// listItemProps = { component: <a href={item.url} target={itemTarget}></a>, href: item.url, target: itemTarget };
-	// }
-
-	const itemHandler = (id?: string) => {
+		}
 		onOpen(id ?? '');
 		if (matchesSM) onClose();
 	};
@@ -98,7 +66,6 @@ export const NavItem: React.FC<Props> = ({ item, level }) => {
 			.split('/')
 			.findIndex(id => id === item.id);
 		if (currentIndex > -1) {
-			// dispatch({ type: MENU_OPEN, id: item.id });
 			onOpen(item.id ?? '');
 		}
 		// eslint-disable-next-line
@@ -106,7 +73,6 @@ export const NavItem: React.FC<Props> = ({ item, level }) => {
 
 	return (
 		<ListItemButton
-			{...listItemProps}
 			disabled={item?.disabled}
 			sx={{
 				borderRadius: `${borderRadius}px`,
@@ -117,30 +83,16 @@ export const NavItem: React.FC<Props> = ({ item, level }) => {
 				pl: `${level * 24}px`,
 			}}
 			selected={isOpen.findIndex(id => id === item.id) > -1}
-			onClick={() => itemHandler(item.id)}
+			onClick={() => itemHandler(item)}
 		>
 			<ListItemIcon sx={{ my: 'auto', minWidth: !item?.icon ? 18 : 36 }}>
 				{itemIcon}
 			</ListItemIcon>
 			<ListItemText
-				primary={
-					<Typography
-						variant={
-							isOpen.findIndex(id => id === item.id) > -1 ? 'h5' : 'body1'
-						}
-						color="inherit"
-					>
-						{item.title}
-					</Typography>
-				}
+				primary={<Typography color="inherit">{item.title}</Typography>}
 				secondary={
 					item.caption && (
-						<Typography
-							variant="caption"
-							// sx={{ ...theme.typography.subMenuCaption }}
-							display="block"
-							gutterBottom
-						>
+						<Typography variant="caption" display="block" gutterBottom>
 							{item.caption}
 						</Typography>
 					)

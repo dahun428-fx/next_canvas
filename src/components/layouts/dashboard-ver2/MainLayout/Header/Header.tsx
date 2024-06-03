@@ -3,6 +3,11 @@ import { useTheme } from '@mui/material/styles';
 import { Avatar, Box, ButtonBase } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { LogoSection } from '../LogoSection';
+import {
+	paletteSecondary200,
+	paletteSecondary600_Dark,
+	paletteSecondaryLight,
+} from '../constant';
 
 type Props = {
 	handleLeftDrawerToggle: () => void;
@@ -33,14 +38,12 @@ export const Header: React.FC<Props> = ({ handleLeftDrawerToggle }) => {
 					<Avatar
 						variant="rounded"
 						sx={{
-							// ...theme.typography?.commonAvatar,
-							// ...theme.typography?.mediumAvatar,
 							transition: 'all .2s ease-in-out',
-							background: theme.palette.secondary.light,
-							color: theme.palette.secondary.dark,
+							background: paletteSecondaryLight,
+							color: paletteSecondary200,
 							'&:hover': {
-								background: theme.palette.secondary.dark,
-								color: theme.palette.secondary.light,
+								background: paletteSecondary600_Dark,
+								color: paletteSecondaryLight,
 							},
 						}}
 						onClick={handleLeftDrawerToggle}

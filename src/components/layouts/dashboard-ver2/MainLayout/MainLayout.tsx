@@ -1,4 +1,12 @@
-import { Box, CssBaseline, useMediaQuery, useTheme } from '@mui/material';
+import {
+	AppBar,
+	Box,
+	Breadcrumbs,
+	CssBaseline,
+	Toolbar,
+	useMediaQuery,
+} from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
 import {
 	Dispatch,
 	ReactNode,
@@ -8,6 +16,10 @@ import {
 	useReducer,
 } from 'react';
 import { Sidebar } from './Sidebar';
+import { Header } from './Header';
+import { IconChevronRight } from '@tabler/icons-react';
+import { drawerWidth } from './constant';
+import navigation from '../assests/js/menu-items';
 
 type MainLayoutState = {
 	isOpen: any[];
@@ -83,50 +95,100 @@ export const MainLayoutProvider: React.FC<{ children: ReactNode }> = ({
 MainLayoutProvider.displayName = 'MainLayoutProvider';
 
 export const MainLayout: React.FC = () => {
-	// const [state, dispatch] = useReducer(reducer, initialState);
-
-	// const dispatcher = useCallback(() => {}, []);
-
-	// const handleLeftDrawerToggle = () => {
-	// 	dispatch({ type: 'MENU_TOGGLE' });
-	// };
-
 	const theme = useTheme();
 	const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
+	const { onOpen, onClose, opened, onToggle, isOpen } =
+		useContext(MainLayoutContext);
+
+	// styles
+	const Main = styled('main', { shouldForwardProp: prop => prop !== 'opened' })(
+		({ theme }) => ({
+			// ...theme.typography.mainContent,
+			...(!opened && {
+				borderBottomLeftRadius: 0,
+				borderBottomRightRadius: 0,
+				transition: theme.transitions.create('margin', {
+					easing: theme.transitions.easing.sharp,
+					duration: theme.transitions.duration.leavingScreen,
+				}),
+				[theme.breakpoints.up('md')]: {
+					marginLeft: -(drawerWidth - 20),
+					width: `calc(100% - ${drawerWidth}px)`,
+				},
+				[theme.breakpoints.down('md')]: {
+					marginLeft: '20px',
+					width: `calc(100% - ${drawerWidth}px)`,
+					padding: '16px',
+				},
+				[theme.breakpoints.down('sm')]: {
+					marginLeft: '10px',
+					width: `calc(100% - ${drawerWidth}px)`,
+					padding: '16px',
+					marginRight: '10px',
+				},
+			}),
+			...(opened && {
+				transition: theme.transitions.create('margin', {
+					easing: theme.transitions.easing.easeOut,
+					duration: theme.transitions.duration.enteringScreen,
+				}),
+				marginLeft: 0,
+				borderBottomLeftRadius: 0,
+				borderBottomRightRadius: 0,
+				width: `calc(100% - ${drawerWidth}px)`,
+				[theme.breakpoints.down('md')]: {
+					marginLeft: '20px',
+				},
+				[theme.breakpoints.down('sm')]: {
+					marginLeft: '10px',
+				},
+			}),
+		})
+	);
 
 	return (
-		<MainLayoutProvider>
-			<Box sx={{ display: 'flex' }}>
-				<CssBaseline />
-				{/* header */}
-				{/* <AppBar
-                enableColorOnDark
-                position="fixed"
-                color="inherit"
-                elevation={0}
-                sx={{
-                    bgcolor: theme.palette.background.default,
-                    transition: leftDrawerOpened ? theme.transitions.create('width') : 'none'
-                }}
-            >
-                <Toolbar>
-                    <Header handleLeftDrawerToggle={handleLeftDrawerToggle} />
-                </Toolbar>
-            </AppBar> */}
-
-				{/* drawer */}
-				<Sidebar matchDownMd={matchDownMd} />
-
-				{/* main content */}
-				{/* <Main theme={theme} open={leftDrawerOpened}> */}
+		<Box sx={{ display: 'flex' }}>
+			<CssBaseline />
+			{/* header */}
+			<AppBar
+				enableColorOnDark
+				position="fixed"
+				color="inherit"
+				elevation={0}
+				sx={{
+					bgcolor: theme.palette.background.default,
+					transition: opened ? theme.transitions.create('width') : 'none',
+				}}
+			>
+				<Toolbar>
+					<Header handleLeftDrawerToggle={onToggle} />
+				</Toolbar>
+			</AppBar>
+			{/* drawer */}
+			<Sidebar matchDownMd={matchDownMd} />
+			{/* main content */}
+			<Main theme={theme}>
 				{/* breadcrumb */}
-				{/* <Breadcrumbs separator={IconChevronRight} navigation={navigation} icon title rightAlign /> */}
+				{/* <Breadcrumbs
+					// separator={<IconChevronRight />}
+					// navigation={navigation}
+					// icon
+					// title
+					// rightAlign
+				/> */}
 				{/* <Outlet /> */}
-				{/* </Main> */}
-				{/* <Customization /> */}
-			</Box>
-		</MainLayoutProvider>
+			</Main>
+			{/* <Customization /> */}
+		</Box>
 	);
 };
 
 MainLayout.displayName = 'MainLayout';
+
+export const Layout: React.FC = () => {
+	return (
+		<MainLayoutProvider>
+			<MainLayout />
+		</MainLayoutProvider>
+	);
+};

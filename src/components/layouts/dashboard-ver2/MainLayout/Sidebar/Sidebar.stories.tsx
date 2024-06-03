@@ -11,9 +11,6 @@ type Story = StoryObj<typeof meta>;
 
 export const _Sidebar: Story = {
 	args: {
-		drawerOpen: true,
-		drawerToggle: () => {
-			return false;
-		},
+		matchDownMd: false,
 	},
 };
