@@ -17,10 +17,24 @@ const dashboard: MenuItem = {
 		{
 			id: 'default',
 			title: 'Dashboard',
-			type: 'item',
-			url: '/dashboard/default',
+			type: 'collapse',
 			icon: icons.IconDashboard,
-			breadcrumbs: false,
+			children: [
+				{
+					id: 'nation-wide',
+					title: '전국',
+					type: 'item',
+					url: '/dashboard/nation-wide',
+					target: true,
+				},
+				{
+					id: 'area-fix',
+					title: '지역',
+					type: 'item',
+					url: '/dashboard/area-fix',
+					target: true,
+				},
+			],
 		},
 	],
 };
