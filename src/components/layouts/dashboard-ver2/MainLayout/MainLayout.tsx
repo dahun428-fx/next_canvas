@@ -5,7 +5,7 @@ import {
 	Toolbar,
 	useMediaQuery,
 } from '@mui/material';
-import { styled, useTheme } from '@mui/material/styles';
+import { ThemeProvider, styled, useTheme } from '@mui/material/styles';
 import {
 	Dispatch,
 	ReactNode,
@@ -16,6 +16,7 @@ import {
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 import { drawerWidth } from './constant';
+import themes from '../../../../themes';
 
 type MainLayoutState = {
 	isOpen: any[];
@@ -90,7 +91,7 @@ export const MainLayoutProvider: React.FC<{ children: ReactNode }> = ({
 };
 MainLayoutProvider.displayName = 'MainLayoutProvider';
 
-export const MainLayout: React.FC = () => {
+export const MainLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
 	const theme = useTheme();
 	const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
 	const { onOpen, onClose, opened, onToggle, isOpen } =
@@ -99,7 +100,7 @@ export const MainLayout: React.FC = () => {
 	// styles
 	const Main = styled('main', { shouldForwardProp: prop => prop !== 'opened' })(
 		({ theme }) => ({
-			// ...theme.typography.mainContent,
+			...theme.typography.mainContent,
 			...(!opened && {
 				borderBottomLeftRadius: 0,
 				borderBottomRightRadius: 0,
@@ -164,6 +165,7 @@ export const MainLayout: React.FC = () => {
 			<Sidebar matchDownMd={matchDownMd} />
 			{/* main content */}
 			<Main theme={theme}>
+				{children}
 				{/* breadcrumb */}
 				{/* <Breadcrumbs
 					// separator={<IconChevronRight />}
@@ -172,7 +174,6 @@ export const MainLayout: React.FC = () => {
 					// title
 					// rightAlign
 				/> */}
-				{/* <Outlet /> */}
 			</Main>
 			{/* <Customization /> */}
 		</Box>
@@ -181,10 +182,12 @@ export const MainLayout: React.FC = () => {
 
 MainLayout.displayName = 'MainLayout';
 
-export const Layout: React.FC = () => {
+export const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
 	return (
-		<MainLayoutProvider>
-			<MainLayout />
-		</MainLayoutProvider>
+		<ThemeProvider theme={themes()}>
+			<MainLayoutProvider>
+				<MainLayout>{children}</MainLayout>
+			</MainLayoutProvider>
+		</ThemeProvider>
 	);
 };

@@ -54,10 +54,8 @@ export const Sidebar: React.FC<Props> = ({ matchDownMd }) => {
 		</>
 	);
 
-	if (window === undefined) {
-		return null;
-	}
-
+	// const container =
+	// 	window !== undefined ? () => window.document.body : undefined;
 	return (
 		<Box
 			component="nav"
@@ -65,7 +63,7 @@ export const Sidebar: React.FC<Props> = ({ matchDownMd }) => {
 			aria-label="mailbox folders"
 		>
 			<Drawer
-				container={window.document.body}
+				// container={container}
 				variant={matchUpMd ? 'persistent' : 'temporary'}
 				anchor="left"
 				open={drawerOpen}

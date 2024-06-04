@@ -55,21 +55,21 @@ export const DashboardLayout: React.FC<Props> = ({ children }) => {
 
 	return (
 		<>
-			<Header />
+			{/* <Header />
 			<Box
 				sx={{
 					minHeight: 1,
 					display: 'flex',
 					flexDirection: { xs: 'column', lg: 'row' },
 				}}
-			>
-				<Nav open={open} setOpen={(value: boolean) => setOpen(value)} />
-				{/* <Layout /> */}
-				<Suspense fallback={<Loading />}>
+			> */}
+			{/* <Nav open={open} setOpen={(value: boolean) => setOpen(value)} /> */}
+			<Layout>{children}</Layout>
+			{/* <Suspense fallback={<Loading />}>
 					<Main open={open}>{children}</Main>
-				</Suspense>
-				<BottomAppBar />
-			</Box>
+				</Suspense> */}
+			{/* <BottomAppBar /> */}
+			{/* </Box> */}
 		</>
 	);
 };
