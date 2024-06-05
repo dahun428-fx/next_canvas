@@ -1,0 +1,52 @@
+$drawer-width: 240px;
+
+@mixin mainContent {
+    background-color: #eef2f6;
+    width: 100%;
+    min-height: calc(100vh - 88px);
+    flex-grow: 1;
+    padding: 20px;
+    margin-top: 88px;
+    margin-right: 20px;
+    border-radius: '4px';
+}
+.mainClose{
+    @include mainContent;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    transition: margin 195ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    @media (min-width: 960px) { /* theme.breakpoints.up('md') 변환 */
+        margin-left: calc(-1 * (#{$drawer-width} - 20px));
+        width: calc(100% - #{$drawer-width});
+    }
+
+    @media (max-width: 960px) { /* theme.breakpoints.down('md') 변환 */
+        margin-left: 20px;
+        width: calc(100% - #{$drawer-width});
+        padding: 16px;
+    }
+
+    @media (max-width: 600px) { /* theme.breakpoints.down('sm') 변환 */
+        margin-left: 10px;
+        width: calc(100% - #{$drawer-width});
+        padding: 16px;
+    }
+}
+
+.main {
+    @include mainContent;
+    transition: margin 225ms cubic-bezier(0.4, 0, 1, 1); /* theme.transitions.create('margin', ...) 변환 */
+    margin-left: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    width: calc(100% - #{$drawer-width});
+  
+    @media (max-width: 960px) { /* theme.breakpoints.down('md') 변환 */
+      margin-left: 20px;
+    }
+  
+    @media (max-width: 600px) { /* theme.breakpoints.down('sm') 변환 */
+      margin-left: 10px;
+    }
+  }

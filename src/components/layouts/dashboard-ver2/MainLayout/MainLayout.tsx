@@ -5,8 +5,8 @@ import {
 	Toolbar,
 	useMediaQuery,
 } from '@mui/material';
-import { ThemeProvider, styled, useTheme } from '@mui/material/styles';
-import {
+import { Theme, ThemeProvider, styled, useTheme } from '@mui/material/styles';
+import React, {
 	Dispatch,
 	ReactNode,
 	Suspense,
@@ -20,6 +20,7 @@ import { Header } from './Header';
 import { drawerWidth } from './constant';
 import themes from '../../../../themes';
 import Loading from '../../dashboard/common/Loading';
+import styles from './MainLayout.module.scss'
 
 type MainLayoutState = {
 	isOpen: any[];
@@ -100,6 +101,101 @@ export const MainLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
 	const { onOpen, onClose, opened, onToggle, isOpen } =
 		useContext(MainLayoutContext);
 
+	const openStyle = {
+		...theme.typography.mainContent,
+		borderBottomLeftRadius: 0,
+		borderBottomRightRadius: 0,
+		transition: theme.transitions.create('margin', {
+			easing: theme.transitions.easing.sharp,
+			duration: theme.transitions.duration.leavingScreen
+		}),
+		[theme.breakpoints.up('md')]: {
+			marginLeft: -(drawerWidth - 20),
+			width: `calc(100% - ${drawerWidth}px)`
+		},
+		[theme.breakpoints.down('md')]: {
+			marginLeft: '20px',
+			width: `calc(100% - ${drawerWidth}px)`,
+			padding: '16px'
+		},
+		[theme.breakpoints.down('sm')]: {
+			marginLeft: '10px',
+			width: `calc(100% - ${drawerWidth}px)`,
+			padding: '16px',
+			marginRight: '10px'
+		}
+	}
+	const closeStyle = {
+		...theme.typography.mainContent,
+		transition: theme.transitions.create('margin', {
+			easing: theme.transitions.easing.easeOut,
+			duration: theme.transitions.duration.enteringScreen
+		}),
+		marginLeft: 0,
+		borderBottomLeftRadius: 0,
+		borderBottomRightRadius: 0,
+		width: `calc(100% - ${drawerWidth}px)`,
+		[theme.breakpoints.down('md')]: {
+			marginLeft: '20px'
+		},
+		[theme.breakpoints.down('sm')]: {
+			marginLeft: '10px'
+		}
+	}
+
+	// styles
+	const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open  }: {theme:Theme, open:boolean}) => ({
+		...theme.typography.mainContent,
+		...(!open && {
+			borderBottomLeftRadius: 0,
+			borderBottomRightRadius: 0,
+			transition: theme.transitions.create('margin', {
+				easing: theme.transitions.easing.sharp,
+				duration: theme.transitions.duration.leavingScreen
+			}),
+			[theme.breakpoints.up('md')]: {
+				marginLeft: -(drawerWidth - 20),
+				width: `calc(100% - ${drawerWidth}px)`
+			},
+			[theme.breakpoints.down('md')]: {
+				marginLeft: '20px',
+				width: `calc(100% - ${drawerWidth}px)`,
+				padding: '16px'
+			},
+			[theme.breakpoints.down('sm')]: {
+				marginLeft: '10px',
+				width: `calc(100% - ${drawerWidth}px)`,
+				padding: '16px',
+				marginRight: '10px'
+			}
+		}),
+		...(open && {
+			transition: theme.transitions.create('margin', {
+				easing: theme.transitions.easing.easeOut,
+				duration: theme.transitions.duration.enteringScreen
+			}),
+			marginLeft: 0,
+			borderBottomLeftRadius: 0,
+			borderBottomRightRadius: 0,
+			width: `calc(100% - ${drawerWidth}px)`,
+			[theme.breakpoints.down('md')]: {
+				marginLeft: '20px'
+			},
+			[theme.breakpoints.down('sm')]: {
+				marginLeft: '10px'
+			}
+		})
+	}));
+
+	// const Children = React.memo(<div>{children}</div>);
+	// const Child = useMemo(()=>{
+	// 	return <div>{children}</div>
+	// },[])
+	// children을 메모이제이션하는 컴포넌트
+	const MyChildrenComponent = React.memo(({ children } : {children:ReactNode})  => {
+		return <div>{children}</div>;
+	});
+  
 	return (
 		<Box sx={{ display: 'flex' }}>
 			<CssBaseline />
@@ -121,64 +217,21 @@ export const MainLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
 			{/* drawer */}
 			<Sidebar matchDownMd={matchDownMd} />
 			{/* main content */}
-			<main>
+			{/* <Main open={opened} theme={theme}>{children}</Main> */}
+			{/* <Main open={opened} theme={theme}><MyChildrenComponent children={children} /></Main> */}
+			{/* <Main open={opened} theme={theme}>{Child}</Main> */}
+			{/* <main>
 				<Box
 					sx={{
 						...theme.typography.mainContent,
-						...(!opened && {
-							borderBottomLeftRadius: 0,
-							borderBottomRightRadius: 0,
-							transition: theme.transitions.create('margin', {
-								easing: theme.transitions.easing.sharp,
-								duration: theme.transitions.duration.leavingScreen,
-							}),
-							[theme.breakpoints.up('md')]: {
-								// marginLeft: -(drawerWidth - 20),
-								marginLeft: `-${drawerWidth - 20}px`,
-								width: `calc(100% - ${drawerWidth}px)`,
-							},
-							[theme.breakpoints.down('md')]: {
-								marginLeft: '20px',
-								width: `calc(100% - ${drawerWidth}px)`,
-								padding: '16px',
-							},
-							[theme.breakpoints.down('sm')]: {
-								marginLeft: '10px',
-								width: `calc(100% - ${drawerWidth}px)`,
-								padding: '16px',
-								marginRight: '10px',
-							},
-						}),
-						...(opened && {
-							transition: theme.transitions.create('margin', {
-								easing: theme.transitions.easing.easeOut,
-								duration: theme.transitions.duration.enteringScreen,
-							}),
-							marginLeft: 0,
-							borderBottomLeftRadius: 0,
-							borderBottomRightRadius: 0,
-							width: `calc(100% - ${drawerWidth}px)`,
-							[theme.breakpoints.down('md')]: {
-								marginLeft: '20px',
-							},
-							[theme.breakpoints.down('sm')]: {
-								marginLeft: '10px',
-							},
-						}),
+						// openStyle
+						closeStyle
 					}}
 				>
 					{children}
 				</Box>
-				{/* breadcrumb */}
-				{/* <Breadcrumbs
-					// separator={<IconChevronRight />}
-					// navigation={navigation}
-					// icon
-					// title
-					// rightAlign
-				/> */}
-			</main>
-
+			</main> */}
+			<main className={opened? styles.main : styles.mainClose}>{children}</main>
 			{/* <Customization /> */}
 		</Box>
 	);
