@@ -10,30 +10,37 @@ const icons = {
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
 
 const pages: MenuItem = {
-	id: 'pages',
-	title: 'Pages',
-	caption: 'Pages Caption',
+	id: 'datas',
+	title: 'DATA',
+	caption: '강력범죄 발생현황',
 	type: 'group',
 	children: [
 		{
-			id: 'authentication',
-			title: 'Authentication',
+			id: 'violent-crime',
+			title: 'violent-crime',
 			type: 'collapse',
 			icon: icons.IconKey,
 
 			children: [
 				{
-					id: 'login3',
-					title: 'Login',
+					id: 'police-data',
+					title: '경찰서별',
 					type: 'item',
-					url: '/pages/login/login3',
+					url: '/dashboard/violent-crime/office',
 					target: true,
 				},
 				{
-					id: 'register3',
-					title: 'Register',
+					id: 'yearly-regional-data',
+					title: '연도/지역별',
 					type: 'item',
-					url: '/pages/register/register3',
+					url: '/dashboard/violent-crime/yearly',
+					target: true,
+				},
+				{
+					id: 'regional-detail-data',
+					title: '지역별 상세',
+					type: 'item',
+					url: '/dashboard/violent-crime/region',
 					target: true,
 				},
 			],

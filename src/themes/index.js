@@ -8,6 +8,10 @@ import { createTheme } from '@mui/material/styles';
 import componentStyleOverrides from './compStyleOverride';
 import themePalette from './palette';
 import themeTypography from './typography';
+import {
+	borderRadius,
+	fontFamily,
+} from '@/components/layouts/dashboard-ver2/MainLayout/constant';
 
 /**
  * Represent theme style and structure as per Material-UI
@@ -73,6 +77,8 @@ const theme = () => {
 		darkSecondary800: '#6200ea',
 	};
 	const themeOption = {
+		fontFamily: fontFamily,
+		borderRadius: borderRadius,
 		colors: color,
 		heading: color.grey900,
 		paper: color.paper,
