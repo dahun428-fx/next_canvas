@@ -1,8 +1,10 @@
 import { Box } from "@mui/material";
+import Link from "next/link";
 
 type Props = {};
 
 export default function Home() {
+
 	return (
 		<Box sx={{width:400}}>
 			<div>안녕하세요.</div>
@@ -13,3 +15,4 @@ export default function Home() {
 		</Box>
 	);
 }
+
