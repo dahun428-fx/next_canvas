@@ -3,9 +3,10 @@ import { Police } from '@/models/api/open/police/SearchPoliceResponse';
 import { Box, Card, CardHeader, Grid } from '@mui/material';
 import { PoliceItem } from '../PoliceItem';
 import { digit } from '@/utils/number';
+import { PoliceCityType, PoliceDataType } from '@/utils/openapi/police/data';
 
 type Props = {
-	items: Police[];
+	items: PoliceDataType[];
 };
 
 export const PoliceList: React.FC<Props> = ({ items }) => {

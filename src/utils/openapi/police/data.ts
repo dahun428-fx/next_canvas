@@ -58,6 +58,20 @@ export const police_total_data_by_crime = (
 	return resultArray;
 };
 
+export const police_seperete_city = (data: PoliceDataType[]) => {
+	return Array.from(police_city).map((item, index) => {
+		return data.filter((newItem, newIndex) => {
+			if (
+				isObject(newItem) &&
+				newItem?.경찰서 !== null &&
+				newItem.경찰서.slice(0, 2) === item
+			) {
+				return newItem;
+			}
+		});
+	});
+};
+
 /**
  * 경찰서 데이터를 도시 이름 기준으로 Merge 한다.
  *
@@ -203,6 +217,7 @@ export interface PoliceDataType {
 	살인: number;
 	절도: number;
 	폭력: number;
+	city?: string;
 }
 
 export type PoliceYearRange =

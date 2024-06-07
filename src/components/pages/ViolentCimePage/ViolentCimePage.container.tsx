@@ -1,39 +1,53 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ViolentCimePage as Presenter } from './ViolentCimePage';
-import { loadOperation, selectPolice } from '@/store/modules/common/police';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
+import { PoliceYearRange } from '@/utils/openapi/police/data';
+import { RegionResourceYear } from '@/api/clients/services/open/region';
 import {
-	bottomBarAddChartTypesOpertion,
-	bottomBarUpdatePageRouteOperation,
-} from '@/store/modules/common/bottom';
-import { ChartType } from 'chart.js';
+	loadOperations,
+	selectViolenceItems,
+} from '@/store/modules/common/violence';
+import { SelectChangeEvent } from '@mui/material';
 
 type Props = {};
 
 export const ViolentCimePage: React.FC<Props> = () => {
-	const initailized = useRef(false);
-	const initailized2 = useRef(false);
-	const policeResponse = useSelector(selectPolice);
 	const dispatch = useDispatch();
 
-	const availableCharts: ChartType[] = ['doughnut', 'polarArea', 'pie'];
+	const policeResponse = useSelector(selectViolenceItems);
+
+	const firstInitialYear = RegionResourceYear[RegionResourceYear.length - 1];
+
+	const [nowYear, setNowYear] = useState<PoliceYearRange>(
+		firstInitialYear as PoliceYearRange
+	);
+
+	const hasItems = useMemo(() => {
+		return policeResponse.some(item => item.year === nowYear);
+	}, [nowYear, policeResponse]);
 
 	useEffect(() => {
-		if (!initailized.current && policeResponse.items.length < 1) {
-			loadOperation(dispatch)();
-			initailized.current = true;
+		if (!hasItems) {
+			loadOperations(dispatch)(nowYear);
 		}
-	}, [dispatch, initailized.current, policeResponse.items.length]);
+	}, [nowYear, dispatch, hasItems]);
 
-	useEffect(() => {
-		if (!initailized2.current) {
-			bottomBarAddChartTypesOpertion(dispatch)(availableCharts);
-			bottomBarUpdatePageRouteOperation(dispatch)('police');
-			initailized2.current = true;
-		}
-	}, [dispatch, initailized2]);
+	const filteredViolenceData = useMemo(() => {
+		return (
+			policeResponse.filter(item => item.year === nowYear)[0]?.data ?? null
+		);
+	}, [nowYear, policeResponse]);
 
-	return <Presenter />;
+	return (
+		<Presenter
+			nowYear={nowYear}
+			policeDatas={filteredViolenceData}
+			setNowYear={(event: SelectChangeEvent) =>
+				setNowYear(event.target.value as PoliceYearRange)
+			}
+			hasItems={hasItems}
+		/>
+	);
 };
 ViolentCimePage.displayName = 'ViolentCimePage';
