@@ -9,6 +9,7 @@ import {
 	regionRequestPerPage,
 	searchRegionList,
 } from '@/api/clients/services/open/region';
+import { LoadingBar } from '@/components/common/Loading/LoadingBar';
 import { SearchPoliceReseponse } from '@/models/api/open/police/SearchPoliceResponse';
 import { SearchRegionResponse } from '@/models/api/open/region/SearchRegionResponse';
 import { RegionResponse } from '@/store/modules/common/region';
@@ -33,8 +34,7 @@ type Props = {
 const AreaFixPage = dynamic<Props>(
 	() =>
 		import('@/components/pages/AreaFixPage').then(module => module.AreaFixPage),
-	// { ssr: false, loading: () => <LoadingBar /> }
-	{ ssr: false }
+	{ ssr: false, loading: () => <LoadingBar /> }
 );
 const AreaFix: NextPage<Props> = ({
 	initialYear,

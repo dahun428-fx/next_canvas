@@ -42,13 +42,11 @@ export const Sidebar: React.FC<Props> = ({ matchDownMd }) => {
 					}}
 				>
 					<MenuList />
-					<MenuCard />
 				</PerfectScrollbar>
 			</BrowserView>
 			<MobileView>
 				<Box sx={{ px: 2 }}>
 					<MenuList />
-					<MenuCard />
 				</Box>
 			</MobileView>
 		</>

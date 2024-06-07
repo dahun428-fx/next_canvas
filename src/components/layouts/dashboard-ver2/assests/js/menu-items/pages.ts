@@ -17,7 +17,7 @@ const pages: MenuItem = {
 	children: [
 		{
 			id: 'violent-crime',
-			title: 'violent-crime',
+			title: 'Police API DATA',
 			type: 'collapse',
 			icon: icons.IconKey,
 
