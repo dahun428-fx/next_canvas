@@ -8,6 +8,7 @@ type Props = {
 	boxStyle?: SxProps<Theme> | undefined;
 	cardStyle?: SxProps<Theme> | undefined;
 	titleStyle?: SxProps<Theme> | undefined;
+	cardLine?: 'outlined' | 'elevation';
 };
 
 export const ChartBox: React.FC<Props> = ({
@@ -16,10 +17,11 @@ export const ChartBox: React.FC<Props> = ({
 	titleStyle,
 	chartData,
 	title,
+	cardLine = 'outlined',
 }) => {
 	return (
 		<Card
-			variant="outlined"
+			variant={cardLine}
 			sx={{ margin: 2, textAlign: 'center', overflow: 'auto', ...cardStyle }}
 		>
 			<Typography

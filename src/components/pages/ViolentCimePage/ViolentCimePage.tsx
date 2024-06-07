@@ -10,6 +10,8 @@ import {
 import { PoliceMain } from '../Police';
 import { Police } from '@/models/api/open/police/SearchPoliceResponse';
 import { PoliceResourceYears } from '@/api/clients/services/open/police';
+import { LoadingBar } from '@/components/common/Loading/LoadingBar';
+import { PoliceMainSkeleton } from '../Police/PoliceMain.Skeleton';
 
 type Props = {
 	nowYear: string;
@@ -51,9 +53,14 @@ export const ViolentCimePage: React.FC<Props> = ({
 						})}
 				</Select>
 			</FormControl>
-			{hasItems && (
+			{!hasItems ? (
 				<>
 					<PoliceMain policeDatas={policeDatas} />
+				</>
+			) : (
+				<>
+					{/* <LoadingBar /> */}
+					<PoliceMainSkeleton />
 				</>
 			)}
 		</Container>

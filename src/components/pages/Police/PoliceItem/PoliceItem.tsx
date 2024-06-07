@@ -1,21 +1,35 @@
-import { Doughnut } from '@/components/ui/charts/doughnut';
-import { DoughnutData } from '@/components/ui/charts/doughnut/Doughnut';
 import { Box, Card, CardHeader, Grid } from '@mui/material';
-import { PoliceDougnut } from '../PoliceDougnut';
+import { SingleChartType } from '@/components/ui/chart/CustomChart';
+import { ChartBox } from '@/components/ui/chart/chartBox';
 
 type Props = {
 	title: string;
 	subheader: string;
-	dataObj: DoughnutData;
+	dataObj: Record<string, number>;
 };
 
 export const PoliceItem: React.FC<Props> = ({ title, subheader, dataObj }) => {
+	const datas: SingleChartType = {
+		chartLabels: Object.keys(dataObj),
+		chartType: 'doughnut',
+		data: dataObj,
+		labelPositon: 'top',
+		percentOff: true,
+	};
+
 	return (
 		<Grid xs={12} sm={6} md={3} item>
 			<Card>
 				<CardHeader title={title} subheader={subheader} />
 				<Box sx={{ p: 3, pb: 1 }}>
-					<PoliceDougnut data={dataObj} title={title} />
+					<ChartBox
+						boxStyle={{
+							minWidth: '150px',
+							maxWidth: '300px',
+						}}
+						chartData={datas}
+						cardLine="elevation"
+					/>
 				</Box>
 			</Card>
 		</Grid>

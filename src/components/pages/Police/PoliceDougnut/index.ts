@@ -1,1 +1,0 @@
-export { PoliceDougnut } from './PoliceDougnut';
