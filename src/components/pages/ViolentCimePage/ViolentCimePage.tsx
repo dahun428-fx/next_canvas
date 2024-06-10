@@ -53,7 +53,7 @@ export const ViolentCimePage: React.FC<Props> = ({
 						})}
 				</Select>
 			</FormControl>
-			{!hasItems ? (
+			{hasItems ? (
 				<>
 					<PoliceMain policeDatas={policeDatas} />
 				</>

@@ -5,9 +5,13 @@ import {
 	ViolenceItem,
 	loadOperations,
 	selectViolence,
+	setOperations,
 } from '@/store/modules/common/violence';
 import { mergeByYearly } from '@/utils/openapi/police/police';
-import { Police } from '@/models/api/open/police/SearchPoliceResponse';
+import {
+	Police,
+	SearchPoliceReseponse,
+} from '@/models/api/open/police/SearchPoliceResponse';
 import { useDispatch } from 'react-redux';
 import { ChartType } from 'chart.js';
 import {
@@ -15,30 +19,19 @@ import {
 	bottomBarUpdatePageRouteOperation,
 } from '@/store/modules/common/bottom';
 
-type Props = {};
+type Props = {
+	initialYear: string;
+	violenceItems: SearchPoliceReseponse[];
+};
 
-export const ViolentYearlyPage: React.FC<Props> = () => {
-	const initailized = useRef(false);
-	const initailized2 = useRef(false);
-	const violenceResponse = useSelector(selectViolence);
-	const availableCharts: ChartType[] = ['line', 'bar'];
-
+export const ViolentYearlyPage: React.FC<Props> = ({
+	initialYear,
+	violenceItems,
+}) => {
 	const dispatch = useDispatch();
-
 	useEffect(() => {
-		if (!initailized2.current) {
-			bottomBarAddChartTypesOpertion(dispatch)(availableCharts);
-			bottomBarUpdatePageRouteOperation(dispatch)('violent');
-			initailized2.current = true;
-		}
-	}, [dispatch, initailized2]);
-
-	useEffect(() => {
-		if (!initailized.current && violenceResponse.items.length < 1) {
-			loadOperations(dispatch)('2022');
-			initailized.current = true;
-		}
-	}, [dispatch, initailized.current, violenceResponse.items.length]);
+		setOperations(dispatch)(violenceItems);
+	}, [dispatch, violenceItems]);
 
 	return <Presenter />;
 };
