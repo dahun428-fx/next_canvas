@@ -1,10 +1,8 @@
 import { ViolentChartsModalButton } from '../ViolentChartsModalButton';
 import styles from './ViolentCharts.module.scss';
-import { useSelector } from '@/store/hooks';
-import { selectChartType } from '@/store/modules/common/violence';
 import { Box } from '@mui/material';
-import { CustomChart } from '@/components/common/utils/CustomChart';
 import { MultiChartDataType } from '@/components/ui/chart/CustomChart';
+import { ChartBox } from '@/components/ui/chart/chartBox';
 
 type Props = {
 	dataObject: MultiChartDataType[];
@@ -17,8 +15,6 @@ export const ViolentCharts: React.FC<Props> = ({
 	labels,
 	title,
 }) => {
-	const chartType = useSelector(selectChartType);
-
 	return (
 		<Box>
 			<div className={styles.modalButton}>
@@ -28,20 +24,13 @@ export const ViolentCharts: React.FC<Props> = ({
 					title={title}
 				/>
 			</div>
-			{/* <VerticalBar
-				dataObject={dataObject}
-				labels={labels}
-				chartName={title}
-				zoomNeed={false}
-				chartType={chartType}
-			/> */}
-			<CustomChart
-				dataLabels={labels}
-				chartName={title}
-				chartLineDataArray={dataObject}
-				zoomNeed={false}
-				labelPositon="top"
-				chartType={chartType}
+			<ChartBox
+				chartData={{
+					chartLabels: labels,
+					chartType: 'line',
+					data: dataObject,
+					labelPositon: 'top',
+				}}
 			/>
 		</Box>
 	);

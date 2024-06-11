@@ -1,23 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { ViolentYearlyPage as Presenter } from './ViolentYearlyPage';
-import { useSelector } from '@/store/hooks';
-import {
-	ViolenceItem,
-	loadOperations,
-	selectViolence,
-	setOperations,
-} from '@/store/modules/common/violence';
-import { mergeByYearly } from '@/utils/openapi/police/police';
-import {
-	Police,
-	SearchPoliceReseponse,
-} from '@/models/api/open/police/SearchPoliceResponse';
+import { setOperations } from '@/store/modules/common/violence';
+import { SearchPoliceReseponse } from '@/models/api/open/police/SearchPoliceResponse';
 import { useDispatch } from 'react-redux';
-import { ChartType } from 'chart.js';
-import {
-	bottomBarAddChartTypesOpertion,
-	bottomBarUpdatePageRouteOperation,
-} from '@/store/modules/common/bottom';
 
 type Props = {
 	initialYear: string;

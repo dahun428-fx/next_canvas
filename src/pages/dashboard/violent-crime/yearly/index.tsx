@@ -4,14 +4,26 @@ import {
 	searchPoliceList,
 } from '@/api/clients/services/open/police';
 import { RegionResourceYear } from '@/api/clients/services/open/region';
-import { ViolentYearlyPage } from '@/components/pages/ViolentYearlyPage';
+import { LoadingBar } from '@/components/common/Loading/LoadingBar';
 import { SearchPoliceReseponse } from '@/models/api/open/police/SearchPoliceResponse';
 import { GetStaticProps, NextPage } from 'next';
+import dynamic from 'next/dynamic';
 
 type Props = {
 	initialYear: string;
 	violenceItems: SearchPoliceReseponse[];
 };
+
+const ViolentYearlyPage = dynamic<Props>(
+	() =>
+		import('@/components/pages/ViolentYearlyPage').then(
+			module => module.ViolentYearlyPage
+		),
+	{
+		ssr: false,
+		loading: () => <LoadingBar />,
+	}
+);
 
 const ViolentCrimeYealy: NextPage<Props> = ({ initialYear, violenceItems }) => {
 	return (

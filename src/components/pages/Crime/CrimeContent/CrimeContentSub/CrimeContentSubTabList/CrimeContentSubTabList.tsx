@@ -1,9 +1,8 @@
-import { Doughnut } from '@/components/ui/charts/doughnut';
+import { ChartBox } from '@/components/ui/chart/chartBox';
 import {
 	CrimeMainCategory,
 	RegionItem,
 	changeToChartDataSub,
-	makeDoughnutLabels,
 } from '@/utils/openapi/region/region';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Tab, Typography } from '@mui/material';
@@ -53,29 +52,19 @@ export const CrimeContentSubTabList: React.FC<Props> = ({
 			{subCrime.map((item, index) => {
 				const title = `${data.year} 년도 ${data.city_name} 지역 범죄 중분류 차트 - ${item}`;
 				const adjustData = getSubData(item);
-				let totalcount = Object.values(adjustData).reduce((prev, curr) => {
-					return curr + prev;
-				}, 0);
+
 				return (
 					<TabPanel value={item} key={`${item}_${index}`}>
 						<Typography sx={{ textAlign: 'center' }} variant="h6">
 							{title}
 						</Typography>
 						<Box>
-							<Doughnut
-								labels={makeDoughnutLabels(adjustData, totalcount)}
-								data={adjustData}
-								title={``}
-								chartName={``}
-								chartType={chartType}
-								options={{
-									responsive: true,
-									plugins: {
-										legend: {
-											display: true,
-											position: 'left',
-										},
-									},
+							<ChartBox
+								chartData={{
+									chartLabels: Object.keys(adjustData),
+									data: adjustData,
+									chartType: 'doughnut',
+									labelPositon: 'left',
 								}}
 							/>
 						</Box>

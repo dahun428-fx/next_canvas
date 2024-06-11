@@ -29,7 +29,7 @@ export const AreaFixMainChart: React.FC<Props> = ({
 			<Typography mt={2}>
 				{`${selectedCityName} 지역 연도별 범죄 추이`}
 			</Typography>
-			<Stack direction={'row'} mt={2}>
+			<Stack direction={'column'} mt={2}>
 				<ChartBox
 					boxStyle={{
 						minWidth: 700,

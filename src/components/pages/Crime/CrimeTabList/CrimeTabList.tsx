@@ -28,8 +28,6 @@ export const CrimeTabList: React.FC<Props> = ({ selectedData }) => {
 		[dispatch, updateYearOperation, setTabValue]
 	);
 
-	console.log('selectedData ===> ', selectedData);
-
 	return (
 		<Box>
 			<TabContext value={tabValue}>

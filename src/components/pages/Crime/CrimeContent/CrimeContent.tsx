@@ -1,19 +1,12 @@
-import { Doughnut } from '@/components/ui/charts/doughnut';
-import { digit } from '@/utils/number';
-import {
-	CrimeMainCategory,
-	RegionItem,
-	changeToChartData,
-	makeDoughnutLabels,
-} from '@/utils/openapi/region/region';
+import { RegionItem, changeToChartData } from '@/utils/openapi/region/region';
 import { Box, Typography } from '@mui/material';
-import { Context } from 'chartjs-plugin-datalabels';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { CrimeContentSub } from './CrimeContentSub';
 import Divider from '@mui/material/Divider';
 import { useSelector } from '@/store/hooks';
 import { selectChartType } from '@/store/modules/common/region';
-import { CustomChart } from '@/components/common/utils/CustomChart';
+import { ChartBox } from '@/components/ui/chart/chartBox';
+import { SingleChartType } from '@/components/ui/chart/CustomChart';
 
 type Props = {
 	data: RegionItem;
@@ -30,11 +23,15 @@ export const CrimeContent: React.FC<Props> = ({ data }) => {
 		return `${data.year} 년도 ${data.city_name}지역 범죄 대분류 차트`;
 	}, [data]);
 
+	const datas: SingleChartType = {
+		chartLabels: Object.keys(adjustData),
+		chartType: 'doughnut',
+		labelPositon: 'left',
+		data: adjustData,
+	};
 	if (!adjustData) {
 		return null;
 	}
-
-	console.log('adjustData====>', adjustData);
 
 	return (
 		<Box mt={2}>
@@ -42,12 +39,7 @@ export const CrimeContent: React.FC<Props> = ({ data }) => {
 				{title}
 			</Typography>
 			<Box>
-				<CustomChart
-					dataLabels={makeDoughnutLabels(adjustData, data.totalCount)}
-					chartDoughnutData={adjustData}
-					chartType={chartType}
-					labelPositon="left"
-				/>
+				<ChartBox chartData={datas} />
 			</Box>
 			<Divider />
 			<Box mt={3}>

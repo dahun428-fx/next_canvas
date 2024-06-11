@@ -4,8 +4,6 @@ import { Box, Grid, Tab } from '@mui/material';
 import { SyntheticEvent, useMemo, useState } from 'react';
 import { PoliceList } from './PoliceList';
 import { PoliceItem } from './PoliceItem';
-import { digit } from '@/utils/number';
-import { DoughnutData } from '@/components/ui/charts/doughnut/Doughnut';
 import { Police } from '@/models/api/open/police/SearchPoliceResponse';
 import {
 	police_city_data,

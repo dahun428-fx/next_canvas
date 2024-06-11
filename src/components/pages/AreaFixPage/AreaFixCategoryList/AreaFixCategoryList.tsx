@@ -84,7 +84,7 @@ export const AreaFixCategoryList: React.FC<Props> = ({
 			</Box>
 			<Divider flexItem />
 			<Grid container>
-				<Grid item xs={12} sm={6} md={6}>
+				<Grid item xs={12} sm={12} md={12}>
 					<ChartBox
 						titleStyle={{
 							margin: 2,
@@ -92,16 +92,15 @@ export const AreaFixCategoryList: React.FC<Props> = ({
 						}}
 						title={`${selectedYear} 년도 ${selectedCityName} 지역 범죄 대분류`}
 						boxStyle={{
-							height: '700px',
+							width: '100%',
 							display: 'flex',
 							justifyContent: 'center',
 						}}
 						cardStyle={{ margin: 2, textAlign: 'center' }}
 						chartData={{
 							className: styles.areaChar,
-							chartLabels: makeDoughnutLabels(
-								changeToChartData(selectedRegionData?.category),
-								selectedRegionData?.totalCount
+							chartLabels: Object.keys(
+								changeToChartData(selectedRegionData?.category)
 							),
 							chartType: 'doughnut',
 							data: changeToChartData(selectedRegionData?.category),
@@ -109,7 +108,7 @@ export const AreaFixCategoryList: React.FC<Props> = ({
 						}}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={6} md={6}>
+				<Grid item xs={12} sm={12} md={12}>
 					<Grid container>
 						{Object.keys(CrimeMainCategory).map((item, index) => {
 							const data = selectedRegionData;
@@ -117,7 +116,7 @@ export const AreaFixCategoryList: React.FC<Props> = ({
 							const adjustData = changeToChartDataSub(data.category, item);
 
 							return (
-								<Grid key={index} item xs={6} sm={6} md={6}>
+								<Grid key={index} item xs={12} sm={6} md={6}>
 									<ChartBox
 										cardStyle={{
 											margin: 2,
@@ -129,15 +128,17 @@ export const AreaFixCategoryList: React.FC<Props> = ({
 											textAlign: 'center',
 										}}
 										boxStyle={{
+											width: '100%',
 											minHeight: '350px',
 											display: 'flex',
 											justifyContent: 'center',
 										}}
 										chartData={{
-											chartLabels: makeDoughnutLabels(adjustData),
+											chartLabels: Object.keys(adjustData),
 											chartType: 'doughnut',
 											labelPositon: 'left',
 											data: adjustData,
+											digitOff: true,
 										}}
 									/>
 								</Grid>

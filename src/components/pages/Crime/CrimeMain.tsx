@@ -32,7 +32,6 @@ export const CrimeMain: React.FC<Props> = ({
 	setSelectedItem,
 	selectedItemPosition,
 }) => {
-	// const [parentData, setParentData] = useState<RegionItem>(selectedData);
 	const [childCity, setChildCity] = useState<string[]>([]);
 	const [childSelectedItem, setChildSelectedItem] = useState<string>('');
 	const [sideShow, setSideShow] = useState(true);
@@ -82,8 +81,6 @@ export const CrimeMain: React.FC<Props> = ({
 		}
 		return {};
 	}, [selectedItemPosition]);
-
-	const handleSideListToggleButton = () => {};
 
 	return (
 		<Grid container>

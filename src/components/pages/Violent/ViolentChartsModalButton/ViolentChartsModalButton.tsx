@@ -1,8 +1,7 @@
 import { Modal, ModalOpener, ModalProvider } from '@/components/ui/modal';
 import FilterNoneIcon from '@mui/icons-material/FilterNone';
-import { Button, IconButton, Tooltip } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import { VerticalBar } from '@/components/ui/charts/verticalbar';
-import styles from './ViolentChartsModalButton.module.scss';
 import { ModalSizeType } from '@/components/ui/modal/Modal';
 import { useSelector } from '@/store/hooks';
 import { selectChartType } from '@/store/modules/common/violence';

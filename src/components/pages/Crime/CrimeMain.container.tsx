@@ -1,12 +1,4 @@
-import {
-	MouseEvent,
-	SyntheticEvent,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import { MouseEvent, useCallback, useMemo, useState } from 'react';
 import { CrimeMain as Presenter } from './CrimeMain';
 import { regionCityArray } from '@/utils/openapi/region/region';
 import { useSelector } from '@/store/hooks';
@@ -23,7 +15,7 @@ export const CrimeMain: React.FC = () => {
 
 	const [selectedItemPosition, setSelectedItemPosition] =
 		useState<ChildPosition | null>(null);
-	const [selectedCity, setSelectedItem] = useState<string>(regionCityArray[0]);
+	const [selectedItem, setSelectedItem] = useState<string>(regionCityArray[0]);
 
 	const onChangeSelectedItem = useCallback(
 		(event: MouseEvent, value: string) => {
@@ -31,7 +23,7 @@ export const CrimeMain: React.FC = () => {
 			setSelectedItemPosition({ x: clientX, y: clientY });
 			setSelectedItem(value);
 		},
-		[]
+		[selectedItemPosition, selectedItem]
 	);
 
 	const data = useMemo(() => {
@@ -49,21 +41,13 @@ export const CrimeMain: React.FC = () => {
 		}
 
 		const getDataByCityAndYear = getDataByYear.items.filter(item => {
-			if (selectedCity.includes(item.city_name)) {
+			if (selectedItem.includes(item.city_name)) {
 				return item;
 			}
 		})[0];
-		// console.log(
-		// 	'selectedYear, selectedItem ===> ',
-		// 	selectedYear,
-		// 	selectedCity,
-		// 	getDataByYear,
-		// 	getDataByCityAndYear
-		// );
-		// console.log('getDataByYear ===> ', getDataByYear);
 
 		return getDataByCityAndYear;
-	}, [selectedYear, selectedCity, regionData]);
+	}, [selectedYear, selectedItem, regionData]);
 
 	if (!regionData || regionData.items.length < 1 || !data) {
 		return null;
@@ -72,7 +56,7 @@ export const CrimeMain: React.FC = () => {
 	return (
 		<Presenter
 			selectedData={data}
-			selectedItem={selectedCity}
+			selectedItem={selectedItem}
 			setSelectedItem={onChangeSelectedItem}
 			selectedItemPosition={selectedItemPosition}
 		/>
