@@ -1,8 +1,4 @@
-import {
-	mergeByCity,
-	policeCityArray,
-	seperateByCity,
-} from '@/utils/openapi/police/police';
+import { policeCityArray } from '@/utils/openapi/police/police';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Grid, Tab } from '@mui/material';
 import { SyntheticEvent, useMemo, useState } from 'react';
@@ -64,26 +60,13 @@ export const PoliceMain: React.FC<Props> = ({ policeDatas }) => {
 						{mergePoliceList &&
 							mergePoliceList.length > 0 &&
 							mergePoliceList.map((item, index) => {
-								const { 강도, 살인, city, 절도, 폭력 } = item;
-								const dataObj: DoughnutData = {
-									강도,
-									살인,
-									절도,
-									폭력,
-								};
-
-								const subheader = `총 발생건수 : ${digit(강도 + 살인 + 절도 + 폭력)} 건`;
-								if (강도 + 살인 + 절도 + 폭력 > 0) {
-									return (
-										<PoliceItem
-											key={`all_${index}`}
-											dataObj={dataObj}
-											title={city}
-											subheader={subheader}
-										/>
-									);
-								}
-								return null;
+								return (
+									<PoliceItem
+										title={item.city}
+										data={item}
+										key={`all_${index}`}
+									/>
+								);
 							})}
 					</Grid>
 				</TabPanel>
