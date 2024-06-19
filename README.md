@@ -33,61 +33,46 @@
 ### 화면별 기능 소개
 
 - 메인페이지 : 전국 - 대시보드
-
-![**⇒ 연도별 범죄현황을 한눈에 볼 수 있는 대시보드 페이지입니다.**](https://prod-files-secure.s3.us-west-2.amazonaws.com/4b1a7513-44e4-4f43-96bc-0931be4276fb/daa5d5ca-a5f3-4e3e-949a-b68a702500c5/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4_%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C_%EC%A0%84%EA%B5%AD01.png)
+![**⇒ 연도별 범죄현황을 한눈에 볼 수 있는 대시보드 페이지입니다.**](https://github.com/dahun428-fx/next_canvas/assets/70366042/98a4a5d0-5a28-469c-ab22-88fdccbb4b8e)
 
 **⇒ 연도별 범죄현황을 한눈에 볼 수 있는 대시보드 페이지입니다.**
 
 - 메인페이지 : 전국 - 차트 / 표
-
-![**⇒ 연도별 범죄현황을 지역별로 나누어 차트/표로 표기하여 지역별 현황을 사용자에게 한눈에 볼 수 있도록 UI 를 만들었습니다.**](https://prod-files-secure.s3.us-west-2.amazonaws.com/4b1a7513-44e4-4f43-96bc-0931be4276fb/aaa4bf39-7801-4d24-be61-abd496c94610/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4_%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C_%EC%A0%84%EA%B5%AD02.png)
+![**⇒ 연도별 범죄현황을 지역별로 나누어 차트/표로 표기하여 지역별 현황을 사용자에게 한눈에 볼 수 있도록 UI 를 만들었습니다.**](https://github.com/dahun428-fx/next_canvas/assets/70366042/fe34fe71-afff-405b-aec1-21c3eb1556f3)
 
 **⇒ 연도별 범죄현황을 지역별로 나누어 차트/표로 표기하여 지역별 현황을 사용자에게 한눈에 볼 수 있도록 UI 를 만들었습니다.**
 
 - 메인페이지 : 전국 - 차트
 
-![**⇒ 연도별 범죄현황 중 4개 카테고리 항목을 도넛차트로 표기하여, 주요 4대 범죄 현황을 사용자에게 한눈에 볼 수 있도록 표기하였습니다.**](https://prod-files-secure.s3.us-west-2.amazonaws.com/4b1a7513-44e4-4f43-96bc-0931be4276fb/8fae4ade-0b44-4cfb-a86a-49cd3709624b/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4_%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C_%EC%A0%84%EA%B5%AD03.png)
-
+![메인화면_대시보드_전국03](https://github.com/dahun428-fx/next_canvas/assets/70366042/11471469-233e-47aa-a153-35fbcd1d3686)
 **⇒ 연도별 범죄현황 중 4개 카테고리 항목을 도넛차트로 표기하여, 주요 4대 범죄 현황을 사용자에게 한눈에 볼 수 있도록 표기하였습니다.**
 
 - 대시보드 : 지역 - 대시보드 / 차트
 
-![**⇒ 지역별 범죄현황을 대시보드로 표기하여, 지역별 범죄 현황을 UI 로 한눈에 볼 수 있게하였습니다. 또한, 선 그래프로 범죄 추이 현황을 표기하여 연도별 추이 현황을 알 수 있도록 하였습니다.**](https://prod-files-secure.s3.us-west-2.amazonaws.com/4b1a7513-44e4-4f43-96bc-0931be4276fb/e7acde1c-2fb4-45a7-bdd5-7555253aef4b/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4_%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C_%EC%A7%80%EC%97%AD01.png)
-
+![메인화면_대시보드_지역01](https://github.com/dahun428-fx/next_canvas/assets/70366042/cc0a111d-e742-47ab-bf14-4b86e41252a1)
 **⇒ 지역별 범죄현황을 대시보드로 표기하여, 지역별 범죄 현황을 UI 로 한눈에 볼 수 있게하였습니다. 또한, 선 그래프로 범죄 추이 현황을 표기하여 연도별 추이 현황을 알 수 있도록 하였습니다.**
 
 - 대시보드 : 지역 - 도넛차트
 
-![**⇒ 주요 4대 범죄현황을 연도별로 나누어 표로 제시하였습니다. 사용자는 구체적인 수치를 확인할 수 있습니다.        또한, 도넛 차트로 대분류 / 중분류로 나누어 범죄 현황을 출력하여 UI 로 구성하였습니다.**](https://prod-files-secure.s3.us-west-2.amazonaws.com/4b1a7513-44e4-4f43-96bc-0931be4276fb/0e7643a8-6db0-4c8e-a67c-7cdb2f6f2b9d/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4_%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C_%EC%A7%80%EC%97%AD02.png)
-
+![메인화면_대시보드_지역02](https://github.com/dahun428-fx/next_canvas/assets/70366042/a050c33e-3011-4921-b3fa-2a3c8c0a2f94)
 **⇒ 주요 4대 범죄현황을 연도별로 나누어 표로 제시하였습니다. 사용자는 구체적인 수치를 확인할 수 있습니다.        또한, 도넛 차트로 대분류 / 중분류로 나누어 범죄 현황을 출력하여 UI 로 구성하였습니다.**
 
 - 데이터 : 범죄현황 - 경찰서별
-
-![**공공 API 데이터를 이용하여 지역별 / 경찰서별로 나누어 현황을 차트로 표기하였습니다.**](https://prod-files-secure.s3.us-west-2.amazonaws.com/4b1a7513-44e4-4f43-96bc-0931be4276fb/ead0b449-d13b-464b-9cf5-2d67c3d1d3f0/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4_%EB%B2%94%EC%A3%84%ED%98%84%ED%99%A9_%EA%B2%BD%EC%B0%B0%EC%84%9C01.png)
-
+![메인화면_범죄현황_경찰서01](https://github.com/dahun428-fx/next_canvas/assets/70366042/494f5902-9d38-48df-888d-c3cda8d7810a)
 **공공 API 데이터를 이용하여 지역별 / 경찰서별로 나누어 현황을 차트로 표기하였습니다.**
 
 - 데이터 : 범죄현황 - 연도 / 지역별 차트
-
-![**공공 API 데이터를 이용하여 선 차트를 만들었습니다. 사용자는 지역을 클릭하여 데이터를 선별하고, 그래프를 확대 및 조정하여 원하는 정보를 제공받을 수 있습니다.**](https://prod-files-secure.s3.us-west-2.amazonaws.com/4b1a7513-44e4-4f43-96bc-0931be4276fb/a772b6ae-05d3-427f-9020-ee07c0e3bd7b/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4_%EB%B2%94%EC%A3%84%ED%98%84%ED%99%A9_%EC%97%B0%EB%8F%84%EC%A7%80%EC%97%AD%EB%B3%8401.png)
-
+![메인화면_범죄현황_연도지역별01](https://github.com/dahun428-fx/next_canvas/assets/70366042/8ada84c8-c89b-4ed8-8a64-6fa011f8c215)
 **공공 API 데이터를 이용하여 선 차트를 만들었습니다. 사용자는 지역을 클릭하여 데이터를 선별하고, 그래프를 확대 및 조정하여 원하는 정보를 제공받을 수 있습니다.**
 
 - 데이터 : 범죄현황 - 연도 / 지역별 표
-
-![**공공 API 데이터를 이용하여 표를 만들었습니다. 사용자는 표를 클릭하여 연도별로 데이터를 정렬할 수 있습니다. 또한 원하는 지역을 선별하여 데이터를 출력할 수 있습니다.**](https://prod-files-secure.s3.us-west-2.amazonaws.com/4b1a7513-44e4-4f43-96bc-0931be4276fb/7a8c5d03-928b-469f-be1c-c5f72749f494/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4_%EB%B2%94%EC%A3%84%ED%98%84%ED%99%A9_%EC%97%B0%EB%8F%84%EC%A7%80%EC%97%AD%EB%B3%8402.png)
-
+![메인화면_범죄현황_연도지역별02](https://github.com/dahun428-fx/next_canvas/assets/70366042/28cd6bc6-6b1c-4cc2-81df-af0a2293cfa7)
 **공공 API 데이터를 이용하여 표를 만들었습니다. 사용자는 표를 클릭하여 연도별로 데이터를 정렬할 수 있습니다. 또한 원하는 지역을 선별하여 데이터를 출력할 수 있습니다.**
 
 - 데이터 : 범죄현황 - 지역상세 대분류
-
-![**공공데이터 API 을 이용하여 지역별 상세 차트를 만들어 사용자에게 제공하였습니다. 사용자는 지역별로 대분류 / 중분류로 시각화한 데이터를 UI 로 제공받을 수 있습니다.**](https://prod-files-secure.s3.us-west-2.amazonaws.com/4b1a7513-44e4-4f43-96bc-0931be4276fb/454920ba-643c-4e9c-bada-adba70e227bd/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4_%EB%B2%94%EC%A3%84%ED%98%84%ED%99%A9_%EC%A7%80%EC%97%AD%EC%83%81%EC%84%B801.png)
-
+![메인화면_범죄현황_지역상세01](https://github.com/dahun428-fx/next_canvas/assets/70366042/88d991de-5433-4e65-bcba-2a3ea783f6ee)
 **공공데이터 API 을 이용하여 지역별 상세 차트를 만들어 사용자에게 제공하였습니다. 사용자는 지역별로 대분류 / 중분류로 시각화한 데이터를 UI 로 제공받을 수 있습니다.**
 
 - 데이터 : 범죄현황 - 지역상세 중분류
-
-![**공공데이터 API 을 이용하여 지역별 상세 차트를 만들어 사용자에게 제공하였습니다. 사용자는 지역별로 대분류 / 중분류로 시각화한 데이터를 UI 로 제공받을 수 있습니다.**](https://prod-files-secure.s3.us-west-2.amazonaws.com/4b1a7513-44e4-4f43-96bc-0931be4276fb/27fba275-92b5-4e5c-9476-0fb53024e4fe/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4_%EB%B2%94%EC%A3%84%ED%98%84%ED%99%A9_%EC%A7%80%EC%97%AD%EC%83%81%EC%84%B802.png)
-
+![메인화면_범죄현황_지역상세02](https://github.com/dahun428-fx/next_canvas/assets/70366042/83f46748-ac0a-4d78-8b57-04d2a81ecceb)
 **공공데이터 API 을 이용하여 지역별 상세 차트를 만들어 사용자에게 제공하였습니다. 사용자는 지역별로 대분류 / 중분류로 시각화한 데이터를 UI 로 제공받을 수 있습니다.**
